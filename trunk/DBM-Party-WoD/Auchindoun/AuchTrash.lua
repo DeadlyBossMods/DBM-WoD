@@ -22,7 +22,7 @@ local specWarnArbitersHammer		= mod:NewSpecialWarningInterrupt(157797)
 
 mod:RemoveOption("HealthFrame")
 
-local isTrivial = self:IsTrivial(110)
+local isTrivial = mod:IsTrivial(110)
 
 function mod:SPELL_CAST_START(args)
 	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end

@@ -20,7 +20,7 @@ mod:AddRangeFrameOption(3, 160288)--Range guessed. Maybe 5. one tooltip says 1.5
 
 mod:RemoveOption("HealthFrame")
 
-local isTrivial = self:IsTrivial(110)
+local isTrivial = mod:IsTrivial(110)
 
 mod.vb.debuffCount = 0
 local Debuff = GetSpellInfo(160288)
