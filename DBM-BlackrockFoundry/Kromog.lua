@@ -1,11 +1,10 @@
 local mod	= DBM:NewMod(1162, "DBM-BlackrockFoundry", nil, 457)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 14994 $"):sub(12, -3))
+mod:SetRevision(("$Revision$"):sub(12, -3))
 mod:SetCreatureID(77692)
 mod:SetEncounterID(1713)
 mod:SetZone()
-mod:SetHotfixNoticeRev(13105)
 mod.respawnTime = 29.5
 
 mod:RegisterCombat("combat")
@@ -138,7 +137,9 @@ function mod:SPELL_CAST_START(args)
 		timerRipplingSmashCD:Stop()
 		timerWarpedArmorCD:Stop()
 		voiceGraspingEarth:Play("157060")
-		self:RuneStart()
+		if not DBM.Options.EnablePatchRestrictions then
+			self:RuneStart()
+		end
 		if self:IsMythic() then
 			timerGraspingEarthCD:Start(66)
 			local remaining = timerTremblingEarthCD:GetRemaining()
@@ -294,6 +295,7 @@ do
 	local lastPosition = nil
 	function mod:CHAT_MSG_ADDON(prefix, message, channel, sender)
 		if prefix ~= "EXRTADD" then return end
+		if DBM.Options.EnablePatchRestrictions then return end
 		local subPrefix,pos1,name1,pos2,name2,pos3,name3 = strsplit("\t", message)
 		if subPrefix ~= "kromog" then return end
 		sender = Ambiguate(sender, "none")
