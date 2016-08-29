@@ -1,12 +1,11 @@
 local mod	= DBM:NewMod(1392, "DBM-HellfireCitadel", nil, 669)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 14869 $"):sub(12, -3))
+mod:SetRevision(("$Revision$"):sub(12, -3))
 mod:SetCreatureID(90435)
 mod:SetEncounterID(1787)
 mod:SetZone()
 --mod:SetUsedIcons(8, 7, 6, 4, 2, 1)
-mod:SetHotfixNoticeRev(14154)
 mod.respawnTime = 18--18 is an odd one, but definitely was 18
 
 mod:RegisterCombat("combat")
@@ -279,7 +278,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.poundCount = 0
 		self.vb.swatCount = 0
 		warnShadowEnergy:Show()
-		self:RuneStart(181293)
+		if not DBM.Options.EnablePatchRestrictions then
+			self:RuneStart(181293)
+		end
 		if self:IsMythic() and spellId == 186879 then--Mythic AND enraged
 			timerFelOutpouringCD:Start(8)
 			self:Schedule(8, delayedFelOutpouring, self, 65)--73
@@ -324,7 +325,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.poundCount = 0
 		self.vb.explosiveBurst = 0
 		warnExplosiveEnergy:Show()
-		self:RuneStart(181297)
+		if not DBM.Options.EnablePatchRestrictions then
+			self:RuneStart(181297)
+		end
 		if (self:IsMythic() and spellId == 186880) then
 			timerExplosiveRunesCD:Start(8)
 			self:Schedule(8, delayedExplosiveRunes, self, 63)--71
@@ -367,7 +370,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.poundCount = 0
 		self.vb.foulCrush = 0
 		warnFoulEnergy:Show()
-		self:RuneStart(181300)
+		if not DBM.Options.EnablePatchRestrictions then
+			self:RuneStart(181300)
+		end
 		if (self:IsMythic() and spellId == 186881) then
 			timerGraspingHandsCD:Start(8)
 			countdownGraspingHands:Start(8)
@@ -543,6 +548,7 @@ do
 	}
 	function mod:CHAT_MSG_ADDON(prefix, message, channel, sender)
 		if prefix ~= "EXRTADD" then return end
+		if DBM.Options.EnablePatchRestrictions then return end
 		local subPrefix,pos1,name1,pos2,name2,pos3,name3 = strsplit("\t", message)
 		if subPrefix ~= "kormrok" then return end
 		sender = Ambiguate(sender, "none")
