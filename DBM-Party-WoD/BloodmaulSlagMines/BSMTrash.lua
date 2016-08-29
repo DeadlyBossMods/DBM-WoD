@@ -13,7 +13,7 @@ mod:RegisterEvents(
 )
 
 local specWarnCrush						= mod:NewSpecialWarningDodge(151447, "Tank")
-local specWarnCinderSplash				= mod:NewSpecialWarningSpell(152298, nil, nil, nil, 2)
+local specWarnCinderSplash				= mod:NewSpecialWarningSpell(152298, false, nil, 2, 2)
 local specWarnRoar						= mod:NewSpecialWarningInterrupt(151545, "-Healer")--Maybe healer need warning too, if interrupt gets off, healer can't heal for 5 seconds
 local specWarnLavaBurst					= mod:NewSpecialWarningInterrupt(151558, "-Healer")
 local specWarnSuppressionField			= mod:NewSpecialWarningInterrupt(151581, "-Healer")--Maybe healer need warning too, if interrupt gets off, healer can't heal for 5 seconds
@@ -23,6 +23,8 @@ local specWarnSubjugate					= mod:NewSpecialWarningDispel(151697, "Healer")
 local specWarnSlaversRage				= mod:NewSpecialWarningDispel(151965, "RemoveEnrage")
 
 mod:RemoveOption("HealthFrame")
+
+local isTrivial = self:IsTrivial(110)
 
 local UnitExists, UnitGUID, UnitAffectingCombat = UnitExists, UnitGUID, UnitAffectingCombat
 local function validWarning(GUID)
@@ -34,7 +36,7 @@ local function validWarning(GUID)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if not self.Options.Enabled or self:IsDifficulty("normal5") then return end
+	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
 	local spellId = args.spellId
 	if spellId == 164597 and not args:IsDestTypePlayer() then
 		specWarnStoneBulwark:Show(args.destName)
@@ -48,7 +50,7 @@ function mod:SPELL_AURA_APPLIED(args)
 end
 
 function mod:SPELL_CAST_START(args)
-	if not self.Options.Enabled or self:IsDifficulty("normal5") then return end
+	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
 	local spellId = args.spellId
 	if spellId == 152298 then
 		specWarnCinderSplash:Show()
