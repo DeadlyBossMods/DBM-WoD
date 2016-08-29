@@ -24,7 +24,7 @@ local specWarnSlaversRage				= mod:NewSpecialWarningDispel(151965, "RemoveEnrage
 
 mod:RemoveOption("HealthFrame")
 
-local isTrivial = self:IsTrivial(110)
+local isTrivial = mod:IsTrivial(110)
 
 local UnitExists, UnitGUID, UnitAffectingCombat = UnitExists, UnitGUID, UnitAffectingCombat
 local function validWarning(GUID)

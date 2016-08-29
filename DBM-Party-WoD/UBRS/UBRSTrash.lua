@@ -33,7 +33,7 @@ local timerEruptionCD					= mod:NewCDTimer(10, 155037, nil, false, nil, 3)--10-1
 
 mod:RemoveOption("HealthFrame")
 
-local isTrivial = self:IsTrivial(110)
+local isTrivial = mod:IsTrivial(110)
 
 function mod:SPELL_AURA_APPLIED(args)
 	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
