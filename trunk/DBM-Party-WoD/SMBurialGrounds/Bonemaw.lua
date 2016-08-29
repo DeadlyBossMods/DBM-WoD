@@ -44,7 +44,7 @@ mod.vb.inhaleActive = false
 
 function mod:OnCombatStart(delay)
 	self.vb.inhaleActive = false
-	timerBodySlamCD:Start(15-delay, UnitName("boss1"), UnitGUID("boss1"))
+	timerBodySlamCD:Start(15-delay, UnitName("boss1") or BOSS, UnitGUID("boss1"))
 	timerInhaleCD:Start(29-delay)
 	timerSubmergeCD:Start(-delay)
 end

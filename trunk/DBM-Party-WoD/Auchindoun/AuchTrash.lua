@@ -22,8 +22,10 @@ local specWarnArbitersHammer		= mod:NewSpecialWarningInterrupt(157797)
 
 mod:RemoveOption("HealthFrame")
 
+local isTrivial = self:IsTrivial(110)
+
 function mod:SPELL_CAST_START(args)
-	if not self.Options.Enabled or self:IsDifficulty("normal5") then return end
+	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
 	local spellId = args.spellId
 	if spellId == 157173 then
 		specWarnFelStomp:Show()

@@ -17,30 +17,19 @@ mod:RegisterEvents(
 )
 
 local warnLavaWreath					= mod:NewTargetAnnounce(176025, 4)
---local warnFlametongue					= mod:NewTargetAnnounce(176032, 4)--target scanning unverified
 
-local specWarnActivating				= mod:NewSpecialWarningInterrupt(163966, "-Healer")
+local specWarnActivating				= mod:NewSpecialWarningInterrupt(163966, false, nil, 2)
 local specWarnLavaWreath				= mod:NewSpecialWarningMoveAway(176025)
---local specWarnFlametongue				= mod:NewSpecialWarningYou(176032)
---local yellFlametongue					= mod:NewYell(176032)
 local specWarnFlametongueGround			= mod:NewSpecialWarningMove(176033)--Ground aoe, may add an earlier personal warning if target scanning works.
 local specWarnShrapnelblast				= mod:NewSpecialWarningMove(166675, "Tank", nil, nil, 3)--160943 boss version, 166675 trash version.
 local specWarnThunderzone				= mod:NewSpecialWarningMove(166340)
 
 mod:RemoveOption("HealthFrame")
 
-function mod:FlametongueTarget(targetname, uId)
-	if not targetname then return end
---	warnFlametongue:Show(targetname)
-	DBM:Debug("Flametongue possibly on "..targetname)
-	if targetname == UnitName("player") then
---		specWarnFlametongue:Show()
---		yellFlametongue:Yell()
-	end
-end
+local isTrivial = self:IsTrivial(110)
 
 function mod:SPELL_AURA_APPLIED(args)
-	if not self.Options.Enabled or self:IsDifficulty("normal5") then return end
+	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
 	local spellId = args.spellId
 	if spellId == 176025 then
 		warnLavaWreath:Show(args.destName)
@@ -54,12 +43,11 @@ end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_CAST_START(args)
-	if not self.Options.Enabled or self:IsDifficulty("normal5") then return end
+	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
 	local spellId = args.spellId
 	if spellId == 166675 and self:AntiSpam(2, 1) then
 		specWarnShrapnelblast:Show()
 	elseif spellId == 176032 then
-		self:BossTargetScanner(args.sourceGUID, "FlametongueTarget", 0.05, 16)
 		if self:IsTank() then
 			specWarnFlametongueGround:Show()--Pre warn here for tanks, because this attack also massively buffs trash damage if they are standing in the fire too. Will improve if target scanning works
 		end
@@ -67,15 +55,15 @@ function mod:SPELL_CAST_START(args)
 end
 
 function mod:SPELL_CAST_SUCCESS(args)
-	if not self.Options.Enabled or self:IsDifficulty("normal5") then return end
+	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
 	local spellId = args.spellId
-	if spellId == 163966 and self:AntiSpam(2, 3) then
+	if spellId == 163966 and self:AntiSpam(3, 3) then
 		specWarnActivating:Show(args.sourceName)
 	end
 end
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
-	if spellId == 176033 and destGUID == UnitGUID("player") and self:AntiSpam(2, 2) then
+	if spellId == 176033 and destGUID == UnitGUID("player") and self:AntiSpam(2, 2) and not isTrivial then
 		specWarnFlametongueGround:Show()
 	end
 end
