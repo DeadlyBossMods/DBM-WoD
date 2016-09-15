@@ -647,7 +647,7 @@ local function updateAllTimers(self, ICD, AllureSpecial)
 			countdownShackledTorment:Cancel()
 			countdownShackledTorment:Start(ICD)
 		end
-		if not self:IsFaceroll() and timerWroughtChaosCD:GetRemaining() < ICD then
+		if not self:IsEasy() and timerWroughtChaosCD:GetRemaining() < ICD then
 			local elapsed, total = timerWroughtChaosCD:GetTime()
 			local extend = ICD - (total-elapsed)
 			DBM:Debug("timerWroughtChaosCD extended by: "..extend, 2)
@@ -673,7 +673,7 @@ local function updateAllTimers(self, ICD, AllureSpecial)
 			countdownShackledTorment:Cancel()
 			countdownShackledTorment:Start(ICD)
 		end
-		if not self:IsFaceroll() and timerWroughtChaosCD:GetRemaining() < ICD then
+		if not self:IsEasy() and timerWroughtChaosCD:GetRemaining() < ICD then
 			local elapsed, total = timerWroughtChaosCD:GetTime()
 			local extend = ICD - (total-elapsed)
 			DBM:Debug("timerWroughtChaosCD extended by: "..extend, 2)
@@ -1259,7 +1259,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		--Begin phase 2
 		warnPhase2:Show()
 		voicePhaseChange:Play("ptwo")
-		if not self:IsFaceroll() then
+		if not self:IsEasy() then
 			timerWroughtChaosCD:Start(5)
 		end
 		timerDeathbrandCD:Start(35, self.vb.deathBrandCount+1)--35-39
