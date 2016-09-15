@@ -364,7 +364,7 @@ local function showTrainWarning(self)
 end
 
 local function lanePos()
-	if DBM.Options.EnablePatchRestrictions then return 0 end
+	if self:HasMapRestrictions() then return 0 end
 	local posX = UnitPosition("player")--room is perfrect square, y coord not needed.
 	local playerLane
 	-- map coord from http://mysticalos.com/images/DBM/ThogarData/1.jpeg http://mysticalos.com/images/DBM/ThogarData/2.jpeg http://mysticalos.com/images/DBM/ThogarData/3.jpeg http://mysticalos.com/images/DBM/ThogarData/4.jpeg
@@ -383,7 +383,7 @@ end
 local function laneCheck(self)
 	local trainTable = self:IsMythic() and mythicTrains or self:IsLFR() and lfrTrains or otherTrains
 	local train = self.vb.trainCount
-	if DBM.Options.EnablePatchRestrictions then return end
+	if self:HasMapRestrictions() then return end
 	local playerLane = lanePos()
 	if trainTable[train] and trainTable[train][playerLane] then
 		specWarnTrain:Show()
@@ -434,7 +434,7 @@ end
 --Timing may need tweaks. more Moves need adding.
 --Positions based on https://www.youtube.com/watch?v=0QC7BOEv2iE
 local function showHud(self, train, center)
-	if self.Options.HudMapForTrain and not DBM.Options.EnablePatchRestrictions then
+	if self.Options.HudMapForTrain and not self:HasMapRestrictions() then
 		local Red, Green, Blue = 1, 1, 1
 		local hudType = nil
 		if not self.Options.HudMapUseIcons then

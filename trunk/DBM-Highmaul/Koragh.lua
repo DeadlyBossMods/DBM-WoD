@@ -295,7 +295,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerExpelMagicFel:Start()
 			countdownFel:Start()
 			yellExpelMagicFel:Schedule(11)--Yell right before expire, not apply
-			if not DBM.Options.EnablePatchRestrictions then
+			if not self:HasMapRestrictions() then
 				lastX, LastY = UnitPosition("player")
 				self:Schedule(7, returnPosition, self)
 				if self.Options.HudMapForFel then
