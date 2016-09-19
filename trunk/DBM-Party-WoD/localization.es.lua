@@ -205,7 +205,7 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	warnAdd			= "Mostrar aviso para Ensamblaje de protección del Trecho Celestial",
+	warnAdd			= "Mostrar aviso cuando aparezca un Ensamblaje de protección del Trecho Celestial",
 	specWarnAdd		= "Mostrar aviso especial para cambiar de objetivo a Ensamblaje de protección del Trecho Celestial"
 })
 
