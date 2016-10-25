@@ -196,7 +196,7 @@ local function checkBoatPlayer(self, npc)
 	self.vb.bladeDash = 1
 	self.vb.bloodRitual = 0
 	local bossPower = UnitPower("boss1")--All bosses have same power, doesn't matter which one checked
-	--These abilites resume after boat phase ends on mythic, on other difficulties, they still reset
+	--These abilites resume when boat phase ends with thes timers, they do NOT resume previous timers where they left off.
 	timerBladeDashCD:Stop()
 	timerBladeDashCD:Start(5, 1)--5-6
 	countdownBladeDash:Cancel()
