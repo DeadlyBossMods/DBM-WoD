@@ -10,8 +10,6 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 164357",
 	"SPELL_CAST_SUCCESS 164275",
-	"SPELL_PERIODIC_DAMAGE 169495 164294",
-	"SPELL_ABSORBED 169495 164294",
 	"UNIT_SPELLCAST_SUCCEEDED boss1",
 	"CHAT_MSG_MONSTER_EMOTE",
 	"RAID_BOSS_WHISPER"
@@ -37,6 +35,16 @@ local voiceUncheckedGrowth		= mod:NewVoice(164294, "Tank", nil, 3)--Almost no on
 
 function mod:OnCombatStart(delay)
 	timerParchedGrasp:Start(7-delay)
+	if not self:IsTrivial(110) then
+		self:RegisterShortTermEvents(
+			"SPELL_PERIODIC_DAMAGE 169495 164294",
+			"SPELL_PERIODIC_MISSED 169495 164294"
+		)
+	end
+end
+
+function mod:OnCombatEnd()
+	self:UnregisterShortTermEvents()
 end
 
 function mod:SPELL_CAST_START(args)
@@ -66,7 +74,7 @@ function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId
 		voiceUncheckedGrowth:Play("runaway")
 	end
 end
-mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
+mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 164718 then--Cancel Brittle Bark
