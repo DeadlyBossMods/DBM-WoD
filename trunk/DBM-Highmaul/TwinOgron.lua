@@ -96,14 +96,6 @@ do
 end
 
 local lines = {}
-local function sortInfoFrame(a, b) 
-	local a = lines[a]
-	local b = lines[b]
-	if not tonumber(a) then a = -1 end
-	if not tonumber(b) then b = -1 end
-	if a > b then return true else return false end
-end
-
 local function updateInfoFrame()
 	table.wipe(lines)
 	local bossPower = 0
@@ -203,7 +195,7 @@ function mod:OnCombatStart(delay)
 	countdownPol:Start(polEnergyRate+10-delay)
 	voicePol:Schedule(polEnergyRate+3.5-delay, "158134") --shield
 	if self.Options.InfoFrame then
-		DBM.InfoFrame:Show(4, "function", updateInfoFrame, sortInfoFrame)
+		DBM.InfoFrame:Show(4, "function", updateInfoFrame)
 	end
 end
 

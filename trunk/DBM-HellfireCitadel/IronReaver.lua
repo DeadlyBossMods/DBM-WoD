@@ -107,17 +107,9 @@ do
 	end
 end
 
-local updateInfoFrame, sortInfoFrame
+local updateInfoFrame
 do
 	local lines = {}
-	sortInfoFrame = function(a, b)
-		local a = lines[a]
-		local b = lines[b]
-		if not tonumber(a) then a = -1 end
-		if not tonumber(b) then b = -1 end
-		if a > b then return true else return false end
-	end
-
 	local reactiveName, burningName, quickfuseName, reinforcedName, volatileName = GetSpellInfo(186676), GetSpellInfo(186667), GetSpellInfo(186660), GetSpellInfo(188294), GetSpellInfo(182523)
 	updateInfoFrame = function()
 		table.wipe(lines)
@@ -251,7 +243,7 @@ function mod:SPELL_CAST_START(args)
 		end
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 			DBM.InfoFrame:SetHeader(args.spellName)
-			DBM.InfoFrame:Show(5, "function", updateInfoFrame, sortInfoFrame)
+			DBM.InfoFrame:Show(5, "function", updateInfoFrame)
 		end
 	elseif spellId == 185282 then
 		self.vb.barrageCount = self.vb.barrageCount + 1
