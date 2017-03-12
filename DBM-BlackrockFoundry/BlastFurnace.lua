@@ -154,14 +154,6 @@ do
 end
 
 local lines = {}
-local function sortInfoFrame(a, b) 
-	local a = lines[a]
-	local b = lines[b]
-	if not tonumber(a) then a = -1 end
-	if not tonumber(b) then b = -1 end
-	if a > b then return true else return false end
-end
-
 local function updateInfoFrame1()
 	table.wipe(lines)
 	local regulatorCount = 0
@@ -373,7 +365,7 @@ function mod:OnCombatStart(delay)
 		end)
 	end
 	if self.Options.InfoFrame then
-		DBM.InfoFrame:Show(3, "function", updateInfoFrame1, sortInfoFrame)
+		DBM.InfoFrame:Show(3, "function", updateInfoFrame1)
 	end
 	updateRangeFrame(self)
 end
@@ -477,7 +469,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if self.Options.InfoFrame and not DBM.InfoFrame:IsShown() then
 			DBM.InfoFrame:SetHeader(args.spellName)
-			DBM.InfoFrame:Show(5, "function", updateInfoFrame2, sortInfoFrame)
+			DBM.InfoFrame:Show(5, "function", updateInfoFrame2)
 		end
 	elseif spellId == 158345 and self:AntiSpam(10, 3) then--Might be SPELL_CAST_SUCCESS instead.
 		specWarnShieldsDown:Show()

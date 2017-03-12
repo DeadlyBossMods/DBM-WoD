@@ -232,16 +232,9 @@ do
 	end
 end
 
-local updateInfoFrame, sortInfoFrame
+local updateInfoFrame
 do
 	local lines = {}
-	sortInfoFrame = function(a, b)
-		local a = lines[a]
-		local b = lines[b]
-		if not tonumber(a) then a = -1 end
-		if not tonumber(b) then b = -1 end
-		if a < b then return true else return false end
-	end
 	updateInfoFrame = function()
 		table.wipe(lines)
 		local total = 0
@@ -505,7 +498,7 @@ local function showFelburstTargets(self)
 	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:SetHeader(felburstDebuff)
-		DBM.InfoFrame:Show(5, "function", updateInfoFrame, sortInfoFrame, true)
+		DBM.InfoFrame:Show(5, "function", updateInfoFrame, false, true)
 	end
 end
 
@@ -542,7 +535,7 @@ local function breakShackles(self, spellName)
 		end
 		if self.Options.InfoFrame then
 			DBM.InfoFrame:SetHeader(shackledDebuff)
-			DBM.InfoFrame:Show(5, "function", updateInfoFrame, sortInfoFrame, true)
+			DBM.InfoFrame:Show(5, "function", updateInfoFrame, false, true)
 		end
 	end
 	if self.Options.HudMapOnShackledTorment2 and self:IsMythic() then
