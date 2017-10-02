@@ -890,22 +890,22 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		if spellId == 158012 then
 			if self:IsMythic() then
 				self.vb.phase = 2
-				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.phase:format(2))
+				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(2))
 				voicePhaseChange:Play("ptwo")
 			else
 				self.vb.phase = 3
-				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.phase:format(3))
+				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(3))
 				voicePhaseChange:Play("pthree")
 			end
 		end
 		if spellId == 157964 then
 			if self:IsMythic() then
 				self.vb.phase = 3
-				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.phase:format(3))
+				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(3))
 				voicePhaseChange:Play("pthree")
 			else
 				self.vb.phase = 4
-				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.phase:format(4))
+				warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(4))
 				voicePhaseChange:Play("pfour")
 			end
 		end
@@ -944,11 +944,11 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		--	countdownForceNova:Start(tr5+n)
 		end
 		self.vb.phase = 2
-		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.phase:format(2))
+		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(2))
 		voicePhaseChange:Play("ptwo")
 	elseif spellId == 70628 then --Margok being killed by chogal
 		self.vb.phase = 4
-		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.phase:format(4))
+		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(4))
 		voicePhaseChange:Play("pfour")
 		updateRangeFrame(self)
 		timerInfiniteDarknessCD:Start(9)--First timer 8-12 second variable, almost always 10. I'll make 9 for now so it's semi accurate in both situations
