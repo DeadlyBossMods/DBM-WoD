@@ -157,13 +157,14 @@ local DBMHudMap = DBMHudMap
 
 local function isPlayerOnBoat()
 	local _, y = UnitPosition("player")
-	if y < 3196 then
-		return false
-	else
+	if y and y > 3196 then
 		return true
+	else
+		return false
 	end
 end
 
+--[[
 local function boatReturnWarning()
 	if boatMissionDone and isPlayerOnBoat() then
 		specWarnReturnBase:Show()
@@ -184,7 +185,7 @@ local function checkBoatPlayer(self, npc)
 	end
 	DBM:Debug("checkBoatPlayer finished")
 	boatMissionDone = false
-	self:Unschedule(boatReturnWarning)
+	--self:Unschedule(boatReturnWarning)
 	timerBombardmentAlphaCD:Stop()
 	timerWarmingUp:Stop()
 	countdownWarmingUp:Cancel()
@@ -236,6 +237,7 @@ local function checkBoatOn(self, count)
 		self:Schedule(1, checkBoatOn, self, count + 1)
 	end
 end
+--]]
 
 function mod:ConvulsiveTarget(targetname, uId)
 	if not targetname then return end
@@ -296,6 +298,7 @@ function mod:OnCombatStart(delay)
 	self:RegisterShortTermEvents(
 		"UNIT_HEALTH_FREQUENT boss1 boss2 boss3"
 	)
+	DBM:AddMsg("Warning: This mod is completely and utterly broken with no proper way to detect boat phase ending or player location, both of which timers/other features HEAVILY replied upon")
 end
 
 function mod:OnCombatEnd()
@@ -307,10 +310,10 @@ end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
-	local noFilter = false
-	if not DBM.Options.DontShowFarWarnings then
-		noFilter = true
-	end
+	local noFilter = true
+--	if not DBM.Options.DontShowFarWarnings then
+--		noFilter = true
+--	end
 	if spellId == 158078 then
 		self.vb.bloodRitual = self.vb.bloodRitual + 1
 		if noFilter or not isPlayerOnBoat() then--Blood Ritual. Still safest way to start timer, in case no sync
@@ -367,7 +370,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		noFilter = true
 	end
 	if spellId == 157854 then
-		self:Schedule(12.5, boatReturnWarning)
+		--self:Schedule(12.5, boatReturnWarning)
 		if noFilter or not isPlayerOnBoat() then
 			warnBombardmentAlpha:Show(self.vb.alphaOmega)
 			timerBombardmentAlphaCD:Start()
@@ -544,8 +547,8 @@ end
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc)
 	if msg:find(L.shipMessage) then
-		self:Schedule(1, checkBoatOn, self, 1)
-		self:Schedule(25, checkBoatPlayer, self, npc)
+		--self:Schedule(1, checkBoatOn, self, 1)
+		--self:Schedule(25, checkBoatPlayer, self, npc)
 		boatMissionDone = false
 		self.vb.ship = self.vb.ship + 1
 		self.vb.alphaOmega = 1
