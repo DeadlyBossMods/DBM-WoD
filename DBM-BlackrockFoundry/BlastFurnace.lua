@@ -153,38 +153,49 @@ do
 	end
 end
 
-local lines = {}
-local function updateInfoFrame1()
-	table.wipe(lines)
-	local regulatorCount = 0
-	--Show heat first
-	lines[heatName] = UnitPower("boss1", 10)--Heart of the mountain always boss1
-	--Show regulator progress second
-	for i = 2, 4 do--Boss order can be random. regulators being 3/4 not guaranteed. Had some pull 2/3, 3/4, etc. Must check all 2-4
-		if UnitExists("boss"..i) then
-			local cid = DBM:GetCIDFromGUID(UnitGUID("boss"..i))
-			if cid == 76808 then--Heat Regulator
-				regulatorCount = regulatorCount + 1
-				local bombsNeeded = mceil(UnitHealth("boss"..i)/100000)
-				lines[L.Regulator:format(regulatorCount)] = L.bombNeeded:format(bombsNeeded)
-				if regulatorCount == 2 then break end
+local updateInfoFrame1, updateInfoFrame2
+do
+	local lines = {}
+	local sortedLines = {}
+	local function addLine(key, value)
+		-- sort by insertion order
+		lines[key] = value
+		sortedLines[#sortedLines + 1] = key
+	end
+	updateInfoFrame1 = function()
+		table.wipe(lines)
+		table.wipe(sortedLines)
+		local regulatorCount = 0
+		--Show heat first
+		addLine(heatName, UnitPower("boss1", 10))--Heart of the mountain always boss1
+		--Show regulator progress second
+		for i = 2, 4 do--Boss order can be random. regulators being 3/4 not guaranteed. Had some pull 2/3, 3/4, etc. Must check all 2-4
+			if UnitExists("boss"..i) then
+				local cid = DBM:GetCIDFromGUID(UnitGUID("boss"..i))
+				if cid == 76808 then--Heat Regulator
+					regulatorCount = regulatorCount + 1
+					local bombsNeeded = mceil(UnitHealth("boss"..i)/100000)
+					addLine(L.Regulator:format(regulatorCount), L.bombNeeded:format(bombsNeeded))
+					if regulatorCount == 2 then break end
+				end
 			end
 		end
+		return lines, sortedLines
 	end
-	return lines
-end
 
-local function updateInfoFrame2()
-	table.wipe(lines)
-	--Show Heat first
-	lines[heatName] = UnitPower("boss1", 10)--Heart of the mountain always boss1
-	--Show fixate debuffs second
-	for uId in DBM:GetGroupMembers() do
-		if UnitDebuff(uId, fixateDebuff) then
-			lines[UnitName(uId)] = ""
+	updateInfoFrame2 = function()
+		table.wipe(lines)
+		table.wipe(sortedLines)
+		--Show Heat first
+		addLine(heatName, UnitPower("boss1", 10))--Heart of the mountain always boss1
+		--Show fixate debuffs second
+		for uId in DBM:GetGroupMembers() do
+			if UnitDebuff(uId, fixateDebuff) then
+				addLine(UnitName(uId), "")
+			end
 		end
+		return lines, sortedLines
 	end
-	return lines
 end
 
 --Note: only thing that's still different in each mode

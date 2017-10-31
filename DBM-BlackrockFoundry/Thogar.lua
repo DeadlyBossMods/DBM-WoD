@@ -363,7 +363,7 @@ local function showTrainWarning(self)
 	warnTrain:Show(train, text)
 end
 
-local function lanePos()
+local function lanePos(self)
 	if self:HasMapRestrictions() then return 0 end
 	local posX = UnitPosition("player")--room is perfrect square, y coord not needed.
 	local playerLane
@@ -384,7 +384,7 @@ local function laneCheck(self)
 	local trainTable = self:IsMythic() and mythicTrains or self:IsLFR() and lfrTrains or otherTrains
 	local train = self.vb.trainCount
 	if self:HasMapRestrictions() then return end
-	local playerLane = lanePos()
+	local playerLane = lanePos(self)
 	if trainTable[train] and trainTable[train][playerLane] then
 		specWarnTrain:Show()
 	end
@@ -412,7 +412,7 @@ local function updateInfoFrame()
 	local train = mod.vb.infoCount
 	local trainTable = mod:IsMythic() and mythicTrains or mod:IsLFR() and lfrTrains or otherTrains
 	if trainTable[train] then
-		local playerLane = lanePos()
+		local playerLane = lanePos(mod)
 		for i = 1, 4 do
 			local lanetext = (playerLane == i and "|cff00ffff" or "")..L.lane.." "..i..(playerLane == i and "|r" or "")
 			if trainTable[train][i] then
