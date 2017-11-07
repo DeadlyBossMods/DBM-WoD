@@ -95,72 +95,82 @@ do
 	end
 end
 
-local lines = {}
-local function updateInfoFrame()
-	table.wipe(lines)
-	local bossPower = 0
-	local bossPower2 = 0
-	if UnitExists("boss1") and UnitExists("boss2") then
-		bossPower = UnitPower("boss1")
-		bossPower2 = UnitPower("boss2")
+local updateInfoFrame
+do
+	local lines = {}
+	local sortedLines = {}
+	local function addLine(key, value)
+		-- sort by insertion order
+		lines[key] = value
+		sortedLines[#sortedLines + 1] = key
 	end
-	--First, Phem
-	if DBM:GetUnitCreatureId("boss1") == 78237 then
-		lines[UnitName("boss1")] = bossPower
-		if bossPower < 33 then--Whirlwind
-			if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
-				lines["|cFF9932CD"..GetSpellInfo(157943).."|r"] = GetSpellInfo(163321)
-			else
-				lines[GetSpellInfo(157943)] = ""
-			end
-		elseif bossPower < 66 then--Enfeabling Roar
-			lines[GetSpellInfo(158057)] = ""
-		elseif bossPower < 100 then--Quake
-			lines[GetSpellInfo(158200)] = ""
+	updateInfoFrame = function()
+		table.wipe(lines)
+		table.wipe(sortedLines)
+		local bossPower = 0
+		local bossPower2 = 0
+		if UnitExists("boss1") and UnitExists("boss2") then
+			bossPower = UnitPower("boss1")
+			bossPower2 = UnitPower("boss2")
 		end
-	elseif DBM:GetUnitCreatureId("boss2") == 78237 then
-		lines[UnitName("boss2")] = bossPower2
-		if bossPower2 < 33 then--Whirlwind
-			if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
-				lines["|cFF9932CD"..GetSpellInfo(157943).."|r"] = GetSpellInfo(163321)
-			else
-				lines[GetSpellInfo(157943)] = ""
+		--First, Phem
+		if DBM:GetUnitCreatureId("boss1") == 78237 then
+			addLine(UnitName("boss1"), bossPower)
+			if bossPower < 33 then--Whirlwind
+				if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
+					addLine("|cFF9932CD"..GetSpellInfo(157943).."|r", GetSpellInfo(163321))
+				else
+					addLine(GetSpellInfo(157943), "")
+				end
+			elseif bossPower < 66 then--Enfeabling Roar
+				addLine(GetSpellInfo(158057), "")
+			elseif bossPower < 100 then--Quake
+				addLine(GetSpellInfo(158200), "")
 			end
-		elseif bossPower2 < 66 then--Enfeabling Roar
-			lines[GetSpellInfo(158057)] = ""
-		elseif bossPower2 < 100 then--Quake
-			lines[GetSpellInfo(158200)] = ""
+		elseif DBM:GetUnitCreatureId("boss2") == 78237 then
+			addLine(UnitName("boss2"), bossPower2)
+			if bossPower2 < 33 then--Whirlwind
+				if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
+					addLine("|cFF9932CD"..GetSpellInfo(157943).."|r", GetSpellInfo(163321))
+				else
+					addLine(GetSpellInfo(157943), "")
+				end
+			elseif bossPower2 < 66 then--Enfeabling Roar
+				addLine(GetSpellInfo(158057), "")
+			elseif bossPower2 < 100 then--Quake
+				addLine(GetSpellInfo(158200), "")
+			end
 		end
-	end
 	--Second, Pol
-	if DBM:GetUnitCreatureId("boss1") == 78238 then
-		if bossPower < 33 then--Shield Charge
-			lines[UnitName("boss1")] = bossPower
-			if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
-				lines["|cFF9932CD"..GetSpellInfo(158134).."|r"] = GetSpellInfo(163336)
-			else
-				lines[GetSpellInfo(158134)] = ""
+		if DBM:GetUnitCreatureId("boss1") == 78238 then
+			if bossPower < 33 then--Shield Charge
+				addLine(UnitName("boss1"), bossPower)
+				if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
+					addLine("|cFF9932CD"..GetSpellInfo(158134).."|r", GetSpellInfo(163336))
+				else
+					addLine(GetSpellInfo(158134), "")
+				end
+			elseif bossPower < 66 then--Disruptiong Shout
+				addLine(GetSpellInfo(158093), "")
+			elseif bossPower < 100 then--Pulverize
+				addLine(GetSpellInfo(158385), "")
 			end
-		elseif bossPower < 66 then--Disruptiong Shout
-			lines[GetSpellInfo(158093)] = ""
-		elseif bossPower < 100 then--Pulverize
-			lines[GetSpellInfo(158385)] = ""
-		end
-	elseif DBM:GetUnitCreatureId("boss2") == 78238 then
-		lines[UnitName("boss2")] = bossPower2
-		if bossPower2 < 33 then--Shield Charge
-			if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
-				lines["|cFF9932CD"..GetSpellInfo(158134).."|r"] = GetSpellInfo(163336)
-			else
-				lines[GetSpellInfo(158134)] = ""
+		elseif DBM:GetUnitCreatureId("boss2") == 78238 then
+			addLine(UnitName("boss2"), bossPower2)
+			if bossPower2 < 33 then--Shield Charge
+				if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
+					addLine("|cFF9932CD"..GetSpellInfo(158134).."|r", GetSpellInfo(163336))
+				else
+					addLine(GetSpellInfo(158134), "")
+				end
+			elseif bossPower2 < 66 then--Disruptiong Shout
+				addLine(GetSpellInfo(158093), "")
+			elseif bossPower2 < 100 then--Pulverize
+				addLine(GetSpellInfo(158385), "")
 			end
-		elseif bossPower2 < 66 then--Disruptiong Shout
-			lines[GetSpellInfo(158093)] = ""
-		elseif bossPower2 < 100 then--Pulverize
-			lines[GetSpellInfo(158385)] = ""
 		end
+		return lines, sortedLines
 	end
-	return lines
 end
 
 function mod:OnCombatStart(delay)
