@@ -110,37 +110,44 @@ end
 local updateInfoFrame
 do
 	local lines = {}
+	local sortedLines = {}
 	local reactiveName, burningName, quickfuseName, reinforcedName, volatileName = GetSpellInfo(186676), GetSpellInfo(186667), GetSpellInfo(186660), GetSpellInfo(188294), GetSpellInfo(182523)
+	local function addLine(key, value)
+		-- sort by insertion order
+		lines[key] = value
+		sortedLines[#sortedLines + 1] = key
+	end
 	updateInfoFrame = function()
 		table.wipe(lines)
+		table.wipe(sortedLines)
 		local total = mod.vb.burningCount + mod.vb.reactiveCount + mod.vb.quickfuseCount + mod.vb.volatileCount + mod.vb.reinforcedCount
 		if total == 0 then--None found, hide infoframe because all bombs dead
 			DBM.InfoFrame:Hide()
 		end
 		if mod.vb.reactiveCount > 0 then
 			if mod:IsTank() then
-				lines["|cff00ffff"..reactiveName.."|r"] = mod.vb.reactiveCount
+				addLine("|cff00ffff"..reactiveName.."|r", mod.vb.reactiveCount)
 			else
-				lines[reactiveName] = mod.vb.reactiveCount
+				addLine(reactiveName, mod.vb.reactiveCount)
 			end
 		end
 		if mod.vb.burningCount > 0 then
-			lines[burningName] = mod.vb.burningCount
+			addLine(burningName, mod.vb.burningCount)
 		end
 		if mod.vb.quickfuseCount > 0 then
 			if mod:IsDps() then
-				lines["|cff00ffff"..quickfuseName.."|r"] = mod.vb.quickfuseCount
+				addLine("|cff00ffff"..quickfuseName.."|r", mod.vb.quickfuseCount)
 			else
-				lines[quickfuseName] = mod.vb.quickfuseCount
+				addLine(quickfuseName, mod.vb.quickfuseCount)
 			end
 		end
 		if mod.vb.reinforcedCount > 0 then
-			lines[reinforcedName] = mod.vb.reinforcedCount
+			addLine(reinforcedName, mod.vb.reinforcedCount)
 		end
 		if mod.vb.volatileCount > 0 then
-			lines[volatileName] = mod.vb.volatileCount
+			addLine(volatileName, mod.vb.volatileCount)
 		end
-		return lines
+		return lines, sortedLines
 	end
 end
 

@@ -209,8 +209,15 @@ end
 local updateInfoFrame
 do
 	local lines = {}
+	local sortedLines = {}
+	local function addLine(key, value)
+		-- sort by insertion order
+		lines[key] = value
+		sortedLines[#sortedLines + 1] = key
+	end
 	updateInfoFrame = function()
 		table.wipe(lines)
+		table.wipe(sortedLines)
 		local total, total2 = 0, 0
 		for i = 1, #gazeTargets do
 			local name = gazeTargets[i]
@@ -218,7 +225,7 @@ do
 			if not uId then break end
 			if UnitDebuff(uId, gaze1) or UnitDebuff(uId, gaze2) then
 				total = total + 1
-				lines["|cFF9932CD"..name.."|r"] = i
+				addLine("|cFF9932CD"..name.."|r", i)
 			end
 		end
 		--Mythic, show guldan targets and number of charges left
@@ -229,13 +236,13 @@ do
 			local _, _, _, currentStack = UnitDebuff(uId, guldanName)
 			if currentStack then
 				total2 = total2 + 1
-				lines[name] = currentStack
+				addLine(name, currentStack)
 			end
 		end
 		if total == 0 and total2 == 0 then--None found, hide infoframe because all broke
 			DBM.InfoFrame:Hide()
 		end
-		return lines
+		return lines, sortedLines
 	end
 end
 

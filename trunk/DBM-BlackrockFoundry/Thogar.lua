@@ -391,43 +391,34 @@ local function laneCheck(self)
 end
 
 local lines = {}
-
-local function sortInfoFrame(a, b)
-	local rexp = L.lane.." ".."%d"
-	local c = string.match(a, rexp)
-	local d = string.match(b, rexp)
-	if c and not d then
-		return true
-	elseif not c and d then
-		return false
-	elseif c and d and c < d then 
-		return true
-	else
-		return false
-	end
+local sortedLines = {}
+local function addLine(key, value)
+	-- sort by insertion order
+	lines[key] = value
+	sortedLines[#sortedLines + 1] = key
 end
-
 local function updateInfoFrame()
 	table.wipe(lines)
+	table.wipe(sortedLines)
 	local train = mod.vb.infoCount
 	local trainTable = mod:IsMythic() and mythicTrains or mod:IsLFR() and lfrTrains or otherTrains
 	if trainTable[train] then
-		local playerLane = lanePos(mod)
+		--local playerLane = lanePos(mod)
 		for i = 1, 4 do
-			local lanetext = (playerLane == i and "|cff00ffff" or "")..L.lane.." "..i..(playerLane == i and "|r" or "")
+			--local lanetext = (playerLane == i and "|cff00ffff" or "")..L.lane.." "..i..(playerLane == i and "|r" or "")
 			if trainTable[train][i] then
-				lines[lanetext] = trainTable[train][i]
+				addLine(L.lane..i, trainTable[train][i])
 			else
-				lines[lanetext] = ""
+				addLine(L.lane..i, "")
 			end
 		end
 		if trainTable[train]["speciali"] then
-			lines[trainTable[train]["speciali"]] = ""
+			addLine(trainTable[train]["speciali"], "")
 		end
 	else
-		lines[DBM_CORE_UNKNOWN] = ""
+		addLine(DBM_CORE_UNKNOWN, "")
 	end
-	return lines
+	return lines, sortedLines
 end
 
 --Work In Progress
@@ -525,7 +516,7 @@ local function showInfoFrame(self)
 	if self.Options.InfoFrame then
 		self.vb.infoCount = self.vb.trainCount + 1
 		DBM.InfoFrame:SetHeader(MovingTrain.." ("..(self.vb.infoCount)..")")
-		DBM.InfoFrame:Show(5, "function", updateInfoFrame, sortInfoFrame)
+		DBM.InfoFrame:Show(5, "function", updateInfoFrame)
 	end
 end
 
