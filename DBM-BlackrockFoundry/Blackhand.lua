@@ -57,7 +57,7 @@ local specWarnAttachSlagBombsOther	= mod:NewSpecialWarningTaunt(157000, nil, nil
 local specWarnSlagPosition			= mod:NewSpecialWarning("specWarnSlagPosition", nil, false, nil, 1)
 local yellAttachSlagBombs			= mod:NewYell(157000, nil, nil, 2)
 local specWarnMassiveShatteringSmash= mod:NewSpecialWarningCount(158054, nil, nil, 2, 3, 2)
-local specWarnFallingDebris			= mod:NewSpecialWarningCount(162585, nil, nil, nil, 2)--Mythic (like Meteor)
+local specWarnFallingDebris			= mod:NewSpecialWarningCount(162585, nil, nil, nil, 2, 2)--Mythic (like Meteor)
 
 --Stage One: The Blackrock Forge
 mod:AddTimerLine(SCENARIO_STAGE:format(1))
@@ -65,7 +65,7 @@ local timerDemolitionCD				= mod:NewNextCountTimer(45, 156425, nil, nil, nil, 2,
 local timerMassiveDemolitionCD		= mod:NewNextCountTimer(6, 156479, nil, nil, nil, 2, nil, DBM_CORE_DEADLY_ICON)
 local timerMarkedforDeathCD			= mod:NewNextCountTimer(15.5, 156096, nil, nil, nil, 3)--Deadly icon? DJ doesn't give it an icon so i won't either for now
 local timerThrowSlagBombsCD			= mod:NewCDCountTimer(24.5, 156030, nil, "Melee", nil, 3)--It's a next timer, but sometimes delayed by Shattering Smash
-local timerShatteringSmashCD		= mod:NewCDCountTimer(44.5, 155992, nil, nil, nil, 5)--power based, can variate a little do to blizzard buggy power code.
+local timerShatteringSmashCD		= mod:NewCDCountTimer(44.5, 155992, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)--power based, can variate a little do to blizzard buggy power code.
 local timerImpalingThrow			= mod:NewCastTimer(5, 156111, nil, nil, nil, nil, nil, DBM_CORE_DEADLY_ICON)--How long marked target has to aim throw at Debris Pile or Siegemaker
 --Stage Two: Storage Warehouse
 mod:AddTimerLine(SCENARIO_STAGE:format(2))
@@ -92,6 +92,7 @@ local voiceDemolition				= mod:NewVoice(156425) --AOE
 local voiceThrowSlagBombs			= mod:NewVoice(156030) --bombsoon
 local voiceMassiveExplosion			= mod:NewVoice(163008) --AOE
 local voiceAttachSlagBombs			= mod:NewVoice(157000) --target: runout;
+local voiceFallingDebris			= mod:NewVoice(162585) --helpsoak
 
 mod:AddSetIconOption("SetIconOnMarked", 156096, true)
 mod:AddRangeFrameOption("6/10")
@@ -362,6 +363,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if spellId == 162579 then
 		self.vb.deprisCount = self.vb.deprisCount + 1
 		specWarnFallingDebris:Show(self.vb.deprisCount)
+		voiceFallingDebris:Play("helpsoak")
 		timerFallingDebris:Start()
 		timerFallingDebrisCD:Start(nil, self.vb.deprisCount+1)
 	end
