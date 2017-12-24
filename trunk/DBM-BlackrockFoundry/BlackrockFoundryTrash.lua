@@ -28,7 +28,7 @@ local yellLivingBlaze				= mod:NewYell(175583)
 local specWarnEmberInWind			= mod:NewSpecialWarningMoveAway(177855)
 local specWarnFinalFlame			= mod:NewSpecialWarningDodge(163194, "MeleeDps")
 local specWarnReapingWhirl			= mod:NewSpecialWarningDodge(171537, "MeleeDps")
-local specWarnBurning				= mod:NewSpecialWarningStack(175594, nil, 8)
+local specWarnBurning				= mod:NewSpecialWarningStack(175594, nil, 8, nil, nil, 1, 6)
 local specWarnBurningOther			= mod:NewSpecialWarningTaunt(175594, nil, nil, nil, nil, 2)
 
 local voiceBurning					= mod:NewVoice(155242) --changemt
@@ -66,7 +66,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnEmberInWind:Show()
 		end
-	elseif spellId == 175594 then
+	elseif spellId == 175594 and not self:IsTrivial(110) then
 		local amount = args.amount or 1
 		if (amount >= 8) and (amount % 3 == 0) then
 			voiceBurning:Play("changemt")
