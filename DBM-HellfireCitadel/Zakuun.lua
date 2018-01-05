@@ -85,7 +85,7 @@ mod.vb.yellType = "Icon"
 mod.vb.latentIcon = 8
 local yellSeeds2 = mod:NewPosYell(181508, nil, true, false)
 local seedsTargets = {}
-local befouledName = GetSpellInfo(179711)
+local befouledName, latentDebuff = DBM:GetSpellInfo(179711), DBM:GetSpellInfo(182008)
 local UnitDebuff = UnitDebuff
 local debuffFilter
 do
@@ -193,6 +193,7 @@ local function delayModCheck(self)
 end
 
 function mod:OnCombatStart(delay)
+	befouledName, latentDebuff = DBM:GetSpellInfo(179711), DBM:GetSpellInfo(182008)
 	table.wipe(seedsTargets)
 	self.vb.befouledTargets = 0
 	self.vb.FissureCount = 0
@@ -222,9 +223,8 @@ function mod:OnCombatStart(delay)
 		self:Schedule(5, delayModCheck, self)--Do this after 5 seconds, allow time to see if we get a sync
 	end
 	if self.Options.InfoFrame then
-		local spellName = GetSpellInfo(182008)
-		DBM.InfoFrame:SetHeader(spellName)
-		DBM.InfoFrame:Show(10, "playerbaddebuff", spellName, true)
+		DBM.InfoFrame:SetHeader(latentDebuff)
+		DBM.InfoFrame:Show(10, "playerbaddebuff", latentDebuff, true)
 	end
 end
 

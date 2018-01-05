@@ -22,14 +22,14 @@ mod:RegisterEventsInCombat(
 local warnNecroticBreath			= mod:NewSpellAnnounce(159219, 3)--Warn everyone, so they know where not to be.
 local warnRot						= mod:NewStackAnnounce(163241, 2, nil, "Tank")
 --Adds/Mushrooms
-local warnLivingMushroom			= mod:NewCountAnnounce(160022, 1)--Good shroom! (mana/haste)
-local warnRejuvMushroom				= mod:NewCountAnnounce(160021, 1)--Other good shroom (healing)
+local warnLivingMushroom			= mod:NewCountAnnounce(160022, 1, nil, nil, nil, nil, nil, 2)--Good shroom! (mana/haste)
+local warnRejuvMushroom				= mod:NewCountAnnounce(160021, 1, nil, nil, nil, nil, nil, 2)--Other good shroom (healing)
 
-local specWarnCreepingMoss			= mod:NewSpecialWarningMove(163590, "Tank")
+local specWarnCreepingMoss			= mod:NewSpecialWarningMove(163590, "Tank", nil, nil, 2, 2)
 local specWarnInfestingSpores		= mod:NewSpecialWarningCount(159996, nil, nil, nil, 2, 2)
 local specWarnDecay					= mod:NewSpecialWarningInterruptCount(160013, "-Healer", nil, nil, nil, 2)
 local specWarnNecroticBreath		= mod:NewSpecialWarningSpell(159219, "Tank", nil, nil, 3)
-local specWarnRot					= mod:NewSpecialWarningStack(163241, nil, 3)
+local specWarnRot					= mod:NewSpecialWarningStack(163241, nil, 3, nil, nil, 1, 6)
 local specWarnRotOther				= mod:NewSpecialWarningTaunt(163241, nil, nil, nil, 1, 2)
 local specWarnExplodingFungus		= mod:NewSpecialWarningDodge(163794, nil, nil, nil, 2, 2)--Change warning type/sound? need to know more about spawn.
 local specWarnWaves					= mod:NewSpecialWarningDodge(160425, nil, nil, nil, 2, 2)
@@ -54,18 +54,6 @@ local timerSpecialCD				= mod:NewCDSpecialTimer(20)--Mythic Specials. Shared cd,
 
 local countdownInfestingSpores		= mod:NewCountdown(57, 159996)--The variation on this annoys me, may move countdown to something more reliable if possible
 local countdownFungalFleshEater		= mod:NewCountdown("Alt120", "ej9995", "-Healer")
-
-local voiceInfestingSpores			= mod:NewVoice(159996) --aesoon
-local voiceRot						= mod:NewVoice(163241, nil, nil, 2)
-local voiceLivingMushroom			= mod:NewVoice(160022)
-local voiceRejuvMushroom			= mod:NewVoice(160021)
-local voiceMindFungus				= mod:NewVoice(163141, "Dps")
-local voiceFungalFlesheater			= mod:NewVoice("ej9995", "-Healer")
-local voiceSporeShooter				= mod:NewVoice(163594, "RangedDps")
-local voiceDecay					= mod:NewVoice(160013, "-Healer")
-local voiceExplodingFungus			= mod:NewVoice(163794)
-local voiceWaves					= mod:NewVoice(160425)
-local voiceCreepingMoss				= mod:NewVoice(163590, "Tank")
 
 mod:AddRangeFrameOption(8, 160254, false)
 mod:AddDropdownOption("InterruptCounter", {"Two", "Three", "Four"}, "Two", "misc")
@@ -92,7 +80,7 @@ function mod:OnCombatStart(delay)
 	countdownFungalFleshEater:Start(32-delay)
 	timerInfestingSporesCD:Start(45-delay, 1)
 	countdownInfestingSpores:Start(45-delay)
-	voiceInfestingSpores:Schedule(38.5-delay, "aesoon")
+	specWarnInfestingSpores:ScheduleVoice(38.5-delay, "aesoon")
 	timerRejuvMushroomCD:Start(80-delay, 1)--Todo, verify 80 in all modes and not still 75 in mythic
 	berserkTimer:Start(-delay)
 	if self:IsMythic() then
@@ -114,7 +102,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnInfestingSpores:Show(self.vb.sporesCount)
 		timerInfestingSporesCD:Start(nil, self.vb.sporesCount+1)
 		countdownInfestingSpores:Start()
-		voiceInfestingSpores:Schedule(50.5, "aesoon")
+		specWarnInfestingSpores:ScheduleVoice(50.5, "aesoon")
 	elseif spellId == 160013 then
 		if (self.Options.InterruptCounter == "Two" and self.vb.decayCounter == 2) or (self.Options.InterruptCounter == "Three" and self.vb.decayCounter == 3) or self.vb.decayCounter == 4 then
 			self.vb.decayCounter = 0
@@ -125,13 +113,13 @@ function mod:SPELL_CAST_START(args)
 			specWarnDecay:Show(args.sourceName, self.vb.decayCounter)
 			timerDecayCD:Start(args.sourceGUID)
 			if self.vb.decayCounter == 1 then
-				voiceDecay:Play("kick1r")
+				specWarnDecay:Play("kick1r")
 			elseif self.vb.decayCounter == 2 then
-				voiceDecay:Play("kick2r")
+				specWarnDecay:Play("kick2r")
 			elseif self.vb.decayCounter == 3 then
-				voiceDecay:Play("kick3r")
+				specWarnDecay:Play("kick3r")
 			elseif self.vb.decayCounter == 4 then
-				voiceDecay:Play("kick4r")
+				specWarnDecay:Play("kick4r")
 			end
 		end
 	elseif spellId == 159219 then
@@ -153,7 +141,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(8)
 		end
-		voiceSporeShooter:Play("163594k")
+		specWarnSporeShooter:Play("163594k")
 	elseif spellId == 163241 then
 		timerRotCD:Start()
 	end
@@ -166,10 +154,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		if amount >= 3 then
 			if args:IsPlayer() then--At this point the other tank SHOULD be clear.
 				specWarnRot:Show(amount)
+				specWarnRot:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
 				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnRotOther:Show(args.destName)
-					voiceRot:Play("changemt")
+					specWarnRotOther:Play("changemt")
 				else
 					warnRot:Show(args.destName, amount)
 				end
@@ -179,7 +168,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 164125 and args:GetDestCreatureID() == 78491 then
 		specWarnCreepingMoss:Show()
-		voiceCreepingMoss:Play("bossout")
+		specWarnCreepingMoss:Play("bossout")
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -201,32 +190,32 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 163141 then
 		specWarnMindFungus:Show()
 		timerMindFungusCD:Start()
-		voiceMindFungus:Play("163141k")
+		specWarnMindFungus:Play("163141k")
 	elseif spellId == 163142 then
 		self.vb.fleshEaterCount = self.vb.fleshEaterCount + 1
 		specWarnFungalFlesheater:Show(self.vb.fleshEaterCount)
 		timerFungalFleshEaterCD:Start(nil, self.vb.fleshEaterCount+1)
 		countdownFungalFleshEater:Start()
-		voiceFungalFlesheater:Play("163142k")
+		specWarnFungalFlesheater:Play("163142k")
 	elseif spellId == 160022 then
 		self.vb.greenShroom = self.vb.greenShroom + 1
 		warnLivingMushroom:Show(self.vb.greenShroom)
 		timerLivingMushroomCD:Start(nil, self.vb.greenShroom+1)
-		voiceLivingMushroom:Play("160022s") --green one
+		warnLivingMushroom:Play("160022s") --green one
 	elseif spellId == 160021 or spellId == 177820 then--Seems diff ID in mythic vs non mythic?
 		self.vb.blueShroom = self.vb.blueShroom + 1
 		warnRejuvMushroom:Show(self.vb.blueShroom)
 		timerRejuvMushroomCD:Start(nil, self.vb.blueShroom+1)
-		voiceRejuvMushroom:Play("160021s") --blue one
+		warnRejuvMushroom:Play("160021s") --blue one
 	elseif spellId == 163794 then
 		specWarnExplodingFungus:Show()
 		timerSpecialCD:Start()
-		voiceExplodingFungus:Play("watchstep")
-		voiceExplodingFungus:Schedule(15, "specialsoon")
+		specWarnExplodingFungus:Play("watchstep")
+		specWarnExplodingFungus:ScheduleVoice(15, "specialsoon")
 	elseif spellId == 160425 then
 		specWarnWaves:Show()
 		timerSpecialCD:Start()
-		voiceWaves:Play("watchwave")
-		voiceWaves:Schedule(15, "specialsoon")
+		specWarnWaves:Play("watchwave")
+		specWarnWaves:ScheduleVoice(15, "specialsoon")
 	end
 end

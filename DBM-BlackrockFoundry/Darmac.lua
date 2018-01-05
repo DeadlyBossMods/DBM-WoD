@@ -25,7 +25,7 @@ mod:RegisterEventsInCombat(
 
 --TODO, maybe combine the 4 beast ability target warnings into one option
 --Boss basic attacks
-local warnPinDownTargets			= mod:NewTargetAnnounce(154960, 3)
+local warnPinDownTargets			= mod:NewTargetAnnounce(154960, 3, nil, nil, nil, nil, nil, 2)
 --Boss gained abilities (beast deaths grant boss new abilities)
 local warnMount						= mod:NewTargetAnnounce(29769, 1)
 local warnWolf						= mod:NewTargetAnnounce(155458, 1)--Grants Rend and Tear
@@ -85,15 +85,6 @@ local berserkTimer					= mod:NewBerserkTimer(720)
 local countdownPinDown				= mod:NewCountdown(19.7, 154960, "Ranged")
 local countdownCallPack				= mod:NewCountdown("Alt31", 154975, "Tank")
 local countdownEpicenter			= mod:NewCountdown("AltTwo20", 159043, "Melee")
-
-local voiceCallthePack				= mod:NewVoice(154975, "Tank", nil, 2) --killmob
-local voiceSavageHowl				= mod:NewVoice(155198, "RemoveEnrage") --trannow
-local voicePinDown					= mod:NewVoice(154960, "Ranged") --helpme
-local voiceInfernoBreath			= mod:NewVoice(154989) --breathsoon
-local voiceSuperheatedShrapnel		= mod:NewVoice(155499) --breathsoon
-local voiceRendandTear				= mod:NewVoice(155385, "Melee")  --runaway
-local voiceCrushArmor				= mod:NewVoice(155236) --changemt
-local voiceTantrum					= mod:NewVoice(162275) --aesoon
 
 mod:AddRangeFrameOption("8/7/3", nil, "-Melee")
 mod:AddSetIconOption("SetIconOnSpear", 154960)--Not often I make icon options on by default but this one is universally important. YOu always break players out of spear, in any strat.
@@ -260,11 +251,11 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 155198 then
 		if self.Options.SpecWarn155198dispel2 then
 			specWarnSavageHowlDispel:Schedule(1.5, args.sourceName)
+			specWarnSavageHowlDispel:ScheduleVoice(1.5, "trannow")
 		else
 			specWarnSavageHowl:Schedule(1.5, args.sourceName)
 		end
 		timerSavageHowlCD:Start()
-		voiceSavageHowl:Schedule(1.5, "trannow")
 	elseif spellId == 159043 or spellId == 159045 then--Beast version/Boss version
 		self.vb.epicenterCount = self.vb.epicenterCount + 1
 		if self:IsMelee() and self:AntiSpam(3, 2) then
@@ -285,10 +276,10 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif spellId == 154975 then--Moved to success because spell cast start is interrupted, a lot, and no sense in announcing it if he didn't finish it. if he self interrupts it can be delayed as much as 15 seconds.
 		if self:IsTank() then
 			specWarnCallthePack:Show()
-			voiceCallthePack:Play("killmob")
+			specWarnCallthePack:Play("killmob")
 		else
 			specWarnCallthePack:Schedule(5)--They come out very slow and staggered, allow 5 seconds for tank to pick up then call switch for everyone else
-			voiceCallthePack:Schedule(5, "killmob")
+			specWarnCallthePack:ScheduleVoice(5, "killmob")
 		end
 		if self:IsDifficulty("normal", "lfr") then
 			timerCallthePackCD:Start(41.5)--40+1.5
@@ -310,8 +301,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			yellPinDown:Yell()
 		else
-			voicePinDown:Cancel()
-			voicePinDown:Schedule(0.5, "helpme")
+			warnPinDownTargets:CancelVoice()
+			warnPinDownTargets:ScheduleVoice(0.5, "helpme")
 		end
 	elseif spellId == 154981 then
 		if self:CheckDispelFilter() then
@@ -342,12 +333,12 @@ function mod:SPELL_AURA_APPLIED(args)
 		if amount >= 3 and args:IsPlayer() then
 			specWarnCrushArmor:Show(amount)
 		elseif amount >= 2 and not args:IsPlayer() then--Swap at 2 WHEN POSSIBLE but 50/50 you have to go to 3.
-			if not UnitDebuff("player", GetSpellInfo(155236)) and not UnitIsDeadOrGhost("player") then
+			if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 				specWarnCrushArmorOther:Show(args.destName)
+				specWarnCrushArmorOther:Play("tauntboss")
 			else
 				warnCrushArmor:Show(args.destName, amount)
 			end
-			voiceCrushArmor:Play("changemt")
 		else
 			warnCrushArmor:Show(args.destName, amount)
 		end
@@ -502,31 +493,31 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		self.vb.tantrumCount = self.vb.tantrumCount + 1
 		specWarnTantrum:Show(self.vb.tantrumCount)
 		timerTantrumCD:Start(nil, self.vb.tantrumCount+1)
-		voiceTantrum:Play("aesoon")
+		specWarnTantrum:Play("aesoon")
 	elseif spellId == 155520 then--Beastlord Darmac Tantrum
 		self.vb.tantrumCount = self.vb.tantrumCount + 1
 		specWarnTantrum:Show(self.vb.tantrumCount)
 		timerTantrumCD:Start(33, self.vb.tantrumCount+1)--This one may also be 30 seconds, but I saw 33 consistently
-		voiceTantrum:Play("aesoon")
+		specWarnTantrum:Play("aesoon")
 	elseif spellId == 155603 then--Face Random Non-Tank (boss version)
 		specWarnSuperheatedShrapnel:Show()
-		voiceSuperheatedShrapnel:Play("breathsoon")
+		specWarnSuperheatedShrapnel:Play("breathsoon")
 		timerSuperheatedShrapnelCD:Start()
 		--self:BossTargetScanner(76865, "SuperheatedTarget", 0.05, 40)--Apparently scanning this does work in LFR, but I've never seen him look at a target on mythic
 		self:BossUnitTargetScanner(uId, "SuperheatedTarget")
 	elseif spellId == 155385 or spellId == 155515 then--Both versions of spell(boss and beast), they seem to have same cooldown so combining is fine
 		specWarnRendandTear:Show()
 		timerRendandTearCD:Start()
-		voiceRendandTear:Play("runaway")
+		specWarnRendandTear:Play("runaway")
 	elseif spellId == 155365 then--Cast
 		specWarnPinDown:Show()
 		timerPinDownCD:Start()
 		countdownPinDown:Start()
-		voicePinDown:Play("spear")
+		specWarnPinDown:Play("spear")
 	elseif spellId == 155423 then--Face Random Non-Tank (beast version)
 		specWarnInfernoBreath:Show()
 		timerInfernoBreathCD:Start()
-		voiceInfernoBreath:Play("breathsoon")
+		specWarnInfernoBreath:Play("breathsoon")
 		self:BossUnitTargetScanner(uId, "BreathTarget")
 	end
 end

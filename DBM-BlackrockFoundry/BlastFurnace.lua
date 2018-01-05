@@ -27,18 +27,18 @@ local warnRegulators			= mod:NewAnnounce("warnRegulators", 2, 156918)
 local warnBlastFrequency		= mod:NewAnnounce("warnBlastFrequency", 1, 155209, "Healer")
 local warnBomb					= mod:NewTargetAnnounce(155192, 4, nil, false, 2)
 local warnDropBombs				= mod:NewSpellAnnounce(174726, 1, nil, "-Tank", 2)
-local warnEngineer				= mod:NewCountAnnounce("ej9649", 2, 155179)
+local warnEngineer				= mod:NewCountAnnounce("ej9649", 2, 155179, nil, nil, nil, 2)
 local warnRupture				= mod:NewTargetAnnounce(156932, 3)
 local warnInfuriated			= mod:NewTargetAnnounce(155170, 3, nil, "Tank")
 --Phase 2
-local warnPhase2				= mod:NewPhaseAnnounce(2)
+local warnPhase2				= mod:NewPhaseAnnounce(2, 2, nil, nil, nil, nil, nil, 2)
 local warnElementalists			= mod:NewAddsLeftAnnounce("ej9655", 2, 91751)
 local warnFixate				= mod:NewTargetAnnounce(155196, 4)
 local warnVolatileFire			= mod:NewTargetAnnounce(176121, 4, nil, false, 2)--Spam. disable by default.
-local warnFireCaller			= mod:NewCountAnnounce("ej9659", 3, 156937, "Tank")
-local warnSecurityGuard			= mod:NewCountAnnounce("ej9648", 2, 160379, "Tank")
+local warnFireCaller			= mod:NewCountAnnounce("ej9659", 3, 156937, "Tank", nil, nil, 2)
+local warnSecurityGuard			= mod:NewCountAnnounce("ej9648", 2, 160379, "Tank", nil, nil, 2)
 --Phase 3
-local warnPhase3				= mod:NewPhaseAnnounce(3)
+local warnPhase3				= mod:NewPhaseAnnounce(3, 2, nil, nil, nil, nil, nil, 2)
 local warnMelt					= mod:NewTargetAnnounce(155225, 4)--Every 10 sec.
 local warnHeat					= mod:NewStackAnnounce(155242, 2, nil, "Tank")
 
@@ -94,19 +94,7 @@ local countdownFireCaller		= mod:NewCountdown("AltTwo64", "ej9659", "Tank")
 local countdownSecurityGuard	= mod:NewCountdown("Alt41", "ej9648", "Tank")
 local countdownVolatileFire		= mod:NewCountdownFades(8, 176121)
 
-local voicePhaseChange			= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
-local voiceRepair				= mod:NewVoice(155179, "-Healer") --int
-local voiceBomb 				= mod:NewVoice(155192) --bombyou.ogg, bomb on you
-local voiceBellowsOperator 		= mod:NewVoice("ej9650", "-Healer")
-local voiceRupture				= mod:NewVoice(156932) --runaway
-local voiceMelt					= mod:NewVoice(155223) --runaway
-local voiceSlagPool				= mod:NewVoice(155743) --runaway
-local voiceHeat					= mod:NewVoice(155242) --changemt
-local voiceVolatileFire			= mod:NewVoice(176121) --runout
 local voiceSlagElemental		= mod:NewVoice("ej9657", "-Tank")
-local voiceFireCaller			= mod:NewVoice("ej9659", "Tank")
-local voiceSecurityGuard		= mod:NewVoice("ej9648", "Tank")
-local voiceEngineer				= mod:NewVoice("ej9649", "Tank")
 
 mod:AddRangeFrameOption(8)
 mod:AddBoolOption("InfoFrame")
@@ -129,10 +117,7 @@ mod.vb.bellowsOperator = 0
 mod.vb.secondSlagSpawned = false
 mod.vb.volatileActive = 0
 local playerVolatileCount = 0
-local bombDebuff = GetSpellInfo(155192)
-local volatileFireDebuff = GetSpellInfo(176121)
-local fixateDebuff = GetSpellInfo(155196)
-local heatName = GetSpellInfo(155242)
+local bombDebuff, volatileFireDebuff, fixateDebuff, heatName = DBM:GetSpellInfo(155192), DBM:GetSpellInfo(176121), DBM:GetSpellInfo(155196), DBM:GetSpellInfo(155242)
 local activeSlagGUIDS = {}
 local activePrimalGUIDS = {}
 local activePrimal = 0 -- health report variable. no sync
@@ -203,9 +188,9 @@ local function Engineers(self)
 	self.vb.engineer = self.vb.engineer + 1
 	local count = self.vb.engineer
 	warnEngineer:Show(count)
-	voiceEngineer:Play("ej9649")
+	warnEngineer:Play("ej9649")
 	if count < 12 then
-		voiceEngineer:Schedule(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
+		warnEngineer:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
 	end
 	if self:IsDifficulty("mythic", "normal") then
 		timerEngineer:Start(35, count+1)
@@ -222,9 +207,9 @@ local function SecurityGuard(self)
 	self.vb.securityGuard = self.vb.securityGuard + 1
 	local count = self.vb.securityGuard
 	warnSecurityGuard:Show(count)
-	voiceSecurityGuard:Play("ej9648")
+	warnSecurityGuard:Play("ej9648")
 	if count < 12 then
-		voiceSecurityGuard:Schedule(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
+		warnSecurityGuard:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
 	end
 	if self.vb.phase == 1 then
 		timerSecurityGuard:Start(30.5, count+1)
@@ -266,9 +251,9 @@ local function FireCaller(self)
 	self.vb.fireCaller = self.vb.fireCaller + 1
 	local count = self.vb.fireCaller
 	warnFireCaller:Show(count)
-	voiceFireCaller:Play("ej9659")
+	warnFireCaller:Play("ej9659")
 	if count < 12 then
-		voiceFireCaller:Schedule(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
+		warnFireCaller:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
 	end
 	timerVolatileFireCD:Start(7)--6-8
 	timerFireCaller:Start(45, count+1)
@@ -330,6 +315,7 @@ function mod:CustomHealthUpdate()
 end
 
 function mod:OnCombatStart(delay)
+	bombDebuff, volatileFireDebuff, fixateDebuff, heatName = DBM:GetSpellInfo(155192), DBM:GetSpellInfo(176121), DBM:GetSpellInfo(155196), DBM:GetSpellInfo(155242)
 	table.wipe(activeSlagGUIDS)
 	table.wipe(activePrimalGUIDS)
 	prevHealth = 100
@@ -409,7 +395,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	local spellId = args.spellId
 	if spellId == 155179 and self:CheckTankDistance(args.sourceGUID, 40) then--Blizz seems to updated encounter code so they now run to nearest regulator instead of lowest health one.
 		specWarnRepair:Show(args.sourceName)
-		voiceRepair:Play("kickcast")
+		specWarnRepair:Play("kickcast")
 	elseif spellId == 174726 and self:CheckTankDistance(args.sourceGUID, 40) and self:AntiSpam(2, 4) and self.vb.phase == 1 then
 		warnDropBombs:Show()
 	elseif spellId == 176121 then
@@ -434,7 +420,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerBomb:Start(debuffTime)
 			if self:AntiSpam(2, 6) then
 				specWarnBomb:Show(L.heatRegulator)
-				voiceBomb:Play("bombrun")
+				specWarnBomb:Play("bombrun")
 			end
 		end
 	elseif spellId == 155196 then
@@ -494,12 +480,13 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 155242 then
 		local amount = args.amount or 1
 		if amount >= 2 then
-			voiceHeat:Play("changemt")
 			if args:IsPlayer() then
 				specWarnHeat:Show(amount)
+				specWarnHeat:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
 				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnHeatOther:Show(args.destName)
+					specWarnHeatOther:Play("tauntboss")
 				else
 					warnHeat:Show(args.destName, amount)
 				end
@@ -511,7 +498,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.bellowsOperator = self.vb.bellowsOperator + 1
 		specWarnBellowsOperator:Show()
 		timerBellowsOperator:Start(nil, self.vb.bellowsOperator+1)
-		voiceBellowsOperator:Play("killmob")
+		specWarnBellowsOperator:Play("killmob")
 	elseif spellId == 176121 then
 		warnVolatileFire:CombinedShow(1, args.destName)
 		self.vb.volatileActive = self.vb.volatileActive + 1
@@ -524,14 +511,14 @@ function mod:SPELL_AURA_APPLIED(args)
 				playerVolatileCount = playerVolatileCount + 1
 				if playerVolatileCount == 2 then
 					specWarnTwoVolatileFire:Show()
-					voiceVolatileFire:Schedule(debuffTime - 2, "defensive")
+					specWarnTwoVolatileFire:ScheduleVoice(debuffTime - 2, "defensive")
 				end
 				timerVolatileFire:Start(debuffTime, playerVolatileCount)--Pass playerVolatileCount as arg to have a timer for each debuff
 				if self:AntiSpam(3, 9) then
 					specVolatileFire:Show()
 					--Only one countdown/yell/runout alert though to avoid spam, user needs to get out of group for first expire, they just need to STAY out for second
 					countdownVolatileFire:Start(debuffTime)
-					voiceVolatileFire:Schedule(debuffTime - 4, "runout")
+					specVolatileFire:ScheduleVoice(debuffTime - 4, "runout")
 					if not self:IsLFR() and self.Options.Yell176121 then
 						if self:IsMythic() and self.Options.VFYellType2 == "Countdown" then
 							yellVolatileFire2:Schedule(debuffTime - 1, 1)
@@ -550,7 +537,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnMeltYou:Show()
 			yellMelt:Schedule(5)--yell after 5 sec to warn nearby player (aoe actually after 6 sec). like expel magic: fel
-			voiceMelt:Play("runout")
+			specWarnMeltYou:Play("runout")
 		elseif self:CheckNearby(8, args.destName) then
 			specWarnMeltNear:Show()
 		end
@@ -564,7 +551,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnRuptureOn:Show()
 			yellRupture:Schedule(4)--yell after 4 sec to warn nearby player (aoe actually after 5 sec).  like expel magic: fel
-			voiceRupture:Play("runout")
+			specWarnRuptureOn:Play("runout")
 		end
 	elseif spellId == 155173 and args:IsDestTypeHostile() then
 		specWarnEarthShield:Show(args.destName)
@@ -607,13 +594,13 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId)
 	if spellId == 156932 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnRupture:Show()
-		voiceRupture:Play("runaway")
+		specWarnRupture:Play("runaway")
 	elseif spellId == 155223 and destGUID == UnitGUID("player") and self:AntiSpam(2, 2) then
 		specWarnMelt:Show()
-		voiceMelt:Play("runaway")
+		specWarnMelt:Play("runaway")
 	elseif spellId == 155743 and destGUID == UnitGUID("player") and self:AntiSpam(2, 5) then
 		specWarnSlagPool:Show()
-		voiceSlagPool:Play("runaway")
+		specWarnSlagPool:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
@@ -636,7 +623,7 @@ function mod:UNIT_DIED(args)
 			self:UnregisterShortTermEvents()
 			warnPhase3:Show()
 			specWarnHeartoftheMountain:Show()
-			voicePhaseChange:Play("pthree")
+			warnPhase3:Play("pthree")
 			updateRangeFrame(self)
 			if DBM.BossHealth:IsShown() then
 				DBM.BossHealth:Clear()
@@ -662,7 +649,7 @@ function mod:UNIT_DIED(args)
 			timerSecurityGuard:Stop()
 			countdownSecurityGuard:Cancel()
 			self:Unschedule(SecurityGuard)
-			voicePhaseChange:Play("ptwo")
+			warnPhase2:Play("ptwo")
 			--Start adds timers. Seem same in all modes.
 			updateRangeFrame(self)
 			if not self:IsLFR() then-- LFR do not have Slag Elemental.

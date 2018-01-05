@@ -28,9 +28,9 @@ mod:RegisterEventsInCombat(
 
 mod:SetBossHealthInfo(92142, 92144, 92146)
 
-local Dia		= EJ_GetSectionInfo(11489)
-local Jubei		= EJ_GetSectionInfo(11488)
-local Gurtogg	= EJ_GetSectionInfo(11490)
+local Dia		= DBM:EJ_GetSectionInfo(11489)
+local Jubei		= DBM:EJ_GetSectionInfo(11488)
+local Gurtogg	= DBM:EJ_GetSectionInfo(11490)
 
 --(target.id = 92142 or target.id = 92144 or target.id = 92146) and type = "death" or (ability.id = 184657 or ability.id = 184476 or ability.id = 184355) and type = "begincast" or (ability.id = 184449 or ability.id = 183480 or ability.id = 184357) and type = "cast" or (ability.id = 183701 or ability.id = 184360 or ability.id = 184365) and type = "applydebuff" or ability.id = 184674
 --TODO, add bloodboil. mythic only?
@@ -99,7 +99,7 @@ mod.vb.reapActive = false
 mod.vb.visageCount = 0
 local felRageTimers = {28, 64.2, 75}--Post august 14th hotfix timers.
 local UnitExists, UnitGUID, UnitDetailedThreatSituation = UnitExists, UnitGUID, UnitDetailedThreatSituation
-local markofNecroDebuff = GetSpellInfo(184449)--Spell name should work, without knowing what right spellid is, For this anyways.
+local markofNecroDebuff = DBM:GetSpellInfo(184449)--Spell name should work, without knowing what right spellid is, For this anyways.
 
 --[[local function delayedReapCheck(self)
 	--Fires 55 seconds after combat start, unless 50 second reap happens.
@@ -122,6 +122,7 @@ end--]]
 --]]
 
 function mod:OnCombatStart(delay)
+	markofNecroDebuff = DBM:GetSpellInfo(184449)
 	self.vb.DiaPushed = false
 	self.vb.diaDead = false
 	self.vb.jubeiGone = false

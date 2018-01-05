@@ -144,10 +144,7 @@ local guldanTargets = {}
 local doomSpikeTargets = {}
 local AddsSeen = {}
 local playerName = UnitName("player")
-local doomName = GetSpellInfo(181099)
-local guldanName = GetSpellInfo(186362)
-local doomSpikeName = GetSpellInfo(181119)
-local gaze1, gaze2 = GetSpellInfo(181597), GetSpellInfo(182006)
+local doomName, guldanName, doomSpikeName, gaze1, gaze2 = DBM:GetSpellInfo(181099), DBM:GetSpellInfo(186362), DBM:GetSpellInfo(181119), DBM:GetSpellInfo(181597), DBM:GetSpellInfo(182006)
 local UnitDebuff = UnitDebuff
 local doomFilter, guldanFilter, doomSpikeFilter
 do
@@ -376,6 +373,7 @@ local function updateAllTimers(self, delay)
 end
 
 function mod:OnCombatStart(delay)
+	doomName, guldanName, doomSpikeName, gaze1, gaze2 = DBM:GetSpellInfo(181099), DBM:GetSpellInfo(186362), DBM:GetSpellInfo(181119), DBM:GetSpellInfo(181597), DBM:GetSpellInfo(182006)
 	table.wipe(doomTargets)
 	table.wipe(gazeTargets)
 	table.wipe(AddsSeen)

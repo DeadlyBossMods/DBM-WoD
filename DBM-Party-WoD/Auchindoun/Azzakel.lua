@@ -54,7 +54,7 @@ mod:AddRangeFrameOption(5, 153396)
 
 mod.vb.debuffCount = 0
 mod.vb.flamesCast = 2
-local curtainDebuff = GetSpellInfo(153396)
+local curtainDebuff = DBM:GetSpellInfo(153396)
 local UnitDebuff = UnitDebuff
 local debuffFilter
 do
@@ -64,6 +64,7 @@ do
 end
 
 function mod:OnCombatStart(delay)
+	curtainDebuff = DBM:GetSpellInfo(153396)
 	self.vb.debuffCount = 0
 	self.vb.flamesCast = 2--Set to 2 on pull to offset first argus
 	timerCurtainOfFlameCD:Start(16-delay)

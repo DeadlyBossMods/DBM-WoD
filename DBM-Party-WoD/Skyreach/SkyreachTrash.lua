@@ -23,7 +23,7 @@ mod:RemoveOption("HealthFrame")
 local isTrivial = mod:IsTrivial(110)
 
 mod.vb.debuffCount = 0
-local Debuff = GetSpellInfo(160288)
+local Debuff = DBM:GetSpellInfo(160288)
 local UnitDebuff = UnitDebuff
 local debuffFilter
 do
@@ -60,6 +60,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			if self.vb.debuffCount == 0 then
 				DBM.RangeCheck:Hide()
 			else
+				Debuff = DBM:GetSpellInfo(160288)
 				if UnitDebuff("player", Debuff) then--You have debuff, show everyone
 					DBM.RangeCheck:Show(3, nil)
 				else--You do not have debuff, only show players who do

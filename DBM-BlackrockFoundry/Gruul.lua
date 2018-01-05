@@ -46,12 +46,6 @@ local berserkTimer					= mod:NewBerserkTimer(360)
 
 local countdownInfernoSlice			= mod:NewCountdown(12, 155080, "Tank")
 
-local voiceInfernoSlice				= mod:NewVoice(155080) --gathershare. maybe change to "InfernoSlice".
---local voiceCrumblingRoar			= mod:NewVoice(155730)
-local voiceOverheadSmash			= mod:NewVoice(155301) --shockwave
-local voiceShatter					= mod:NewVoice(155326)--Spread/Scatter
-local voiceCaveIn					= mod:NewVoice(173192)
-
 mod:AddRangeFrameOption(8, 155530)
 mod:AddHudMapOption("HudMapOnShatter", 155530, false)--Might be overwhelming. up to 8 targets on non mythic, and on mythic, 20 of them. So off by default
 mod:AddDropdownOption("MythicSoakBehavior", {"ThreeGroup", "TwoGroup"}, "ThreeGroup", "misc")
@@ -61,9 +55,9 @@ mod.vb.sliceCount = 0
 mod.vb.petrifyCount = 0
 mod.vb.rampage = false
 mod.vb.firstWarned = false
+local petrifyDebuff = DBM:GetSpellInfo(155323)
 local debuffFilter
 do
-	local petrifyDebuff = GetSpellInfo(155323)
 	local UnitDebuff = UnitDebuff
 	debuffFilter = function(uId)
 		if UnitDebuff(uId, petrifyDebuff) then
@@ -119,6 +113,7 @@ local function clearRampage(self)
 end
 
 function mod:OnCombatStart(delay)
+	petrifyDebuff = DBM:GetSpellInfo(155323)
 	self.vb.smashCount = 0
 	self.vb.sliceCount = 0
 	self.vb.petrifyCount = 0
@@ -193,13 +188,13 @@ function mod:SPELL_CAST_START(args)
 				end
 			end
 		end
-		if not UnitDebuff("player", GetSpellInfo(155323)) then
-			voiceInfernoSlice:Play("gathershare")
+		if not UnitDebuff("player", petrifyDebuff) then
+			specWarnInfernoSlice:Play("gathershare")
 		end
 	elseif spellId == 155301 then
 		self.vb.smashCount = self.vb.smashCount + 1
 		specWarnOverheadSmash:Show(self.vb.smashCount)
-		voiceOverheadSmash:Play("shockwave")
+		specWarnOverheadSmash:Play("shockwave")
 		if not self.vb.rampage and self.vb.smashCount < 3 then
 			timerOverheadSmashCD:Start(nil, self.vb.smashCount+1)--First usually 25-32, second 33-40
 		end
@@ -238,7 +233,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(8)
 			end
-			voiceShatter:Play("scatter")
+			specWarnPetrifyingSlam:Play("scatter")
 		end
 		if hudEnabled then
 			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "timer", args.destName, 8, 10, 0, 1, 0, 0.6, nil, nil, 4):Appear():RegisterForAlerts():Rotate(360, 9.5)
@@ -307,7 +302,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 173192 and destGUID == UnitGUID("player") and self:AntiSpam(2) then
 		specWarnCaveIn:Show()
-		voiceCaveIn:Play("runaway")
+		specWarnCaveIn:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE

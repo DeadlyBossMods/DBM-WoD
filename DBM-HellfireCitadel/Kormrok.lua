@@ -72,7 +72,7 @@ mod.vb.explosiveBurst = 0
 mod.vb.foulCrush = 0
 mod.vb.swatCount = 0
 mod.vb.enraged = false
-local debuffName = GetSpellInfo(181306)
+local debuffName = DBM:GetSpellInfo(181306)
 local UnitDebuff = UnitDebuff
 local playerName = UnitName("player")
 
@@ -114,6 +114,7 @@ local function trippleBurstCheck(self, target, first)
 end
 
 function mod:OnCombatStart(delay)
+	debuffName = DBM:GetSpellInfo(181306)
 	self.vb.explodingTank = nil
 	self.vb.poundActive = false
 	self.vb.poundCount = 0

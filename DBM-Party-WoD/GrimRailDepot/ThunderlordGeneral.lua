@@ -38,7 +38,7 @@ local voiceDiffusedEnergy		= mod:NewVoice(161588)
 
 mod:AddRangeFrameOption(8, 163447)
 
-local debuffCheck = GetSpellInfo(163447)
+local debuffCheck = DBM:GetSpellInfo(163447)
 local UnitDebuff = UnitDebuff
 local debuffFilter
 do
@@ -61,6 +61,7 @@ function mod:FreezingSnareTarget(targetname, uId)
 end
   
 function mod:OnCombatStart(delay)
+	debuffCheck = DBM:GetSpellInfo(163447)
 end
 
 function mod:OnCombatEnd()

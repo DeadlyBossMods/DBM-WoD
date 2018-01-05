@@ -34,15 +34,11 @@ local timerGenesis					= mod:NewCastTimer(14, 169613)
 local timerGenesisCD				= mod:NewCDTimer(45, 169613, nil, nil, nil, 5)--45-60 variation
 local timerGrowUntamedMandragoraCD	= mod:NewCDTimer(30, 176013, nil, nil, nil, 1)
 
-local voiceColossalBlow				= mod:NewVoice(175973)
-local voiceMandragora				= mod:NewVoice(176013, "Dps")
-local voiceGenesis					= mod:NewVoice(175979)
-
 --mod:AddReadyCheckOption(37462, false)
 --mod:AddRangeFrameOption(8, 175979)
 
 local UnitDebuff = UnitDebuff
-local debuffName = GetSpellInfo(176004)
+local debuffName = DBM:GetSpellInfo(176004)
 local debuffFilter
 do
 	debuffFilter = function(uId)
@@ -51,6 +47,7 @@ do
 end
 
 function mod:OnCombatStart(delay, yellTriggered)
+	debuffName = DBM:GetSpellInfo(176004)
 --	if yellTriggered then
 		--Vines--7
 		--Colossal Bow--14
@@ -70,12 +67,12 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 175973 then
 		specWarnColossalBlow:Show()
 		--timerColossalBlow:Start()
-		voiceColossalBlow:Play("shockwave")
+		specWarnColossalBlow:Play("shockwave")
 	elseif spellId == 175979 then
 		specWarnGenesis:Show()
 		timerGenesis:Start()
 		timerGenesisCD:Start()
-		voiceGenesis:Play("169613")
+		specWarnGenesis:Play("169613")
 	end
 end
 
@@ -84,7 +81,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if spellId == 176013 then
 		specWarnGrowUntamedMandragora:Show()
 		timerGrowUntamedMandragoraCD:Start()
-		voiceMandragora:Play("killmob")
+		specWarnGrowUntamedMandragora:Play("killmob")
 	end
 end
 

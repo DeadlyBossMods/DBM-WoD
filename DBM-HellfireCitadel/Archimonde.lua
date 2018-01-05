@@ -214,10 +214,7 @@ local felburstTargets = {}
 local playerName = UnitName("player")
 local playerBanished = false
 local UnitDebuff, UnitDetailedThreatSituation, UnitClass, UnitIsUnit = UnitDebuff, UnitDetailedThreatSituation, UnitClass, UnitIsUnit
-local NetherBanish = GetSpellInfo(186961)
-local shackledDebuff = GetSpellInfo(184964)
-local felburstDebuff = GetSpellInfo(183634)
-local markOfLegionDebuff = GetSpellInfo(187050)
+local NetherBanish, shackledDebuff, felburstDebuff, markOfLegionDebuff = DBM:GetSpellInfo(186961), DBM:GetSpellInfo(184964), DBM:GetSpellInfo(183634), DBM:GetSpellInfo(187050)
 local netherFilter, markOfLegionFilter
 do
 	netherFilter = function(uId)
@@ -704,6 +701,7 @@ end
 
 --/run DBM:GetModByName("1438"):OnCombatStart(0)
 function mod:OnCombatStart(delay)
+	NetherBanish, shackledDebuff, felburstDebuff, markOfLegionDebuff = DBM:GetSpellInfo(186961), DBM:GetSpellInfo(184964), DBM:GetSpellInfo(183634), DBM:GetSpellInfo(187050)
 	self.vb.phase = 1
 	self.vb.demonicCount = 0
 	self.vb.demonicFeedback = false

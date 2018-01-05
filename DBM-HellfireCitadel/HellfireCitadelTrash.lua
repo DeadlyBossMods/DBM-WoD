@@ -49,7 +49,7 @@ local voiceRendingHowl				= mod:NewVoice(189612, "HasInterrupt")--kickcast
 mod:RemoveOption("HealthFrame")
 mod:AddRangeFrameOption(15)
 
-local Bloodthirster = EJ_GetSectionInfo(11266)
+local Bloodthirster = DBM:EJ_GetSectionInfo(11266)
 
 function mod:SPELL_CAST_START(args)
 	if not self.Options.Enabled then return end

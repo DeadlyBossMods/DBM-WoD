@@ -109,10 +109,7 @@ mod.vb.windsTargets = 0
 mod.vb.bombActive = nil
 local chakramTargets = {}
 local playerHasAnzu = false
-local corruption = GetSpellInfo(181824)
-local phantasmalFelBomb = GetSpellInfo(179219)
-local realFelBomb = GetSpellInfo(181753)
-local darkBindings = GetSpellInfo(185510)
+local darkBindings, realFelBomb, phantasmalFelBomb, phantWinds, corruption = DBM:GetSpellInfo(185510), DBM:GetSpellInfo(181753), DBM:GetSpellInfo(179219), DBM:GetSpellInfo(181957), DBM:GetSpellInfo(181824)
 local playerName = UnitName("player")
 local AddsSeen = {}
 
@@ -173,6 +170,7 @@ local function showChakram(self)
 end
 
 function mod:OnCombatStart(delay)
+	darkBindings, realFelBomb, phantasmalFelBomb, phantWinds, corruption = DBM:GetSpellInfo(185510), DBM:GetSpellInfo(181753), DBM:GetSpellInfo(179219), DBM:GetSpellInfo(181957), DBM:GetSpellInfo(181824)
 	self.vb.escapeCount = 0
 	self.vb.focusedBlast = 0
 	self.vb.savedChakram = nil
@@ -336,7 +334,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					voiceThrowAnzu:Play("179202h")
 				end
 			elseif self.vb.windsTargets > 0 then
-				specWarnThrowAnzu:Show(GetSpellInfo(181957))
+				specWarnThrowAnzu:Show(phantWinds)
 				voiceThrowAnzu:Play("179202")
 			else--No bombs or winds, show generic "eye on you" warning
 				specWarnEyeofAnzu:Show()

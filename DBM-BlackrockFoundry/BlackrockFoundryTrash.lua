@@ -31,17 +31,16 @@ local specWarnReapingWhirl			= mod:NewSpecialWarningDodge(171537, "MeleeDps")
 local specWarnBurning				= mod:NewSpecialWarningStack(175594, nil, 8, nil, nil, 1, 6)
 local specWarnBurningOther			= mod:NewSpecialWarningTaunt(175594, nil, nil, nil, nil, 2)
 
-local voiceBurning					= mod:NewVoice(155242) --changemt
-
 mod:RemoveOption("HealthFrame")
 
-local volcanicBomb = GetSpellInfo(156413)
+local volcanicBomb = DBM:GetSpellInfo(156413)
 local blastCount = 0--Non synced variable, because mods that don't use start/endcombat don't have timer recovery
 
 function mod:SPELL_CAST_START(args)
 	if not self.Options.Enabled then return end
 	local spellId = args.spellId
 	if spellId == 156446 then
+		volcanicBomb = DBM:GetSpellInfo(156413)
 		specWarnBlastWave:Show(volcanicBomb)
 	elseif spellId == 163194 then
 		specWarnFinalFlame:Show()
@@ -69,12 +68,13 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 175594 and not self:IsTrivial(110) then
 		local amount = args.amount or 1
 		if (amount >= 8) and (amount % 3 == 0) then
-			voiceBurning:Play("changemt")
 			if args:IsPlayer() then
 				specWarnBurning:Show(amount)
+				specWarnBurningOther:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
 				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnBurningOther:Show(args.destName)
+					specWarnBurningOther:Play("tauntboss")
 				end
 			end
 		end
@@ -88,6 +88,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 159750 then--Mythic version (Blast Waves)
 		DBM:HideBlizzardEvents(1)--Blizzards frame completely covers dbms warnings here and stays on screen forever, so disable the stupid thing.
 		blastCount = 0
+		volcanicBomb = DBM:GetSpellInfo(156413)
 		specWarnBlastWave:Show(volcanicBomb)
 	end
 end

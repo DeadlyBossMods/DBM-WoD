@@ -25,15 +25,11 @@ local specWarnArcaneOrb			= mod:NewSpecialWarningSpell(180819, nil, nil, nil, 2,
 local specWarnArcaneSurge		= mod:NewSpecialWarningInterrupt(180816, false, nil, nil, 1, 2)
 local specWarnArcaneSurgeDispel	= mod:NewSpecialWarningDispel(180816, "MagicDispeller", nil, nil, 1, 2)
 
-local voiceUnleashedEnergy		= mod:NewVoice(180908)--runout
-local voiceArcaneOrb			= mod:NewVoice(180819)--watchorb
-local voiceArcaneSurge			= mod:NewVoice(180816)--kickcast/dispelboss
-
 mod:AddRangeFrameOption(10, 180908)
 mod:AddHudMapOption("HudMapOnUnleashed", 180908)
 
 mod.vb.debuffCount = 0
-local debuffName = GetSpellInfo(180908)
+local debuffName = DBM:GetSpellInfo(180908)
 local debuffFilter
 do
 	debuffFilter = function(uId)
@@ -57,6 +53,7 @@ local function updateRangeFrame(self)
 end
 
 function mod:OnCombatStart(delay)
+	debuffName = DBM:GetSpellInfo(180908)
 	self.vb.debuffCount = 0
 end
 
@@ -73,11 +70,11 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 180819 then
 		specWarnArcaneOrb:Show()
-		voiceArcaneOrb:Play("watchorb")
+		specWarnArcaneOrb:Play("watchorb")
 	elseif spellId == 180816 and self:CheckInterruptFilter(args.sourceGUID) then
 		specWarnArcaneSurge:Show(args.sourceName)
 		if not self:IsHealer() and self.Options.SpecWarn180816interrupt then
-			voiceArcaneSurge:Play("kickcast")
+			specWarnArcaneSurge:Play("kickcast")
 		end
 	end
 end
@@ -90,7 +87,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnUnleashedEnergy:Show()
 			yellUnleashedEnergy:Yell()
-			voiceUnleashedEnergy:Play("runout")
+			specWarnUnleashedEnergy:Play("runout")
 		end
 		if self.Options.HudMapOnUnleashed then
 			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 30, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
@@ -99,7 +96,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 180816 and not args:IsDestTypePlayer() and self:AntiSpam(3, 1) then
 		specWarnArcaneSurgeDispel:Show(args.destName)
 		if self:IsMagicDispeller() then
-			voiceArcaneSurge:Play("dispelboss")
+			specWarnArcaneSurgeDispel:Play("dispelboss")
 		end
 	elseif spellId == 180815 then
 		warnWildPolymorph:CombinedShow(0.5, args.destName)

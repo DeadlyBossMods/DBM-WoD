@@ -21,7 +21,7 @@ mod:RegisterEventsInCombat(
 
 local warnChainHurl					= mod:NewTargetAnnounce(159947, 3)--Warn for cast too?
 local warnOpenWounds				= mod:NewStackAnnounce(159178, 2, nil, "Tank|Healer")
-local warnPillar					= mod:NewSpellAnnounce("ej9394", 3, nil, 159202)
+local warnPillar					= mod:NewSpellAnnounce("ej9394", 3, nil, 159202, nil, nil, nil, 2)
 local warnOnTheHunt					= mod:NewTargetAnnounce(162497, 4)
 
 local specWarnChainHurl				= mod:NewSpecialWarningSpell(159947, nil, nil, nil, nil, 2)
@@ -48,20 +48,14 @@ local countdownSweeper				= mod:NewCountdown(55, 177776, nil, mod.localization.o
 local countdownTiger				= mod:NewCountdown("Alt110", "ej9396", "-Tank")--Tigers never bother tanks so not tanks probelm
 local countdownImpale				= mod:NewCountdown("Alt45", 159113, "Tank")--Slightly veriable based on other spells
 
-local voiceImpale					= mod:NewVoice(159113)
-local voiceBerserkerRush			= mod:NewVoice(158986)
-local voiceChainHurl				= mod:NewVoice(159947)
-local voiceOnTheHunt				= mod:NewVoice(162497)
-local voicePillar					= mod:NewVoice("ej9394", "Ranged")
-
 mod:AddRangeFrameOption(4, 159386)
 
-local firePillar = EJ_GetSectionInfo(9394)
-local chainName = GetSpellInfo(159947)
+local firePillar = DBM:EJ_GetSectionInfo(9394)
+local chainName = DBM:GetSpellInfo(159947)
 
 local function checkHurl()
 	if not UnitDebuff("player", chainName) then
-		voiceChainHurl:Play("otherout")
+		specWarnChainHurl:Play("otherout")
 	end
 end
 
@@ -71,7 +65,7 @@ function mod:BerserkerRushTarget(targetname, uId)
 		if targetname == UnitName("player") then
 			specWarnBerserkerRush:Show(firePillar)
 			yellBerserkerRush:Yell()
-			voiceBerserkerRush:Play("159202f") --find the pillar
+			specWarnBerserkerRush:Play("159202f") --find the pillar
 		else
 			specWarnBerserkerRushOther:Show(targetname)
 		end
@@ -79,6 +73,7 @@ function mod:BerserkerRushTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	chainName = DBM:GetSpellInfo(159947)
 	timerPillarCD:Start(24-delay)
 	timerImpaleCD:Start(35-delay)
 	countdownImpale:Start(35-delay)
@@ -92,7 +87,7 @@ function mod:OnCombatStart(delay)
 		timerTigerCD:Start()
 		countdownTiger:Start()
 	end
-	voiceChainHurl:Schedule(84.5-delay, "159947r") --ready for hurl
+	specWarnChainHurl:ScheduleVoice(84.5-delay, "159947r") --ready for hurl
 end
 
 function mod:OnCombatEnd()
@@ -111,17 +106,17 @@ function mod:SPELL_CAST_START(args)
 		timerImpaleCD:Start()
 		countdownImpale:Start()
 		if self:IsHealer() then
-			voiceImpale:Play("tankheal")
+			specWarnImpale:Play("tankheal")
 		end
 	elseif spellId == 159947 then
 		specWarnChainHurl:Show()
 		timerChainHurlCD:Start()
 		countdownChainHurl:Start()
-		voiceChainHurl:Schedule(99.5, "159947r") --ready for hurl
+		specWarnChainHurl:ScheduleVoice(99.5, "159947r") --ready for hurl
 	elseif spellId == 158986 then
 		timerBerserkerRushCD:Start()
 		self:BossTargetScanner(78714, "BerserkerRushTarget", 0.05, 10)
-		voiceBerserkerRush:Play("chargemove")
+		specWarnBerserkerRushOther:Play("chargemove")
 	end
 end
 
@@ -132,7 +127,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			timerSweeperCD:Start()
 			countdownSweeper:Start()--TODO,scan for punted or whatever knockdown is and cancel.
-			voiceChainHurl:Play("159947y") --you are the target
+			specWarnChainHurl:Play("159947y") --you are the target
 		else
 			if self:AntiSpam(2, 2) then
 				self:Schedule(0.5, checkHurl)
@@ -142,7 +137,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnBerserkerRush:Show(firePillar)
 			yellBerserkerRush:Yell()
-			voiceBerserkerRush:Play("159202f") --find the pillar
+			specWarnBerserkerRush:Play("159202f") --find the pillar
 		else
 			specWarnBerserkerRushOther:Show(args.destName)
 		end
@@ -164,12 +159,13 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 159202 then
 		warnPillar:Show()
 		timerPillarCD:Start()
-		voicePillar:Play("159202") --pillar
+		warnPillar:Play("159202") --pillar
 	elseif spellId == 162497 then
-		warnOnTheHunt:Show(args.destName)
 		if args:IsPlayer() then
 			specWarnOnTheHunt:Show(firePillar)
-			voiceOnTheHunt:Play("159202f") --find the pillar
+			specWarnOnTheHunt:Play("159202f") --find the pillar
+		else
+			warnOnTheHunt:Show(args.destName)
 		end
 	end
 end

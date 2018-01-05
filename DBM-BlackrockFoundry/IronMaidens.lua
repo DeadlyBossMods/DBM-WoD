@@ -29,16 +29,16 @@ mod:RegisterEventsInCombat(
 
 mod:SetBossHealthInfo(77557, 77231, 77477)
 
-local Ship	= EJ_GetSectionInfo(10019)
-local Marak = EJ_GetSectionInfo(10033)
-local Sorka = EJ_GetSectionInfo(10030)
-local Garan = EJ_GetSectionInfo(10025)
+local Ship	= DBM:EJ_GetSectionInfo(10019)
+local Marak = DBM:EJ_GetSectionInfo(10033)
+local Sorka = DBM:EJ_GetSectionInfo(10030)
+local Garan = DBM:EJ_GetSectionInfo(10025)
 
 
 --TODO, refactor or scrap most of this mod in 7.1, including timers since pretty much EVERYTHING relied on location checks do to no ACTUAL events for boat phase ending
 --Ship
-local warnPhase2						= mod:NewPhaseAnnounce(2)
-local warnShip							= mod:NewTargetAnnounce("ej10019", 3, 76204)
+local warnPhase2						= mod:NewPhaseAnnounce(2, 2, nil, nil, nil, nil, nil, 2)
+local warnShip							= mod:NewTargetAnnounce("ej10019", 3, 76204, nil, nil, nil, nil, 2)
 local warnBombardmentAlpha				= mod:NewCountAnnounce(157854, 3)--From ship, but affects NON ship.
 ----Blackrock Deckhand
 local warnProtectiveEarth				= mod:NewSpellAnnounce(158707, 3, nil, false, 2)--Could not verify
@@ -119,16 +119,6 @@ local countdownBloodRitual				= mod:NewCountdownFades("Alt5", 158078, "Tank")
 local countdownBladeDash				= mod:NewCountdown("AltTwo20", 155794, "Tank")
 local countdownDarkHunt					= mod:NewCountdownFades("AltTwo8", 158315)
 
-local voiceRapidFire					= mod:NewVoice(156631) --runout
-local voiceBloodRitual					= mod:NewVoice(158078, "MeleeDps", nil, 2) --farfromline
-local voiceHeartSeeker					= mod:NewVoice(158010) --spread
-local voiceShip							= mod:NewVoice("ej10019") --1695uktar, 1695gorak, 1695ukurogg
-local voiceEarthenbarrier				= mod:NewVoice(158708)  --int
-local voiceDeployTurret					= mod:NewVoice(158599, "RangedDps", nil, 2) --158599 attack turret
-local voiceConvulsiveShadows			= mod:NewVoice(156214) --runaway, target
-local voiceDarkHunt						= mod:NewVoice(158315) --defensive, target
-local voicePenetratingShot				= mod:NewVoice(164271) --stack
-
 mod:AddSetIconOption("SetIconOnRapidFire", 156626, true)
 mod:AddSetIconOption("SetIconOnBloodRitual", 158078, true)
 mod:AddSetIconOption("SetIconOnHeartSeeker", 158010, true)
@@ -149,6 +139,7 @@ mod.vb.darkHunt = 0
 mod.vb.turret = 0
 mod.vb.rapidfire = 0
 mod.vb.shadowsWarned = false
+local preyDebuff, bloodcallingDebuff = DBM:GetSpellInfo(170395), DBM:GetSpellInfo(170405)
 
 local UnitPosition, UnitIsConnected, UnitDebuff, GetTime =  UnitPosition, UnitIsConnected, UnitDebuff, GetTime
 local playerOnBoat = false
@@ -255,7 +246,7 @@ function mod:ConvulsiveTarget(targetname, uId)
 		if self:IsMythic() and targetname == UnitName("player") then
 			specWarnConvulsiveShadows:Show()
 			yellConvulsiveShadows:Yell()
-			voiceConvulsiveShadows:Play("runaway")
+			specWarnConvulsiveShadows:Play("runaway")
 		end
 	end
 end
@@ -263,7 +254,7 @@ end
 function mod:BladeDashTarget(targetname, uId)
 	if self:IsMythic() and self:AntiSpam(5, 3) then
 		if targetname == UnitName("player") then
-			if UnitDebuff("player", GetSpellInfo(170395)) and self.Options.filterBladeDash3 then return end
+			if UnitDebuff("player", preyDebuff) and self.Options.filterBladeDash3 then return end
 			specWarnBladeDash:Show()
 		elseif self:CheckNearby(8, targetname) then
 			specWarnBladeDashOther:Show(targetname)
@@ -274,6 +265,7 @@ function mod:BladeDashTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	preyDebuff, bloodcallingDebuff = DBM:GetSpellInfo(170395), DBM:GetSpellInfo(170405)
 	self.vb.phase = 1
 	self.vb.ship = 0
 	self.vb.alphaOmega = 1
@@ -328,7 +320,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.turret = self.vb.turret + 1
 		if (noFilter or not isPlayerOnBoat()) then
 			specWarnDeployTurret:Show()
-			voiceDeployTurret:Play("158599")
+			specWarnDeployTurret:Play("158599")
 			timerDeployTurretCD:Start(nil, self.vb.turret+1)
 		end
 	elseif spellId == 155794 then
@@ -349,7 +341,7 @@ function mod:SPELL_CAST_START(args)
 	--Begin Deck Abilities
 	elseif spellId == 158708 and (noFilter or isPlayerOnBoat()) then
 		specWarnEarthenbarrier:Show(args.sourceName)
-		voiceEarthenbarrier:Play("kickcast")
+		specWarnEarthenbarrier:Play("kickcast")
 	elseif spellId == 158707 and (noFilter or isPlayerOnBoat()) then
 		warnProtectiveEarth:Show()
 	elseif spellId == 158692 and (noFilter or isPlayerOnBoat()) then
@@ -405,7 +397,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if args:IsPlayer() then
 				specWarnPenetratingShot:Show()
 				yellPenetratingShot:Yell()
-				voicePenetratingShot:Play("gathershare")
+				specWarnPenetratingShot:Play("gathershare")
 			end
 		end
 	elseif spellId == 156214 and not self.vb.shadowsWarned and (noFilter or not isPlayerOnBoat()) then
@@ -414,13 +406,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() and self:IsMythic() then
 			specWarnConvulsiveShadows:Show()
 			yellConvulsiveShadows:Yell()
-			voiceConvulsiveShadows:Play("runaway")
+			specWarnConvulsiveShadows:Play("runaway")
 		end
 	elseif spellId == 158315 then
 		self.vb.darkHunt = self.vb.darkHunt + 1
 		if (noFilter or not isPlayerOnBoat()) then
 			if args:IsPlayer() then
-				voiceDarkHunt:Schedule(1.5, "defensive")
+				specWarnDarkHunt:ScheduleVoice(1.5, "defensive")
 				countdownDarkHunt:Start()
 				specWarnDarkHunt:Show()
 			else
@@ -441,7 +433,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if args:IsPlayer() then
 				specWarnBloodsoakedHeartseeker:Show()
 				yellHeartseeker:Yell()
-				voiceHeartSeeker:Play("scatter")
+				specWarnBloodsoakedHeartseeker:Play("scatter")
 			end
 		end
 	elseif spellId == 159724 then
@@ -455,16 +447,16 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 			if args:IsPlayer() then
 				yellBloodRitual:Yell()
-				if UnitDebuff("player", GetSpellInfo(170405)) and self.Options.filterBloodRitual3 then return end
+				if UnitDebuff("player", bloodcallingDebuff) and self.Options.filterBloodRitual3 then return end
 				specWarnBloodRitual:Show()
-				voiceBloodRitual:Play("targetyou")
+				specWarnBloodRitual:Play("targetyou")
 			else
 				if self.Options.SpecWarn158078targetcount then
 					specWarnBloodRitualOther:Show(self.vb.bloodRitual, args.destName)
 				else
 					warnBloodRitual:Show(self.vb.bloodRitual, args.destName)
 				end
-				voiceBloodRitual:Play("farfromline")--Good sound fit for everyone ELSE
+				specWarnBloodRitualOther:Play("farfromline")--Good sound fit for everyone ELSE
 			end
 		end
 	elseif spellId == 156631 then
@@ -485,7 +477,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 156601 then
 		warnSanguineStrikes:Show(args.destName)
-		--voiceSanguineStrikes:Play("healall")
+		--warnSanguineStrikes:Play("healall")
 	--Begin Deck Abilities
 	elseif spellId == 158702 and (noFilter or isPlayerOnBoat()) then
 		warnFixate:CombinedShow(0.5, args.destName)
@@ -576,7 +568,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc)
 			self:Schedule(3, function()
 				timerBloodRitualCD:Stop()
 			end)
-			voiceShip:Play("1695ukurogg")
+			warnShip:Play("1695ukurogg")
 		elseif npc == Sorka then
 			self:Schedule(3, function()
 				timerBladeDashCD:Stop()
@@ -584,14 +576,14 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc)
 				timerConvulsiveShadowsCD:Stop()
 				timerDarkHuntCD:Stop()
 			end)
-			voiceShip:Play("1695gorak")
+			warnShip:Play("1695gorak")
 		elseif npc == Garan then
 			self:Schedule(3, function()
 				timerRapidFireCD:Stop()
 				timerPenetratingShotCD:Stop()
 				timerDeployTurretCD:Stop()
 			end)
-			voiceShip:Play("1695uktar")
+			warnShip:Play("1695uktar")
 		end
 	end
 end
@@ -602,7 +594,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, targetname)
 	if msg:find(L.EarlyBladeDash) then
 		if self:IsMythic() and self:AntiSpam(5, 3) then
 			if targetname == UnitName("player") then
-				if UnitDebuff("player", GetSpellInfo(170395)) and self.Options.filterBladeDash3 then return end
+				if UnitDebuff("player", preyDebuff) and self.Options.filterBladeDash3 then return end
 				specWarnBladeDash:Show()
 			elseif self:CheckNearby(8, targetname) then
 				specWarnBladeDashOther:Show(targetname)
@@ -643,8 +635,8 @@ function mod:RAID_BOSS_WHISPER(msg)
 	if msg:find("spell:156626") then
 		specWarnRapidFire:Show()
 		yellRapidFire:Yell()
-		voiceRapidFire:Play("runout")
-		voiceRapidFire:Schedule(2, "keepmove")
+		specWarnRapidFire:Play("runout")
+		specWarnRapidFire:ScheduleVoice(2, "keepmove")
 	end
 end
 
@@ -655,6 +647,7 @@ function mod:UNIT_HEALTH_FREQUENT(uId)
 		countdownShip:Cancel()
 		self.vb.phase = 2
 		warnPhase2:Show()
+		warnPhase2:Play("ptwo")
 		self:UnregisterShortTermEvents()
 	end
 end

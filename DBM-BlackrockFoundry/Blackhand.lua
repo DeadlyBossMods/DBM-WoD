@@ -23,7 +23,7 @@ mod:RegisterEventsInCombat(
 
 --TODO, get damage ID for fire on ground created by Mortar
 --TODO, check position of highest threat tank in phase 2 and guess which siege engine is going to come out (and type for mythic)?
-local warnPhase						= mod:NewPhaseChangeAnnounce()
+local warnPhase						= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 --Stage One: The Blackrock Forge
 local warnMarkedforDeath			= mod:NewTargetCountAnnounce(156096, 4)--If not in combat log, find a RAID_BOSS_WHISPER event.
 local warnMassiveDemolition			= mod:NewCountAnnounce(156479, 3, nil, "Ranged", 2)--As a regular warning, not too spammy and perfectly reasonable for ranged to be on by default.
@@ -84,16 +84,6 @@ local countdownSlagBombs			= mod:NewCountdown("Alt25", 156030, "Melee")
 local countdownMarkedforDeath		= mod:NewCountdown("AltTwo25", 156096, "-Tank")
 local countdownMarkedforDeathFades	= mod:NewCountdownFades("AltTwo5", 156096)--Same voice should be fine, never will overlap, and both for same spell, so people will understand
 
-local voicePhaseChange				= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
-local voiceSiegemaker				= mod:NewVoice("ej9571", "Ranged", nil, 2) -- ej9571.ogg tank coming
-local voiceShatteringSmash			= mod:NewVoice(155992, "Melee") --carefly
-local voiceMarkedforDeath			= mod:NewVoice(156096) --target: findshelter; else: 156096.ogg marked for death
-local voiceDemolition				= mod:NewVoice(156425) --AOE
-local voiceThrowSlagBombs			= mod:NewVoice(156030) --bombsoon
-local voiceMassiveExplosion			= mod:NewVoice(163008) --AOE
-local voiceAttachSlagBombs			= mod:NewVoice(157000) --target: runout;
-local voiceFallingDebris			= mod:NewVoice(162585) --helpsoak
-
 mod:AddSetIconOption("SetIconOnMarked", 156096, true)
 mod:AddRangeFrameOption("6/10")
 mod:AddBoolOption("PositionsAllPhases", false)
@@ -119,7 +109,7 @@ local DBMHudMap = DBMHudMap
 local tankFilter
 local yellMFD2 = mod:NewYell(156096, L.customMFDSay, true, false)
 local yellSlag2 = mod:NewYell(157000, L.customSlagSay, true, false)
-local mfdDebuff = GetSpellInfo(156096)
+local mfdDebuff, slagDebuff1, slagDebuff2 = DBM:GetSpellInfo(156096), DBM:GetSpellInfo(157000), DBM:GetSpellInfo(159179)
 local playerName = UnitName("player")
 do
 	tankFilter = function(uId)
@@ -131,7 +121,7 @@ end
 
 local function massiveOver(self)
 	smashTank = nil
-	if not UnitDebuff("player", GetSpellInfo(157000)) and not UnitDebuff("player", GetSpellInfo(159179)) then
+	if not UnitDebuff("player", slagDebuff1) and not UnitDebuff("player", slagDebuff2) then
 		DBM.RangeCheck:Hide()
 	end
 end
@@ -150,7 +140,7 @@ local function warnMarked(self)
 	table.wipe(markTargets)
 	--Begin Check Marked function
 	if not UnitDebuff("player", mfdDebuff) then
-		voiceMarkedforDeath:Play("156096")
+		specWarnMarkedforDeathOther:Play("156096")
 	end
 	--Sort by raidid since combat log order may diff person to person
 	--Order changed from left middle right to left right middle to match BW to prevent conflict in dual mod raids.
@@ -172,7 +162,7 @@ local function warnMarked(self)
 					if self.Options.Yell156096 then
 						yellMFD2:Yell(DBM_CORE_LEFT, playerName)
 					end
-					voiceMarkedforDeath:Play("left")--Schedule another 0.7, for total of 1.2 second after "find shelder"
+					specWarnMFDPosition:Play("left")--Schedule another 0.7, for total of 1.2 second after "find shelder"
 				elseif mfdFound == 2 then
 					if self.Options.SpecWarn156096you then
 						specWarnMFDPosition:Show(DBM_CORE_RIGHT)
@@ -180,7 +170,7 @@ local function warnMarked(self)
 					if self.Options.Yell156096 then
 						yellMFD2:Yell(DBM_CORE_RIGHT, playerName)
 					end
-					voiceMarkedforDeath:Play("right")--Schedule another 0.7, for total of 1.2 second after "find shelder"
+					specWarnMFDPosition:Play("right")--Schedule another 0.7, for total of 1.2 second after "find shelder"
 				elseif mfdFound == 3 then
 					if self.Options.SpecWarn156096you then
 						specWarnMFDPosition:Show(DBM_CORE_MIDDLE)
@@ -188,7 +178,7 @@ local function warnMarked(self)
 					if self.Options.Yell156096 then
 						yellMFD2:Yell(DBM_CORE_MIDDLE, playerName)
 					end
-					voiceMarkedforDeath:Play("center")--Schedule another 0.7, for total of 1.2 second after "find shelder"
+					specWarnMFDPosition:Play("center")--Schedule another 0.7, for total of 1.2 second after "find shelder"
 				end
 			end
 			if mfdFound == expectedTotal then break end
@@ -196,7 +186,6 @@ local function warnMarked(self)
 	end
 end
 
-local slagDebuff = GetSpellInfo(157000)
 local function checkSlag(self)
 	DBM:Debug("checkSlag running", 2)
 	local numGroupMembers = DBM:GetNumGroupMembers()
@@ -208,7 +197,7 @@ local function checkSlag(self)
 	local tempTable = {}
 	for i = 1, numGroupMembers do
 		local unitID = "raid"..i
-		if UnitDebuff(unitID, slagDebuff) then--Tank excluded on purpose to match BW helper
+		if UnitDebuff(unitID, slagDebuff1) then--Tank excluded on purpose to match BW helper
 			slagFound = slagFound + 1
 			if self:IsMeleeDps(unitID) then
 				DBM:Debug("Slag found on melee"..totalMelee, 2)
@@ -270,6 +259,7 @@ function mod:NoteTestFunction(count)
 end
 
 function mod:OnCombatStart(delay)
+	mfdDebuff, slagDebuff1, slagDebuff2 = DBM:GetSpellInfo(156096), DBM:GetSpellInfo(157000), DBM:GetSpellInfo(159179)
 	table.wipe(markTargets)
 	table.wipe(slagTargets)
 	table.wipe(mortarsWarned)
@@ -315,7 +305,7 @@ function mod:SPELL_CAST_START(args)
 			if self:IsTank() then--only warnk tank in phase 1
 				specWarnShatteringSmash:Show(self.vb.smashCount)
 				countdownShatteringSmash:Start(30)
-				voiceShatteringSmash:Play("carefly")
+				specWarnShatteringSmash:Play("carefly")
 			end
 		else
 			if self:IsMythic() then
@@ -326,7 +316,7 @@ function mod:SPELL_CAST_START(args)
 				countdownShatteringSmash:Start()--Not phase 1, concerns everyone not just tank
 			end
 			specWarnShatteringSmash:Show(self.vb.smashCount)--Warn all melee in phase 2
-			voiceShatteringSmash:Play("carefly")
+			specWarnShatteringSmash:Play("carefly")
 		end
 	elseif spellId == 156928 and self:AntiSpam(3, 5) then
 		self.vb.SlagEruption = self.vb.SlagEruption + 1
@@ -338,13 +328,13 @@ function mod:SPELL_CAST_START(args)
 		specWarnMassiveShatteringSmash:Show(self.vb.smashCount)
 		timerShatteringSmashCD:Start(24.5, self.vb.smashCount+1)--Use this cd bar in phase 3 as well, because text for "Massive Shattering Smash" too long.
 		countdownShatteringSmash:Start(24.5)
-		voiceShatteringSmash:Play("carefly")
+		specWarnMassiveShatteringSmash:Play("carefly")
 		if self.Options.RangeFrame and smashTank then
 			--Open regular range frame if you are the smash tank, even if you are a bomb, because now you don't have a choice.
 			if smashTank == UnitName("player") then
 				DBM.RangeCheck:Show(6)
 			--Don't open radar for massive smash if you are one of bomb targets
-			elseif not UnitDebuff("player", GetSpellInfo(157000)) and not UnitDebuff("player", GetSpellInfo(159179)) then
+			elseif not UnitDebuff("player", slagDebuff1) and not UnitDebuff("player", slagDebuff2) then
 				DBM.RangeCheck:Show(6, tankFilter)
 			end
 			self:Schedule(4, massiveOver, self)
@@ -354,7 +344,7 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 163008 then
 		specWarnMassiveExplosion:Show()
 		timerMassiveExplosion:Start()
-		voiceMassiveExplosion:Play("aesoon")
+		specWarnMassiveExplosion:Play("aesoon")
 	end
 end
 
@@ -363,7 +353,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if spellId == 162579 then
 		self.vb.deprisCount = self.vb.deprisCount + 1
 		specWarnFallingDebris:Show(self.vb.deprisCount)
-		voiceFallingDebris:Play("helpsoak")
+		specWarnFallingDebris:Play("helpsoak")
 		timerFallingDebris:Start()
 		timerFallingDebrisCD:Start(nil, self.vb.deprisCount+1)
 	end
@@ -410,7 +400,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			countdownMarkedforDeathFades:Start()
 			if self:IsLFR() or (not self.Options.PositionsAllPhases and self.vb.phase < 3) then
 				yellMarkedforDeath:Yell()
-				voiceMarkedforDeath:Play("findshelter")
+				specWarnMarkedforDeath:Play("findshelter")
 			end
 		end
 		if self.Options.SetIconOnMarked then
@@ -443,7 +433,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				yellAttachSlagBombs:Yell()
 			end
 			timerSlagBomb:Start()
-			voiceAttachSlagBombs:Play("runout")
+			specWarnAttachSlagBombs:Play("runout")
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(10)
 			end
@@ -465,7 +455,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			specWarnAttachSlagBombsOther:Show(args.destName)
 		end
-		voiceAttachSlagBombs:Play("changemt")
+		specWarnAttachSlagBombsOther:Play("changemt")
 	elseif spellId == 156667 then
 		self.vb.markCount2 = 0
 		self.vb.siegemaker = self.vb.siegemaker + 1
@@ -504,7 +494,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif spellId == 156667 then
 		specWarnSiegemakerPlatingFades:Show()
-		voiceSiegemaker:Play("ej9571")
+		specWarnSiegemakerPlatingFades:Play("ej9571")
 	end
 end
 
@@ -535,7 +525,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		specWarnThrowSlagBombs:Show(self.vb.slagCastCount)
 		timerThrowSlagBombsCD:Start(nil, self.vb.slagCastCount+1)
 		countdownSlagBombs:Start()
-		voiceThrowSlagBombs:Play("bombsoon")
+		specWarnThrowSlagBombs:Play("bombsoon")
 	elseif spellId == 156425 then
 		self.vb.demolitionCount = self.vb.demolitionCount + 1
 		specWarnDemolition:Show(self.vb.demolitionCount)
@@ -576,7 +566,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 				end
 			end
 		end
-		voiceDemolition:Play("aesoon")
+		specWarnDemolition:Play("aesoon")
 	elseif spellId == 161347 then--Phase 2 Trigger
 		self.vb.phase = 2
 		self.vb.smashCount = 0
@@ -608,7 +598,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		countdownMarkedforDeath:Cancel()
 		countdownMarkedforDeath:Start(25)
 		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(2))
-		voicePhaseChange:Play("ptwo")
+		warnPhase:Play("ptwo")
 		--Maybe not needed whole phase, only when balcony adds are up? A way to detect and improve?
 		if self.Options.RangeFrame and not self:IsMelee() then
 			DBM.RangeCheck:Show(6)
@@ -647,7 +637,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		countdownMarkedforDeath:Start(17)
 		timerSlagEruptionCD:Start(31.5, 1)
 		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(3))
-		voicePhaseChange:Play("pthree")
+		warnPhase:Play("pthree")
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
 		end

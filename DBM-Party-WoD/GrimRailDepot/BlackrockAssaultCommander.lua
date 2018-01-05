@@ -34,8 +34,8 @@ local voiceSlagBlast			= mod:NewVoice(166570)
 local voiceShrapnelblast		= mod:NewVoice(160943, "Tank")
 local voicePhaseChange			= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
 
-local grenade = EJ_GetSectionInfo(9711)
-local mortar = EJ_GetSectionInfo(9712)
+local grenade = DBM:EJ_GetSectionInfo(9711)
+local mortar = DBM:EJ_GetSectionInfo(9712)
 mod.vb.phase = 1
 
 function mod:SupressiveFireTarget(targetname, uId)

@@ -118,14 +118,14 @@ mod.vb.bulwarkCount = 0
 mod.vb.gavelCount = 0
 mod.vb.phase = 1
 mod.vb.interruptCount = 0
-local AncientEnforcer = EJ_GetSectionInfo(11155)
-local AncientHarbinger = EJ_GetSectionInfo(11163)
-local AncientSovereign = EJ_GetSectionInfo(11170)
-local TyrantVelhari = EJ_GetEncounterInfo(1394)
+local AncientEnforcer = DBM:EJ_GetSectionInfo(11155)
+local AncientHarbinger = DBM:EJ_GetSectionInfo(11163)
+local AncientSovereign = DBM:EJ_GetSectionInfo(11170)
+local TyrantVelhari = DBM:EJ_GetSectionInfo(1394)
 
 local debuffFilter, debuffFilter2
 local UnitDebuff = UnitDebuff
-local debuffName = GetSpellInfo(180526)
+local debuffName = DBM:GetSpellInfo(180526)
 do
 	debuffFilter = function(uId)
 		if UnitDebuff(uId, debuffName) then
@@ -158,6 +158,7 @@ function mod:AnnTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	debuffName = DBM:GetSpellInfo(180526)
 	self.vb.touchofHarmCount = 0
 	self.vb.edictCount = 0
 	self.vb.annihilationCount = 0

@@ -55,11 +55,6 @@ local berserkTimer					= mod:NewBerserkTimer(540)
 local countdownThunderingBlows		= mod:NewCountdown(12, 157054)
 local countdownTremblingEarth		= mod:NewCountdownFades("Alt25", 173917)
 
-local voiceGraspingEarth 			= mod:NewVoice(157060)--157060, safenow
-local voiceCallofMountain			= mod:NewVoice(158217)--Findshelter
-local voiceRipplingSmash			= mod:NewVoice(157592)
-local voiceStoneBreath	 			= mod:NewVoice(156852)
-
 mod.vb.mountainCast = 0
 mod.vb.stoneBreath = 0
 mod.vb.tremblingCast = 0
@@ -98,7 +93,7 @@ function mod:SPELL_CAST_START(args)
 		timerSlamCD:Stop()
 		timerRipplingSmashCD:Stop()
 		timerWarpedArmorCD:Stop()
-		voiceGraspingEarth:Play("157060")
+		specWarnGraspingEarth:Play("157060")
 		if self:IsMythic() then
 			timerGraspingEarthCD:Start(66)
 			local remaining = timerTremblingEarthCD:GetRemaining()
@@ -124,7 +119,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			timerRipplingSmashCD:Start()
 		end
-		voiceRipplingSmash:Play("shockwave")
+		specWarnRipplingSmash:Play("shockwave")
 	elseif spellId == 156704 then
 		specWarnSlam:Show()
 		timerSlamCD:Start()
@@ -132,7 +127,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.mountainCast = self.vb.mountainCast + 1
 		specWarnCalloftheMountain:Show(self.vb.mountainCast)
 		timerCalloftheMountain:Start()
-		voiceCallofMountain:Play("findshelter")
+		specWarnCalloftheMountain:Play("findshelter")
 		if self.vb.mountainCast == 3 then--Start timers for resume normal phase
 			timerStoneBreathCD:Start(8.7, self.vb.stoneBreath+1)--Or 12
 			timerWarpedArmorCD:Start(12.2)--12.2-17
@@ -196,9 +191,9 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.stoneBreath = self.vb.stoneBreath + 1
 		specWarnStoneBreath:Show(self.vb.stoneBreath)
 		timerStoneBreathCD:Start(nil, self.vb.stoneBreath+1)
-		voiceStoneBreath:Play("breathsoon")
+		specWarnStoneBreath:Play("breathsoon")
 	elseif spellId == 157059 and args:IsPlayer() then
-		voiceGraspingEarth:Play("safenow")
+		specWarnGraspingEarth:Play("safenow")
 		self:RuneOver()
 	elseif spellId == 156861 then
 		self.vb.frenzied = true

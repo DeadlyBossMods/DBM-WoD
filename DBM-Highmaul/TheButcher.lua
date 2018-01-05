@@ -43,13 +43,6 @@ local berserkTimer					= mod:NewBerserkTimer(300)
 local countdownTenderizer			= mod:NewCountdown("Alt17", 156151, "Tank")
 local countdownBoundingCleave		= mod:NewCountdown(60, 156160)
 
-local voiceCleave					= mod:NewVoice(156157, "Melee")
-local voiceTenderizer				= mod:NewVoice(156151, nil, nil, 2)
-local voiceGushingWound				= mod:NewVoice(156152, false)--off by default because only one person needs to run out in most strats, not everyone. Only that person should enable option
-local voiceFrenzy					= mod:NewVoice(156598)
-local voiceBoundingCleaveSoon		= mod:NewVoice(156160)
-local voicePaleVitriol				= mod:NewVoice(163046) --Mythic only
-
 mod.vb.cleaveCount = 0
 mod.vb.boundingCleave = 0
 mod.vb.isFrenzied = false
@@ -63,7 +56,7 @@ function mod:OnCombatStart(delay)
 	timerCleaveCD:Start(10-delay)--Verify this wasn't caused by cleave bug.
 	timerCleaverCD:Start(12-delay)
 	timerBoundingCleaveCD:Start(-delay, 1)
-	voiceBoundingCleaveSoon:Schedule(53.5-delay, "156160")
+	specWarnBoundingCleave:ScheduleVoice(53.5-delay, "156160")
 	countdownBoundingCleave:Start(-delay)
 	if self:IsMythic() then
 		berserkTimer:Start(240-delay)
@@ -93,7 +86,7 @@ function mod:SPELL_CAST_START(args)
 			timerCleaveCD:Start()
 		end
 		if not self:IsLFR() then --never play this in LFR
-			voiceCleave:Play("156157")
+			warnCleave:Play("156157")
 		end
 	end
 end
@@ -105,19 +98,20 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerGushingWounds:Start()
 		if (self:IsMythic() and amount > 1) or (self:IsHeroic() and amount > 2) or (self:IsNormal() and amount > 3) then--Mythic max stack 4, heroic 5, normal 6. Common Strats re generally out at 2, 3, 4
 			specWarnGushingWounds:Show(amount)
-			voiceGushingWound:Play("runout")
+			specWarnGushingWounds:Play("runout")
 		end
 	elseif spellId == 156151 then
 		local amount = args.amount or 1
 		timerTenderizerCD:Start()
 		countdownTenderizer:Start()
 		if amount >= 2 then
-			voiceTenderizer:Play("changemt")
 			if args:IsPlayer() then
 				specWarnTenderizer:Show(amount)
+				specWarnTenderizer:Play("stackhigh")
 			else
 				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnTenderizerOther:Show(args.destName)
+					specWarnTenderizerOther:Play("tauntboss")
 				else
 					warnTenderizer:Show(args.destName, amount)
 				end
@@ -128,19 +122,19 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 156598 then
 		self.vb.isFrenzied = true
 		warnFrenzy:Show()
-		voiceFrenzy:Play("frenzy")
+		warnFrenzy:Play("frenzy")
 		--Update bounding cleave timer
 		local bossPower = UnitPower("boss1")
 		local bossProgress = bossPower * 0.3--Under frenzy he gains energy twice as fast. So about 3.33 energy per seocnd, 30 seconds to full power.
 		local timeRemaining = 30-bossProgress
 		timerBoundingCleaveCD:Update(bossProgress, 30, self.vb.boundingCleave+1)--Will bar update work correctly on a count bar? Looking at code I don't think it will, it doesn't accept/pass on extra args in Update call.
 		countdownBoundingCleave:Cancel()
-		voiceBoundingCleaveSoon:Cancel()
+		specWarnBoundingCleave:CancelVoice()
 		if timeRemaining >= 3 then--Don't start countdown if only 2 seconds left
 			countdownBoundingCleave:Start(timeRemaining)
 		end
 		if timeRemaining >= 8.5 then--Prevent a number lower than 2
-			voiceBoundingCleaveSoon:Schedule(30-bossProgress-6.5, "156160")
+			specWarnBoundingCleave:ScheduleVoice(30-bossProgress-6.5, "156160")
 		end
 	end
 end
@@ -172,7 +166,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId)
 	if spellId == 163046 and destGUID == UnitGUID("player") and self:AntiSpam(3, 1) then
 		specWarnPaleVitriol:Show()
-		voicePaleVitriol:Play("runaway")
+		specWarnPaleVitriol:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
@@ -191,12 +185,12 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 			timerBoundingCleave:Start(5)
 			timerBoundingCleaveCD:Start(30, self.vb.boundingCleave+1)
 			countdownBoundingCleave:Start(30)
-			voiceBoundingCleaveSoon:Schedule(23.5, "156160")
+			specWarnBoundingCleave:ScheduleVoice(23.5, "156160")
 		else
 			timerBoundingCleave:Start(9)
 			timerBoundingCleaveCD:Start(nil, self.vb.boundingCleave+1)
 			countdownBoundingCleave:Start(60)
-			voiceBoundingCleaveSoon:Schedule(53.5, "156160")
+			specWarnBoundingCleave:ScheduleVoice(53.5, "156160")
 		end
 	end
 end
