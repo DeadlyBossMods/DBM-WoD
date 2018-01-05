@@ -64,7 +64,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Train			= GetSpellInfo(174806),
+	Train			= "Train",--Might need translation
 	lane			= "Pista",
 	oneTrain		= "Trem em 1 pista aleatória",
 	oneRandom		= "Aparece em 1 pista aleatória",

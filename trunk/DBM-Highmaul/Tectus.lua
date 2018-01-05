@@ -51,15 +51,6 @@ local berserkTimer					= mod:NewBerserkTimer(600)
 
 local countdownEarthwarper			= mod:NewCountdown(41, "ej10061", "Melee")
 
-local voiceCrystallineBarrage		= mod:NewVoice(162346)
-local voiceEarthenFlechettes		= mod:NewVoice(162968, "Melee")
-local voiceTectonicUpheaval			= mod:NewVoice(162475)
-local voiceGiftOfEarth				= mod:NewVoice(162894, "Melee")
-local voiceRavingAssault			= mod:NewVoice(163312)
-local voiceEarthwarper				= mod:NewVoice("ej10061", "Dps")
-local voiceEarthenPillar			= mod:NewVoice(162518, nil )
-
-
 mod:AddSetIconOption("SetIconOnEarthwarper", "ej10061", true, true)
 mod:AddSetIconOption("SetIconOnMote", "ej10064", false, true)--Working with both shard and mote. ej10083 description is bad / This more or less assumes the 4 at a time strat. if you unleash 8 it will fail. Although any guild unleashing 8 is probably doing it wrong (minus LFR)
 mod:AddSetIconOption("SetIconOnCrystal", 162370, false)--icons 1 and 2, no conflict with icon on earthwarper
@@ -72,8 +63,8 @@ mod.vb.healthPhase = 0
 local earthDuders = {}
 
 local tectusN = EJ_GetEncounterInfo(1195)
-local shardN = EJ_GetSectionInfo(10063)
-local moteN = EJ_GetSectionInfo(10064)
+local shardN = DBM:EJ_GetSectionInfo(10063)
+local moteN = DBM:EJ_GetSectionInfo(10064)
 local moteH = {}
 local tectusGUID
 local shardGUID = {}
@@ -193,13 +184,13 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 162475 and self:AntiSpam(5, 1) then--Antispam for later fight.
 		specWarnTectonicUpheaval:Show()
-		voiceTectonicUpheaval:Play("aesoon")
+		specWarnTectonicUpheaval:Play("aesoon")
 	elseif spellId == 162968 then
 		local guid = args.souceGUID
 		specWarnEarthenFlechettes:Show()
 		timerEarthenFlechettesCD:Start(guid)
 		if guid == UnitGUID("target") or guid == UnitGUID("focus") then
-			voiceEarthenFlechettes:Play("shockwave")
+			specWarnEarthenFlechettes:Play("shockwave")
 		end
 	elseif spellId == 162894 then
 		local GUID = args.sourceGUID
@@ -210,10 +201,10 @@ function mod:SPELL_CAST_START(args)
 		earthDuders[GUID] = earthDuders[GUID] + 1
 		specWarnGiftOfEarth:Show(earthDuders[GUID])
 		timerGiftOfEarthCD:Start(GUID)
-		voiceGiftOfEarth:Play("162894")
+		specWarnGiftOfEarth:Play("162894")
 	elseif spellId == 163312 then
 		specWarnRavingAssault:Show()
-		voiceRavingAssault:Play("chargemove")
+		specWarnRavingAssault:Play("chargemove")
 	end
 end
 
@@ -227,7 +218,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerCrystalBarrage:Start()
 			if not self:IsLFR() then
 				yellCrystalineBarrage:Yell()
-				voiceCrystallineBarrage:Play("runout")
+				specWarnCrystallineBarrageYou:Play("runout")
 			end
 		end
 		if self.Options.SetIconOnCrystal and self.vb.healthPhase ~= 3 then
@@ -270,7 +261,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		if cid == 80599 then--Earth Warper
 			self.vb.EarthwarperAlive = self.vb.EarthwarperAlive + 1
 			specWarnEarthwarper:Show()
-			voiceEarthwarper:Play("killmob")
+			specWarnEarthwarper:Play("killmob")
 			timerGiftOfEarthCD:Start(10)--TODO, verify timing on new event
 			timerEarthenFlechettesCD:Start(15)--TODO, verify timing on new event
 			timerEarthwarperCD:Start()--TODO, verify timing on new event
@@ -312,7 +303,7 @@ function mod:SPELL_PERIODIC_DAMAGE(sourceGUID, sourceName, _, _, destGUID, destN
 		end
 		if destGUID == UnitGUID("player") and self:AntiSpam(2, 2) then
 			specWarnCrystallineBarrage:Show()
-			voiceCrystallineBarrage:Play("runaway")
+			specWarnCrystallineBarrage:Play("runaway")
 		end
 	end
 end
@@ -338,6 +329,6 @@ end
 function mod:OnSync(msg)
 	if msg == "TectusPillar" and self:IsInCombat() then
 		specWarnEarthenPillar:Show()
-		voiceEarthenPillar:Play("watchstep")
+		specWarnEarthenPillar:Play("watchstep")
 	end
 end

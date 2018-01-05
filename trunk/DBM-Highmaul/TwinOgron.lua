@@ -36,15 +36,15 @@ local yellArcaneVolatility			= mod:NewYell(163372)--Mythic
 local specWarnShieldCharge			= mod:NewSpecialWarningSpell(158134, nil, nil, nil, 2, 2)
 local specWarnInterruptingShout		= mod:NewSpecialWarningCast(158093, "SpellCaster", nil, 2, 2, 2)
 local specWarnPulverize				= mod:NewSpecialWarningSpell(158385, nil, nil, nil, 2, 2)
-local specWarnArcaneCharge			= mod:NewSpecialWarningSpell(163336, nil, nil, nil, 2)
+local specWarnArcaneCharge			= mod:NewSpecialWarningSpell(163336, nil, nil, nil, 2, 2)
 
 --Phemos (100-106 second full rotation, 33-34 in between)
-mod:AddTimerLine((EJ_GetSectionInfo(9590)))
+mod:AddTimerLine((DBM:EJ_GetSectionInfo(9590)))
 local timerEnfeeblingRoarCD			= mod:NewNextCountTimer(33, 158057, nil, nil, nil, 5)
 local timerWhirlwindCD				= mod:NewNextCountTimer(33, 157943, nil, nil, nil, 2)
 local timerQuakeCD					= mod:NewNextCountTimer(34, 158200, nil, nil, nil, 2)
 --Pol (84 seconds full rotation, 28-29 seconds in between)
-mod:AddTimerLine((EJ_GetSectionInfo(9595)))
+mod:AddTimerLine((DBM:EJ_GetSectionInfo(9595)))
 local timerShieldChargeCD			= mod:NewNextTimer(28, 158134, nil, nil, nil, 3)
 local timerInterruptingShoutCD		= mod:NewNextTimer(28, 158093)--No color classificatoin for this, hmm
 local timerInterruptingShout		= mod:NewCastTimer(3, 158093, nil, "SpellCaster")
@@ -62,9 +62,6 @@ local countdownArcaneVolatility		= mod:NewCountdown("AltTwo60", 163372, "-Tank")
 
 local voicePhemos					= mod:NewVoice(nil, nil, "PhemosSpecialVoice")
 local voicePol						= mod:NewVoice(nil, nil, "PolSpecialVoice")
-local voiceBlaze					= mod:NewVoice(158241)
-local voiceArcaneVolatility			= mod:NewVoice(163372)
-local voiceInterruptingShout		= mod:NewVoice(158093, "SpellCaster")
 
 mod:AddRangeFrameOption("8/3", 163372)
 mod:AddInfoFrameOption("ej9586")
@@ -81,9 +78,9 @@ mod.vb.arcaneDebuff = 0
 local GetTime = GetTime
 local PhemosEnergyRate = 33
 local polEnergyRate = 28
-local GetSpellInfo = GetSpellInfo
-local arcaneDebuff = GetSpellInfo(163372)
-local arcaneTwisted = GetSpellInfo(163297)
+local arcaneDebuff, arcaneTwisted = DBM:GetSpellInfo(163372), DBM:GetSpellInfo(163297)
+local PhemName1, PhemName2, PhemName3, PhemName4= DBM:GetSpellInfo(157943), DBM:GetSpellInfo(163321), DBM:GetSpellInfo(158057), DBM:GetSpellInfo(158200)
+local PolName1, PolName2, PolName3, PolName4 = DBM:GetSpellInfo(158134), DBM:GetSpellInfo(163336), DBM:GetSpellInfo(158093), DBM:GetSpellInfo(158385)
 local UnitDebuff, UnitBuff = UnitDebuff, UnitBuff
 local arcaneVTimers = {8.5, 6, 45, 8, 16.5, 8.5, 5.5, 39, 130, 10, 56.5, 8, 6}
 local debuffFilter
@@ -118,27 +115,27 @@ do
 			addLine(UnitName("boss1"), bossPower)
 			if bossPower < 33 then--Whirlwind
 				if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
-					addLine("|cFF9932CD"..GetSpellInfo(157943).."|r", GetSpellInfo(163321))
+					addLine("|cFF9932CD"..PhemName1.."|r", PhemName2)
 				else
-					addLine(GetSpellInfo(157943), "")
+					addLine(PhemName1, "")
 				end
 			elseif bossPower < 66 then--Enfeabling Roar
-				addLine(GetSpellInfo(158057), "")
+				addLine(PhemName3, "")
 			elseif bossPower < 100 then--Quake
-				addLine(GetSpellInfo(158200), "")
+				addLine(PhemName4, "")
 			end
 		elseif DBM:GetUnitCreatureId("boss2") == 78237 then
 			addLine(UnitName("boss2"), bossPower2)
 			if bossPower2 < 33 then--Whirlwind
 				if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
-					addLine("|cFF9932CD"..GetSpellInfo(157943).."|r", GetSpellInfo(163321))
+					addLine("|cFF9932CD"..PhemName1.."|r", PhemName2)
 				else
-					addLine(GetSpellInfo(157943), "")
+					addLine(PhemName1, "")
 				end
 			elseif bossPower2 < 66 then--Enfeabling Roar
-				addLine(GetSpellInfo(158057), "")
+				addLine(PhemName3, "")
 			elseif bossPower2 < 100 then--Quake
-				addLine(GetSpellInfo(158200), "")
+				addLine(PhemName4, "")
 			end
 		end
 	--Second, Pol
@@ -146,27 +143,27 @@ do
 			if bossPower < 33 then--Shield Charge
 				addLine(UnitName("boss1"), bossPower)
 				if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
-					addLine("|cFF9932CD"..GetSpellInfo(158134).."|r", GetSpellInfo(163336))
+					addLine("|cFF9932CD"..PolName1.."|r", PolName2)
 				else
-					addLine(GetSpellInfo(158134), "")
+					addLine(PolName1, "")
 				end
 			elseif bossPower < 66 then--Disruptiong Shout
-				addLine(GetSpellInfo(158093), "")
+				addLine(PolName3, "")
 			elseif bossPower < 100 then--Pulverize
-				addLine(GetSpellInfo(158385), "")
+				addLine(PolName4, "")
 			end
 		elseif DBM:GetUnitCreatureId("boss2") == 78238 then
 			addLine(UnitName("boss2"), bossPower2)
 			if bossPower2 < 33 then--Shield Charge
 				if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
-					addLine("|cFF9932CD"..GetSpellInfo(158134).."|r", GetSpellInfo(163336))
+					addLine("|cFF9932CD"..PolName1.."|r", PolName2)
 				else
-					addLine(GetSpellInfo(158134), "")
+					addLine(PolName1, "")
 				end
 			elseif bossPower2 < 66 then--Disruptiong Shout
-				addLine(GetSpellInfo(158093), "")
+				addLine(PolName3, "")
 			elseif bossPower2 < 100 then--Pulverize
-				addLine(GetSpellInfo(158385), "")
+				addLine(PolName4, "")
 			end
 		end
 		return lines, sortedLines
@@ -174,6 +171,9 @@ do
 end
 
 function mod:OnCombatStart(delay)
+	arcaneDebuff, arcaneTwisted = DBM:GetSpellInfo(163372), DBM:GetSpellInfo(163297)
+	PhemName1, PhemName2, PhemName3, PhemName4 = DBM:GetSpellInfo(157943), DBM:GetSpellInfo(163321), DBM:GetSpellInfo(158057), DBM:GetSpellInfo(158200)
+	PolName1, PolName2, PolName3, PolName4 = DBM:GetSpellInfo(158134), DBM:GetSpellInfo(163336), DBM:GetSpellInfo(158093), DBM:GetSpellInfo(158385)
 	self.vb.EnfeebleCount = 0
 	self.vb.QuakeCount = 0
 	self.vb.WWCount = 0
@@ -241,6 +241,7 @@ function mod:SPELL_CAST_START(args)
 		voicePhemos:Schedule(PhemosEnergyRate - 5.3, "gather")--Stack
 	elseif spellId == 158134 then
 		specWarnShieldCharge:Show()
+		specWarnShieldCharge:Play("chargemove")
 		timerInterruptingShoutCD:Start(polEnergyRate)--Next Special
 		countdownPol:Start(polEnergyRate)
 		voicePol:Schedule(polEnergyRate - 6.5, "158093") --shot
@@ -249,7 +250,7 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 158093 then
 		specWarnInterruptingShout:Show()
-		voiceInterruptingShout:Play("stopcast")
+		specWarnInterruptingShout:Play("stopcast")
 		if not self:IsMythic() and self.vb.PulverizeCount == 0 then
 			timerPulverizeCD:Start(polEnergyRate+1)--Next Special
 			countdownPol:Start(polEnergyRate+1)
@@ -290,6 +291,7 @@ function mod:SPELL_CAST_START(args)
 		warnPulverize:Show(self.vb.PulverizeCount)
 	elseif spellId == 163336 and self:AntiSpam(2, 1) then
 		specWarnArcaneCharge:Show()
+		specWarnArcaneCharge:Play("chargemove")
 	end
 end
 
@@ -307,7 +309,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnArcaneVolatility:Show()
 			yellArcaneVolatility:Yell()
-			voiceArcaneVolatility:Play("runout")
+			specWarnArcaneVolatility:Play("runout")
 		end
 		if self.Options.RangeFrame then
 			if UnitDebuff("player", arcaneDebuff) then
@@ -318,7 +320,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 158241 and args:IsPlayer() and self:AntiSpam(3, 3) then
 		specWarnBlaze:Show()
-		voiceBlaze:Play("runaway")
+		specWarnBlaze:Play("runaway")
 	elseif spellId == 163297 then
 		warnArcaneTwisted:Show(args.destName)
 		timerArcaneTwistedCD:Start()
@@ -341,7 +343,7 @@ function mod:SPELL_AURA_REFRESH(args)
 		if args:IsPlayer() then
 			specWarnArcaneVolatility:Show()
 			yellArcaneVolatility:Yell()
-			voiceArcaneVolatility:Play("runout")
+			specWarnArcaneVolatility:Play("runout")
 		end
 		if self.Options.RangeFrame then
 			if UnitDebuff("player", arcaneDebuff) then

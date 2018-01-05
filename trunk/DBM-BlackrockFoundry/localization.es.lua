@@ -55,14 +55,6 @@ L:SetMiscLocalization({
 ------------------------
 L= DBM:GetModLocalization(1155)
 
-L:SetTimerLocalization({
-	timerStamperDodge			= DBM_CORE_AUTO_TIMER_TEXTS.nextcount:format((GetSpellInfo(160582)))
-})
-
-L:SetOptionLocalization({
-	timerStamperDodge			= DBM_CORE_AUTO_TIMER_OPTIONS.nextcount:format(160582)
-})
-
 --------------------------
 -- Dominallamas Ka'graz --
 --------------------------
@@ -104,7 +96,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Train			= GetSpellInfo(174806),
+	Train			= "Tren",
 	lane			= "Vía",
 	oneTrain		= "1 vía aleatoria: Tren",
 	oneRandom		= "en 1 vía aleatoria",

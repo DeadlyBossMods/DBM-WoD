@@ -96,7 +96,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	Train			= GetSpellInfo(174806),
+	Train			= "Train",--Needs fixing
 	lane			= "車道",
 	oneTrain		= "一個隨機列車道",
 	oneRandom		= "出現一個隨機列車道",

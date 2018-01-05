@@ -79,7 +79,7 @@ local voiceWarnExhaustion		= mod:NewVoice(164841, "RemoveCurse")
 
 mod:AddRangeFrameOption(10, 156921)
 
-local seedDebuff = GetSpellInfo(156921)
+local seedDebuff = DBM:GetSpellInfo(156921)
 local DebuffFilter
 do
 	DebuffFilter = function(uId)
@@ -110,6 +110,7 @@ function mod:ChaosWaveTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	seedDebuff = DBM:GetSpellInfo(156921)
 	self.vb.seedCount = 0
 	self.vb.phase2 = false
 	timerRainOfFireCD:Start(15-delay)

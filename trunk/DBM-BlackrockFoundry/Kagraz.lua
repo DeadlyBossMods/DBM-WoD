@@ -64,18 +64,10 @@ local timerFireStorm					= mod:NewBuffActiveTimer(14, 155493, nil, nil, nil, 6)
 local berserkTimer						= mod:NewBerserkTimer(420)
 
 local countdownCinderWolves				= mod:NewCountdown(76, 155776)
-local countdownFireStorm				= mod:NewCountdown(61, 155493)--Same voice as wolves cause never happen at same time, in fact they alternate.
+local countdownFireStorm				= mod:NewCountdown(61, 155493)--Same count as wolves cause never happen at same time, in fact they alternate.
 local countdownEnchantedArmaments		= mod:NewCountdown("Alt45", 156724, false, 2)
 local countdownOverheated				= mod:NewCountdownFades("Alt20", 154950, "Tank")
 local countdownMoltenTorrent			= mod:NewCountdownFades("AltTwo6", 154932)
-
-local voiceMoltenTorrent				= mod:NewVoice(154932) --runin
-local voiceFixate						= mod:NewVoice(154952) --justrun
-local voiceCinderWolves					= mod:NewVoice(155776, "-Healer") --killmob
-local voiceBlazinRadiance				= mod:NewVoice(155277)  --runaway (scatter if we have power system)
-local voiceRisingFlames					= mod:NewVoice(163284)  --changemt
-local voiceFireStorm					= mod:NewVoice(155493) --aoe
-local voiceLavaSlash					= mod:NewVoice(155318) --runaway
 
 mod:AddRangeFrameOption("10/6")
 mod:AddSetIconOption("SetIconOnAdds", 155776, true, true)
@@ -144,9 +136,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 		specWarnCinderWolves:Show()
 		timerBlazingRadianceCD:Start(34)
 		timerFireStormCD:Start(nil, self.vb.firestorm+1)
-		voiceFireStorm:Schedule(56.5, "aesoon")
+		specWarnFireStorm:ScheduleVoice(56.5, "aesoon")
 		countdownFireStorm:Start()
-		voiceCinderWolves:Play("killmob")
+		specWarnCinderWolves:Play("killmob")
 		wolfIcon = 2
 		if self.Options.SetIconOnAdds and not self:IsLFR() then
 			self:RegisterShortTermEvents(
@@ -165,7 +157,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnBlazinRadiance:Show()
 			yellBlazinRadiance:Yell()
-			voiceBlazinRadiance:Play("runout")
+			specWarnBlazinRadiance:Play("runout")
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(10)
 			end
@@ -179,7 +171,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			--Schedule, do to dogs changing mind bug
 			timerFixate:Schedule(0.4)
 			specWarnFixate:Schedule(0.4)
-			voiceFixate:Schedule(0.4, "justrun")
+			specWarnFixate:ScheduleVoice(0.4, "justrun")
 		end
 		self:Unschedule(showFixate)
 		self:Schedule(0.4, showFixate, self)
@@ -192,7 +184,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				else--Taunt as soon as stacks are clear, regardless of stack count.
 					if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 						specWarnRisingFlamesOther:Show(args.destName)
-						voiceRisingFlames:Play("changemt")
+						specWarnRisingFlamesOther:Play("tauntboss")
 					else
 						warnRisingFlames:Show(args.destName, amount)
 					end
@@ -209,7 +201,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				if args:IsPlayer() then
 					specWarnCharringBreath:Show(amount)
 				else--Taunt as soon as stacks are clear, regardless of stack count.
-					if not UnitDebuff("player", GetSpellInfo(155074)) and not UnitIsDeadOrGhost("player") then
+					if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 						specWarnCharringBreathOther:Show(args.destName)
 					else
 						warnCharringBreath:Show(args.destName, amount)
@@ -224,7 +216,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnMoltenTorrent:Show()
 			countdownMoltenTorrent:Start(6)
-			voiceMoltenTorrent:Play("runin")
+			specWarnMoltenTorrent:Play("runin")
 			yellMoltenTorrent:Schedule(5, 1)
 			yellMoltenTorrent:Schedule(4, 2)
 			yellMoltenTorrent:Schedule(3, 3)
@@ -263,7 +255,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			timerFixate:Stop()
 			specWarnFixate:Cancel()
-			voiceFixate:Cancel()
+			specWarnFixate:CancelVoice()
 			if GetTime() - (fixateTagets[args.destName] or 0) > 1 then
 				specWarnFixateEnded:Show()
 			end
@@ -277,9 +269,9 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif spellId == 155493 then
 		specWarnFireStormEnded:Show()
 		if self:IsMelee() then
-			voiceFireStorm:Play("safenow")
+			specWarnFireStormEnded:Play("safenow")
 		else
-			voiceFireStorm:Play("scatter")
+			specWarnFireStormEnded:Play("scatter")
 		end
 	end
 end
@@ -287,7 +279,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId)
 	if spellId == 155314 and destGUID == UnitGUID("player") and self:AntiSpam(2.5, 1) then
 		specWarnLavaSlash:Show()
-		voiceLavaSlash:Play("runaway")
+		specWarnLavaSlash:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
@@ -334,6 +326,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerMoltenTorrentCD:Start(42.5)
 		timerSummonCinderWolvesCD:Start()
 		countdownCinderWolves:Start()
-		voiceFireStorm:Play("gather")
+		specWarnFireStorm:Play("gather")
 	end
 end

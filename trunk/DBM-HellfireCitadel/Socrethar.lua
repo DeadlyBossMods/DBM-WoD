@@ -121,8 +121,7 @@ mod.vb.dominatorCount = 0
 mod.vb.interruptBehavior = "Count3Resume"
 local soulsSeen = {}
 local playerInConstruct = false
-local exertSpellName = GetSpellInfo(183331)
-local debuffName = GetSpellInfo(184124)
+local exertSpellName, debuffName = DBM:GetSpellInfo(183331), DBM:GetSpellInfo(184124)
 local UnitDebuff = UnitDebuff
 local debuffFilter
 do
@@ -186,6 +185,7 @@ function mod:ChargeTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	exertSpellName, debuffName = DBM:GetSpellInfo(183331), DBM:GetSpellInfo(184124)
 	self.vb.interruptBehavior = "Count3Resume"
 	self.vb.ReverberatingBlow = 0
 	self.vb.ManariTargets = 0

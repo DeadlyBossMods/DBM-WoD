@@ -125,7 +125,7 @@ local UnitExists, UnitGUID, UnitDetailedThreatSituation = UnitExists, UnitGUID, 
 local AddsSeen = {}
 
 local debuffFilter
-local debuffName = GetSpellInfo(189775)
+local debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:etSpellInfo(186134)
 local UnitDebuff = UnitDebuff
 do
 	debuffFilter = function(uId)
@@ -208,6 +208,7 @@ function mod:EmpoweredFelChains(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:etSpellInfo(186134)
 	self.vb.EmpFelChainCount = 0
 	self.vb.phase = 1
 	self.vb.impCount = 0
@@ -239,7 +240,7 @@ function mod:SPELL_CAST_START(args)
 					return
 				else
 					--Not Tanking
-					if self.vb.phase >= 3 and playerTanking == 1 and not UnitDebuff("player", GetSpellInfo(186135)) then--Vanguard Tank
+					if self.vb.phase >= 3 and playerTanking == 1 and not UnitDebuff("player", vanguardTank) then--Vanguard Tank
 						--You're the Vanguard tank and do NOT have aggro for this strike or void debuff, taunt NOW
 						local targetName = UnitName(bossUnitID.."target") or DBM_CORE_UNKNOWN
 						if self:AntiSpam(3, targetName) then
@@ -260,7 +261,7 @@ function mod:SPELL_CAST_START(args)
 					return
 				else
 					--Not Tanking
-					if self.vb.phase >= 3 and playerTanking == 2 and not UnitDebuff("player", GetSpellInfo(186134)) then--VoidWalker Tank
+					if self.vb.phase >= 3 and playerTanking == 2 and not UnitDebuff("player", voidwalkerTank) then--VoidWalker Tank
 						--You're the void walker tank and do NOT have aggro for this strike or fel debuff, taunt NOW
 						local targetName = UnitName(bossUnitID.."target") or DBM_CORE_UNKNOWN
 						if self:AntiSpam(3, targetName) then

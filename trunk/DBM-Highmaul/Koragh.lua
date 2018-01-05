@@ -69,15 +69,6 @@ local countdownMagicFire			= mod:NewCountdownFades(11.5, 162185)
 local countdownBalls				= mod:NewCountdown("Alt30", 161612)
 local countdownFel					= mod:NewCountdownFades("AltTwo11", 172895)
 
-local voiceExpelMagicFire			= mod:NewVoice(162185)
-local voiceExpelMagicShadow			= mod:NewVoice(162184, "Healer", nil, 2)
-local voiceExpelMagicFrost			= mod:NewVoice(161411)
-local voiceExpelMagicArcane			= mod:NewVoice(162186, nil, nil, 3)
-local voiceMC						= mod:NewVoice(163472, "Dps")
-local voiceTrample					= mod:NewVoice(163101)
-local voiceBalls					= mod:NewVoice(161612)
-local voiceExpelMagicArcaneFel		= mod:NewVoice(172895)
-
 mod:AddRangeFrameOption("5")
 mod:AddSetIconOption("SetIconOnMC", 163472, false)
 mod:AddSetIconOption("SetIconOnFel", 172895, false)
@@ -89,9 +80,7 @@ mod.vb.ballsCount = 0
 mod.vb.shieldCharging = false
 mod.vb.fireActive = false
 local lastX, LastY = nil, nil--Not in VB table because it player personal position
-local barName = GetSpellInfo(156803)
-local arcaneDebuff = GetSpellInfo(162186)
-local DBMHudMap = DBMHudMap
+local barName, arcaneDebuff = DBM:GetSpellInfo(156803), DBM:GetSpellInfo(162186)
 
 local function closeRange(self)
 	if self.Options.RangeFrame and not UnitDebuff("player", arcaneDebuff) then
@@ -104,7 +93,7 @@ local function ballsWarning(self)
 	DBM:Debug("Balls should be falling in 6.5 second")
 	if UnitPower("player", 10) > 0 then--Player is soaker
 		specWarnBallsSoon:Show()--Player who soaks
-		voiceBalls:Play("161612")
+		specWarnBallsSoon:Play("161612")
 	else
 		warnBallsSoon:Show()--Everyone else
 	end
@@ -120,7 +109,7 @@ end
 
 local function returnPosition(self)
 	specWarnExpelMagicFelFades:Show()
-	voiceExpelMagicArcaneFel:Play("172895")
+	specWarnExpelMagicFelFades:Play("172895")
 	if self.Options.FelArrow and lastX and LastY then
 		DBM.Arrow:ShowRunTo(lastX, LastY, 0, 5)
 	end
@@ -134,6 +123,7 @@ function mod:FrostTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	barName, arcaneDebuff = DBM:GetSpellInfo(156803), DBM:GetSpellInfo(162186)
 	self.vb.ballsCount = 0
 	self.vb.shieldCharging = false
 	self.vb.fireActive = false
@@ -169,11 +159,11 @@ function mod:ArcaneTarget()
 	local tanking, status = UnitDetailedThreatSituation("player", "boss1")
 	if tanking or (status == 3) then--Player is current target
 		specWarnExpelMagicArcaneYou:Show()--So show tank warning
-		voiceExpelMagicArcane:Play("runout")
+		specWarnExpelMagicArcaneYou:Play("runout")
 	else
 		if self:AntiSpam(3.5, targetName) then--Set anti spam with target name
 			specWarnExpelMagicArcane:Show(targetName)--Sometimes targetname is nil, and then it warns for unknown, but with the new status == 3 check, it'll still warn correct tank, so useful anyways
-			voiceExpelMagicArcane:Play("changemt")
+			specWarnExpelMagicArcane:Play("changemt")
 		end
 	end
 end
@@ -194,8 +184,8 @@ function mod:SPELL_CAST_START(args)
 			timerExpelMagicFireCD:Start()
 		end
 		countdownMagicFire:Start()
-		voiceExpelMagicFire:Play("scattersoon")
-		voiceExpelMagicFire:Schedule(5, "scatter")
+		specWarnExpelMagicFire:Play("scattersoon")
+		specWarnExpelMagicFire:ScheduleVoice(5, "scatter")
 		self:Schedule(11.5, closeRange, self)
 	elseif spellId == 162184 then
 		specWarnExpelMagicShadow:Show()
@@ -205,7 +195,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			timerExpelMagicShadowCD:Start()
 		end
-		voiceExpelMagicShadow:Play("healall")
+		specWarnExpelMagicShadow:Play("healall")
 	elseif args:IsSpellID(172747) then
 		specWarnExpelMagicFrost:Show()
 		if self.vb.shieldCharging then
@@ -219,7 +209,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			timerExpelMagicFrost:Start(21.5)
 		end
-		voiceExpelMagicFrost:Play("161411")
+		specWarnExpelMagicFrost:Play("161411")
 		self:BossTargetScanner(79015, "FrostTarget", 0.1, 16)
 	elseif spellId == 163517 then
 		warnForfeitPower:Show()
@@ -269,7 +259,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			if self:AntiSpam(3.5, args.destName) and self:IsTank() then--if antispam matches cast start warning, it won't warn again, if name is different, it'll trigger new warning
 				specWarnExpelMagicArcane:Show(args.destName)
-				voiceExpelMagicArcane:Play("changemt")
+				specWarnExpelMagicArcane:Play("changemt")
 			else
 				warnExpelMagicArcane:Show(args.destName)
 			end
@@ -280,7 +270,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnMC:CombinedShow(0.5, args.destName)
 		if self:AntiSpam(3, 1) then
 			specWarnMC:Show()
-			voiceMC:Play("findmc")
+			specWarnMC:Play("findmc")
 		end
 		if self.Options.SetIconOnMC then
 			self:SetSortedIcon(1, args.destName, 8, nil, true)--TODO, find out number of targets and add
@@ -411,7 +401,7 @@ function mod:OnSync(msg, targetname)
 			if target == UnitName("player") then
 				specWarnTrample:Show()
 				yellTrample:Yell()
-				voiceTrample:Play("runaway")
+				specWarnTrample:Play("runaway")
 			elseif self:CheckNearby(10, target) then
 				specWarnTrampleNear:Show(target)
 			end

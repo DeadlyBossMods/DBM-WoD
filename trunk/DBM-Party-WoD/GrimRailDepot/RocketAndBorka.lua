@@ -35,7 +35,7 @@ local timerRecovering			= mod:NewBuffActiveTimer(6, 163947)
 
 local voiceSlam					= mod:NewVoice(162617, "SpellCaster")
 
-local rocketsName = EJ_GetSectionInfo(9430)
+local rocketsName = DBM:EJ_GetSectionInfo(9430)
 local borkaID = nil
 mod.vb.VXCast = 0
 mod.vb.SlamCast = 0

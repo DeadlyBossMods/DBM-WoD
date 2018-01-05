@@ -22,9 +22,6 @@ local specWarnVoidBomb			= mod:NewSpecialWarningYou(180939, nil, nil, nil, 1, 2)
 local yellVoidBomb				= mod:NewYell(180939)
 local specWarnTwistMind			= mod:NewSpecialWarningSwitch(180950, "Dps", nil, nil, 1, 2)
 
-local voiceVoidBomb				= mod:NewVoice(180939)--runout
-local voiceMC					= mod:NewVoice(163472, "Dps")--findmc
-
 mod:AddHudMapOption("HudMapOnMC", 180950)
 
 function mod:VoidTarget(targetname, uId)
@@ -37,7 +34,7 @@ function mod:BombTarget(targetname, uId)
 	if targetname == UnitName("player") then
 		specWarnVoidBomb:Show()
 		yellVoidBomb:Yell()
-		voiceVoidBomb:Play("runout")
+		specWarnVoidBomb:Play("runout")
 	else
 		warnVoidBomb:Show(targetname)
 	end
@@ -55,7 +52,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnTwistMind:CombinedShow(0.5, args.destName)--Only saw 1 target in 12 person raid, but maybe scales up in larger raid size? so combined show just in case
 		if self:AntiSpam(2, 1) then
 			specWarnTwistMind:Show()
-			voiceMC:Play("findmc")
+			specWarnTwistMind:Play("findmc")
 		end
 		if self.Options.HudMapOnMC then
 			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 30, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)

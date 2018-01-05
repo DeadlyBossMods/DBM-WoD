@@ -81,12 +81,13 @@ mod.vb.berserkerCount = 0
 mod.vb.deathThrowsCount = 0
 mod.vb.visionsCount = 0
 local UnitExists, UnitGUID, UnitDetailedThreatSituation = UnitExists, UnitGUID, UnitDetailedThreatSituation
-local felCorruption = GetSpellInfo(182159)
-local Bloodthirster = EJ_GetSectionInfo(11266)
+local felCorruption = DBM:GetSpellInfo(182159)
+local Bloodthirster = DBM:EJ_GetSectionInfo(11266)
 local AddsSeen = {}
 local HowlByGUID = {}--Not syncable, but keeps separate count for each add cleanly
 
 function mod:OnCombatStart(delay)
+	felCorruption = DBM:GetSpellInfo(182159)
 	table.wipe(HowlByGUID)
 	self.vb.berserkerCount = 0
 	self.vb.deathThrowsCount = 0

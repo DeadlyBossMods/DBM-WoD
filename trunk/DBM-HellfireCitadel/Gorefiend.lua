@@ -86,6 +86,7 @@ local sharedFateTimers = {19, 28, 25, 22}
 local sharedFateTargets = {}
 local playerHasFate = false
 local playerName = UnitName("player")
+local digestDebuff, gorefiendCorruption = DBM:GetSpellInfo(181295), DBM:GetSpellInfo(179867)
 --[[
 Time   Player Role   # of players sent, if your raid size is...
                           10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29
@@ -132,6 +133,7 @@ local function sharedFateDelay(self)
 end
 
 function mod:OnCombatStart(delay)
+	digestDebuff, gorefiendCorruption = DBM:GetSpellInfo(181295), DBM:GetSpellInfo(179867)
 	self.vb.rootedFate = nil
 	self.vb.shadowOfDeathCount = 0
 	self.vb.sharedFateCount = 0
@@ -168,9 +170,8 @@ function mod:OnCombatStart(delay)
 	end
 	timerFeastofSouls:Start(-delay)
 	if self.Options.InfoFrame then
-		local spellName = GetSpellInfo(181295)
-		DBM.InfoFrame:SetHeader(spellName)
-		DBM.InfoFrame:Show(10, "playerdebuffremaining", spellName)
+		DBM.InfoFrame:SetHeader(digestDebuff)
+		DBM.InfoFrame:Show(10, "playerdebuffremaining", digestDebuff)
 	end
 end
 
@@ -380,9 +381,8 @@ function mod:OnSync(msg)
 		end
 		--Switch to debuff tracking on mythic feast.
 		if self.Options.InfoFrame and self:IsMythic() then
-			local spellName = GetSpellInfo(179867)
-			DBM.InfoFrame:SetHeader(spellName)
-			DBM.InfoFrame:Show(10, "playerbaddebuff", spellName, nil, true)
+			DBM.InfoFrame:SetHeader(gorefiendCorruption)
+			DBM.InfoFrame:Show(10, "playerbaddebuff", gorefiendCorruption, nil, true)
 		end
 	elseif msg == "SharedFateCast" then
 		table.wipe(sharedFateTargets)
@@ -442,9 +442,8 @@ function mod:OnSync(msg)
 			timerShadowofDeathCDHealer:Start(21, "2x"..DBM_CORE_HEALER_ICON)
 			if self.Options.InfoFrame then
 				--Switch back to digest
-				local spellName = GetSpellInfo(181295)
-				DBM.InfoFrame:SetHeader(spellName)
-				DBM.InfoFrame:Show(10, "playerdebuffremaining", spellName)
+				DBM.InfoFrame:SetHeader(digestDebuff)
+				DBM.InfoFrame:Show(10, "playerdebuffremaining", digestDebuff)
 			end
 		else
 			local numDpsPlayers = 1

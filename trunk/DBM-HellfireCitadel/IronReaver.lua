@@ -98,7 +98,7 @@ local poundingTimers = {32.6, 54, 24}
 
 local debuffFilter
 local UnitDebuff = UnitDebuff
-local debuffName = GetSpellInfo(182280)
+local debuffName, reactiveName, burningName, quickfuseName, reinforcedName, volatileName = DBM:GetSpellInfo(182280), DBM:GetSpellInfo(186676), DBM:GetSpellInfo(186667), DBM:GetSpellInfo(186660), DBM:GetSpellInfo(188294), DBM:GetSpellInfo(182523)
 do
 	debuffFilter = function(uId)
 		if UnitDebuff(uId, debuffName) then
@@ -111,7 +111,6 @@ local updateInfoFrame
 do
 	local lines = {}
 	local sortedLines = {}
-	local reactiveName, burningName, quickfuseName, reinforcedName, volatileName = GetSpellInfo(186676), GetSpellInfo(186667), GetSpellInfo(186660), GetSpellInfo(188294), GetSpellInfo(182523)
 	local function addLine(key, value)
 		-- sort by insertion order
 		lines[key] = value
@@ -167,6 +166,7 @@ local function updateRangeFrame(self)
 end
 
 function mod:OnCombatStart(delay)
+	debuffName, reactiveName, burningName, quickfuseName, reinforcedName, volatileName = DBM:GetSpellInfo(182280), DBM:GetSpellInfo(186676), DBM:GetSpellInfo(186667), DBM:GetSpellInfo(186660), DBM:GetSpellInfo(188294), DBM:GetSpellInfo(182523)
 	self.vb.artilleryActive = 0--Only one that should reset on pull
 	self.vb.volatileCount = 0
 	self.vb.quickfuseCount = 0

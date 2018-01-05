@@ -18,17 +18,14 @@ local warnGoren					= mod:NewSpellAnnounce(180879, 2)
 local specWarnEarthenSlam		= mod:NewSpecialWarningSpell(180868, nil, nil, nil, 2, 2)
 local specWarnRunicSpike		= mod:NewSpecialWarningSpell(180830, "Melee", nil, nil, 2, 2)
 
-local voiceEarthenSlam			= mod:NewVoice(180868) --carefly
-local voiceRunicSpike			= mod:NewVoice(180830, "Melee") --watchstep
-
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 180830 then
 		specWarnRunicSpike:Show()
-		voiceRunicSpike:Play("watchstep")
+		specWarnRunicSpike:Play("watchstep")
 	elseif spellId == 180868 then
 		specWarnEarthenSlam:Show()
-		voiceRunicSpike:Play("carefly")
+		specWarnEarthenSlam:Play("carefly")
 	end
 end
 

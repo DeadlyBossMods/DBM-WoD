@@ -43,9 +43,6 @@ local timerSmartStamperCD				= mod:NewNextTimer(12, 162124, nil, nil, nil, 6, ni
 local countSmartStampers				= mod:NewCountdown(12, 160582)
 local countCripplingSupplex				= mod:NewCountdown("Alt9.5", 156938, "Tank|Healer", 2)
 
-local voiceEnvironmentalThreats			= mod:NewVoice("ej10089")
-local voiceDisruptingRoar				= mod:NewVoice(160838, "SpellCaster")
-
 mod.vb.phase = 1
 mod.vb.stamperDodgeCount = 0
 mod.vb.bossUp = "NoBody"
@@ -92,7 +89,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnDisruptingRoar:Show()
 		timerDisruptingRoarCD:Start()
 		DBM:GetBossUnitId(args.sourceName)
-		voiceDisruptingRoar:Play("stopcast")
+		specWarnDisruptingRoar:Play("stopcast")
 		local _, _, _, _, startTime, endTime = UnitCastingInfo(DBM:GetBossUnitId(args.sourceName))
 		local time = ((endTime or 0) - (startTime or 0)) / 1000
 		if time then
@@ -122,13 +119,13 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		--The triggers are these percentages for sure but there is a delay before they do it so it always appears later, but the trigger has been triggered
 		if self.vb.phase == 2 then--First belt 85% (15 Energy) (fire plates)
 			specWarnSearingPlates:Show()
-			voiceEnvironmentalThreats:Play("watchstep")
+			specWarnSearingPlates:Play("watchstep")
 		elseif self.vb.phase == 3 then--Second belt 55% (45 Energy) (Stampers)
 			specWarnStampers:Show()
-			voiceEnvironmentalThreats:Play("watchstep")
+			specWarnStampers:Play("watchstep")
 		elseif self.vb.phase == 4 then--Second belt 25% (75 Energy) (Fire plates, then stampers)
 			specWarnSearingPlates:Show()
-			voiceEnvironmentalThreats:Play("watchstep")	
+			specWarnSearingPlates:Play("watchstep")	
 		end
 	elseif spellId == 156546 or spellId == 156542 then
 		specWarnCripplingSupplex:Schedule(6)--warn 3 seconds before, stun removed in 6.1
@@ -165,25 +162,25 @@ function mod:UNIT_TARGETABLE_CHANGED(uId)
 		self.vb.bossUp = "NoBody"
 		if self.vb.phase == 4 then--Stampers activate on their own after 3rd jump away, when they return.
 			specWarnStampers:Show()
-			voiceEnvironmentalThreats:Play("watchstep")
+			specWarnStampers:Play("watchstep")
 		else
 			if self.vb.phase == 2 then
 				specWarnSearingPlatesEnd:Show()
 				if self:IsMythic() then
 					timerSmartStamperCD:Start()
 					countSmartStampers:Start()
-					voiceEnvironmentalThreats:Play("gather")--Must restack for smart stampers
+					specWarnSearingPlatesEnd:Play("gather")--Must restack for smart stampers
 				else
-					voiceEnvironmentalThreats:Play("safenow")
+					specWarnSearingPlatesEnd:Play("safenow")
 				end
 			else
 				specWarnStampersEnd:Show()
 				if self:IsMythic() then
 					timerSmartStamperCD:Start()
 					countSmartStampers:Start()
-					voiceEnvironmentalThreats:Play("gather")--Must restack for smart stampers
+					specWarnStampersEnd:Play("gather")--Must restack for smart stampers
 				else
-					voiceEnvironmentalThreats:Play("safenow")
+					specWarnStampersEnd:Play("safenow")
 				end
 			end
 		end

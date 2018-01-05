@@ -121,7 +121,7 @@ local berserkerTimers = {55.9, 26, 14.4, 36.7, 38.8, 49.5, 66.8, 38.7, 65.8, 47.
 local mythicberserkerTimers = {54.7, 59.6, 140.7, 39.7, 46.5, 28.5, 38.9}--29.5 (first) omitted
 local felcasterTimers = {8.5, 32.2, 39.5, 45.6, 50.9, 31.1, 36.7, 10, 103.8, 0.3, 27.8, 47.2}--35 (first) is omitted
 local mythicfelcasterTimers = {9.5, 160, 33.8, 49.4, 41.3, 44.9, 70.6}--35 (first) is omitted.
-local axeDebuff = GetSpellInfo(184369)
+local axeDebuff = DBM:GetSpellInfo(184369)
 local axeFilter
 do
 	axeFilter = function(uId)
@@ -157,6 +157,7 @@ function mod:CannonTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
+	axeDebuff = DBM:GetSpellInfo(184369)
 	self.vb.vehicleCount = 0
 	self.vb.felcasterCount = 0
 	self.vb.berserkerCount = 0
@@ -344,10 +345,10 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-local felCaster = EJ_GetSectionInfo(11411)
-local berserker = EJ_GetSectionInfo(11425)
---local dragoon = EJ_GetSectionInfo(11407)--Unused, add has no yell at this time
---local SiegemasterMartak = EJ_GetSectionInfo(11484)--Unused, maybe used as a filter if needed
+local felCaster = DBM:EJ_GetSectionInfo(11411)
+local berserker = DBM:EJ_GetSectionInfo(11425)
+--local dragoon = DBM:EJ_GetSectionInfo(11407)--Unused, add has no yell at this time
+--local SiegemasterMartak = DBM:EJ_GetSectionInfo(11484)--Unused, maybe used as a filter if needed
 --Massive TODO. Get sides for mythic and only warn for side you are on if possible (iffy at best)
 function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 	if msg == L.BossLeaving and self:AntiSpam(20, 2) then
