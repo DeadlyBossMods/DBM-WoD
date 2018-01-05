@@ -81,10 +81,6 @@ local berserkTimer					= mod:NewBerserkTimer(600)
 local countdownSpecial				= mod:NewCountdown(75, 184681)--spellid is only one of 3 specials but whatever
 local countdownReap					= mod:NewCountdownFades("Alt4", 184476)
 
-local voiceFelstorm					= mod:NewVoice(183701)--aesoon
-local voiceReap						= mod:NewVoice(184476)--runout/runaway
-local voiceDemolishingLeap			= mod:NewVoice(184366)--runaway (Stll not sure I like run away for this. You may not have to move at all, run away implies you need to react, but this boss jumps to random spot in room, you have to check ground whether or not you need to move)
-
 mod:AddRangeFrameOption(8, 184476)
 
 mod.vb.DiaPushed = false
@@ -190,7 +186,7 @@ function mod:SPELL_CAST_START(args)
 			specWarnReap:Show()
 			yellReap:Yell()
 			countdownReap:Start()
-			voiceReap:Play("runout")
+			specWarnReap:Play("runout")
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(8)
 			end
@@ -231,7 +227,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 183701 and args:GetDestCreatureID() == 92142 then--Only warn when jubei uses, not mirror image spam
 		specWarnFelstorm:Show()
-		voiceFelstorm:Play("aesoon")
+		specWarnFelstorm:Play("aesoon")
 --		timerFelstormCD:Start()
 	elseif spellId == 184847 and self:AntiSpam(4, 2) then--Probably stacks very rapidly, so using antispam for now until better method constructed
 		local amount = args.amount or 1
@@ -254,7 +250,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 184365 and not args:IsDestTypePlayer() then--IsDestTypePlayer because it could be wrong spellid and one applied to players when he lands on them, so to avoid spammy mess, filter
 		specWarnDemolishingLeap:Show()
-		voiceDemolishingLeap:Play("runaway")
+		specWarnDemolishingLeap:Play("runaway")
 		countdownSpecial:Start()
 		if not self.vb.diaDead then--Dia is next in natural order, unless dead
 			timerDarknessCD:Start()
@@ -268,13 +264,13 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif (spellId == 184450 or spellId == 185065 or spellId == 185066) and self.vb.reapActive and args:IsPlayer() and self:AntiSpam(5, 5) then--Dispel IDs.
 		specWarnReap:Show()
 		yellReap:Yell()
-		voiceReap:Play("runout")
+		specWarnReap:Play("runout")
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(8)--Guessed, could be 10
 		end
 	elseif spellId == 184652 and args:IsPlayer() and self:AntiSpam(1.75, 3) then
 		specWarnReapGTFO:Show()
-		voiceReap:Play("runaway")
+		specWarnReapGTFO:Play("runaway")
 	elseif spellId == 184355 then
 		local amount = args.amount or 1
 		if not self:IsTank() and args:IsPlayer() and amount >= 3 then
@@ -402,7 +398,7 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 184652 and destGUID == UnitGUID("player") and self:AntiSpam(1.75, 3) then
 		specWarnReapGTFO:Show()
-		voiceReap:Play("runaway")
+		specWarnReapGTFO:Play("runaway")
 	end
 end
 mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE

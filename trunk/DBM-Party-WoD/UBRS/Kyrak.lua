@@ -18,7 +18,6 @@ mod:RegisterEventsInCombat(
 )
 
 local warnRejuvSerumCast			= mod:NewCastAnnounce(161203, 3)
-local warnToxicFumes				= mod:NewTargetAnnounce(162600, 3, nil, "Healer")
 local warnVilebloodSerum			= mod:NewSpellAnnounce(161209, 3)--Some may think this is spammy but the puddles tick literally instantly giving not much time to move before 2nd tick which may kill you.
 
 local specWarnDebilitatingFixation	= mod:NewSpecialWarningInterrupt(161199, "-Healer", nil, 2, 3)
@@ -34,11 +33,6 @@ local timerVilebloodSerumCD			= mod:NewCDTimer(9.5, 161209, nil, nil, nil, 3)--e
 
 local countdownDebilitating			= mod:NewCountdown(20, 161199, "Tank")
 
-local voiceRejuvSerum				= mod:NewVoice(161203, "MagicDispeller")
-local voiceToxicFumes				= mod:NewVoice(162600, "RemovePoison", nil, 2)
-local voiceDebilitating				= mod:NewVoice(161199, "-Healer")
-local voiceVilebloodSerum			= mod:NewVoice(161288)
-
 function mod:OnCombatStart(delay)
 --	timerRejuvSerumCD:Start(22.5-delay)--Insufficent sample size
 	timerDebilitatingCD:Start(12-delay)--Insufficent sample size
@@ -50,11 +44,10 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 161203 and not args:IsDestTypePlayer() then
 		specWarnRejuvSerum:Show(args.destName)
 --		timerRejuvSerumCD:Start()
-		voiceRejuvSerum:Play("dispelboss")
+		specWarnRejuvSerum:Play("dispelboss")
 	elseif spellId == 162600 and self:CheckDispelFilter() then
-		warnToxicFumes:Show(args.destName)
 		specWarnToxicFumes:Show(args.destName)
-		voiceToxicFumes:Play("dispelnow")
+		specWarnToxicFumes:Play("dispelnow")
 	end
 end
 
@@ -65,9 +58,9 @@ function mod:SPELL_CAST_START(args)
 		timerDebilitatingCD:Start()
 		countdownDebilitating:Start()
 		if self:IsTank() then
-			voiceDebilitating:Play("kickcast")
+			specWarnDebilitatingFixation:Play("kickcast")
 		else
-			voiceDebilitating:Play("helpkick")
+			specWarnDebilitatingFixation:Play("helpkick")
 		end
 	elseif spellId == 161203 then
 		warnRejuvSerumCast:Show()
@@ -81,7 +74,7 @@ function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 161288 and destGUID == UnitGUID("player") then
 		if self:AntiSpam(2, 1) then
 			specWarnVilebloodSerum:Show()
-			voiceVilebloodSerum:Play("runaway")
+			specWarnVilebloodSerum:Play("runaway")
 		end
 	end
 end
@@ -100,7 +93,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerVilebloodSerumCD:Start()
 		if self:AntiSpam(2, 1) then
 			specWarnVilebloodSerum:Show()--Always dropped on all players when cast, so moving during cast gets 0 ticks.
-			voiceVilebloodSerum:Play("runaway")
+			specWarnVilebloodSerum:Play("runaway")
 		end
 	end
 end

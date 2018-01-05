@@ -40,16 +40,16 @@ local warnCannon					= mod:NewTargetAnnounce(190748, 2)
 
 --Felfire-Imbued Siege Vehicles
 ----Felfire Crusher
-local warnFelfireCrusher			= mod:NewCountAnnounce("ej11439", 2, 160240)
+local warnFelfireCrusher			= mod:NewCountAnnounce("ej11439", 2, 160240, nil, nil, nil, nil, 2)
 ----Felfire Flamebelcher
-local warnFelfireFlamebelcher		= mod:NewCountAnnounce("ej11437", 2, 160240)
+local warnFelfireFlamebelcher		= mod:NewCountAnnounce("ej11437", 2, 160240, nil, nil, nil, nil, 2)
 ----Felfire Artillery
-local warnFelfireArtillery			= mod:NewCountAnnounce("ej11435", 3, 160240)
+local warnFelfireArtillery			= mod:NewCountAnnounce("ej11435", 3, 160240, nil, nil, nil, nil, 2)
 ----Felfire Demolisher (Heroic, Mythic)
-local warnFelfireDemolisher			= mod:NewCountAnnounce("ej11429", 4, 160240)--Heroic & Mythic only
+local warnFelfireDemolisher			= mod:NewCountAnnounce("ej11429", 4, 160240, nil, nil, nil, nil, 2)--Heroic & Mythic only
 local warnNova						= mod:NewSpellAnnounce(180945, 3)
 ----Felfire Transporter (Mythic)
-local warnFelfireTransporter		= mod:NewCountAnnounce("ej11712", 4, 160240)--Mythic Only
+local warnFelfireTransporter		= mod:NewCountAnnounce("ej11712", 4, 160240, nil, nil, nil, nil, 2)--Mythic Only
 ----Things
 
 --Siegemaster Mar'tak
@@ -62,15 +62,15 @@ local specWarnReinforcements		= mod:NewSpecialWarningSwitch("ej11406", false, ni
 
 --Some specail warnings for taunts or stacks or something here, probably.
 ----Gorebound Felcaster
-local specWarnIncinerate			= mod:NewSpecialWarningInterrupt(181155, false)--Seems less important of two spells
-local specWarnMetamorphosis			= mod:NewSpecialWarningSwitch(181968, "Dps")--Switch and get dead if they transform, they do TONS of damage transformed
+local specWarnIncinerate			= mod:NewSpecialWarningInterrupt(181155, false, nil, nil, 1, 2)--Seems less important of two spells
+local specWarnMetamorphosis			= mod:NewSpecialWarningSwitch(181968, "Dps", nil, nil, 1, 2)--Switch and get dead if they transform, they do TONS of damage transformed
 local specWarnFelfireVolley			= mod:NewSpecialWarningInterrupt(183452, "HasInterrupt", nil, 2, 1, 2)
 ----Contracted Engineer
 local specWarnRepair				= mod:NewSpecialWarningInterrupt(185816, "-Healer", nil, nil, 1, 2)
 ----Grute
-local specWarnCannon				= mod:NewSpecialWarningDodge(190748, nil, nil, nil, 1)
+local specWarnCannon				= mod:NewSpecialWarningDodge(190748, nil, nil, nil, 1, 2)
 local yellCannon					= mod:NewYell(190748)
-local specWarnCannonNear			= mod:NewSpecialWarningClose(190748, nil, nil, nil, 1)
+local specWarnCannonNear			= mod:NewSpecialWarningClose(190748, nil, nil, nil, 1, 2)
 
 --Felfire-Imbued Siege Vehicles
 local specWarnDemolisher			= mod:NewSpecialWarningSwitch("ej11429", "Dps", nil, nil, 1, 5)--Heroic & Mythic only. Does massive aoe damage, has to be killed asap
@@ -95,12 +95,7 @@ local timerSiegeVehicleCD			= mod:NewTimer(60, "timerSiegeVehicleCD", 160240, ni
 local countdownHowlingAxe			= mod:NewCountdownFades("Alt7", 184369)
 local countdownSlam					= mod:NewCountdownFades("Alt11", 184243, false)
 
-local voiceHowlingAxe				= mod:NewVoice(184369)--runout
-local voiceShockwave				= mod:NewVoice(184394)--shockwave
-local voiceIncinerate				= mod:NewVoice(181155, false)--kick
-local voiceFelfireVolley			= mod:NewVoice(183452, "HasInterrupt")--kick
-local voiceRepair					= mod:NewVoice(185816)--kickcast
-local voiceFelfireSiegeVehicles		= mod:NewVoice("ej11428")--One option for all 5, because less cluttered options better in this case I think.
+local voiceFelfireSiegeVehicles		= mod:NewVoice("ej11428")--One option for locations, independant of integration with vehicle announce objects.
 
 mod:AddRangeFrameOption(8, 184369)
 mod:AddHudMapOption("HudMapOnAxe", 184369)
@@ -148,9 +143,11 @@ function mod:CannonTarget(targetname, uId)
 	if not targetname then return end
 	if targetname == UnitName("player") then
 		specWarnCannon:Show()
+		specWarnCannon:Play("targetyou")
 		yellCannon:Yell()
 	elseif self:CheckNearby(5, targetname) then
 		specWarnCannonNear:Show(targetname)
+		specWarnCannonNear:Play("watchstep")
 	else
 		warnCannon:Show(targetname)
 	end
@@ -187,19 +184,20 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 184394 then
 		specWarnShockwave:Show()
-		voiceShockwave:Play("shockwave")
+		specWarnShockwave:Play("shockwave")
 		timerShockwaveCD:Start()
 	elseif spellId == 181155 and self:CheckInterruptFilter(args.sourceGUID) then
 		specWarnIncinerate:Show(args.sourceName)
-		voiceIncinerate:Play("kickcast")
+		specWarnIncinerate:Play("kickcast")
 	elseif spellId == 183452 and self:CheckInterruptFilter(args.sourceGUID) then--Two spellids because two different cast times (mob has two forms)
 		specWarnFelfireVolley:Show(args.sourceName)
-		voiceFelfireVolley:Play("kickcast")
+		specWarnFelfireVolley:Play("kickcast")
 	elseif spellId == 185816 and self:CheckInterruptFilter(args.sourceGUID) then
 		specWarnRepair:Show(args.sourceName)
-		voiceRepair:Play("kickcast")
+		specWarnRepair:Play("kickcast")
 	elseif spellId == 181968 and self:AntiSpam(3, 1) then
 		specWarnMetamorphosis:Show()
+		specWarnMetamorphosis:Play("killmob")
 	elseif spellId == 180945 then
 		warnNova:Show()
 	elseif spellId == 190748 then
@@ -233,23 +231,23 @@ function mod:SPELL_AURA_APPLIED(args)
 		local cid = self:GetCIDFromGUID(args.destGUID)
 		if cid == 90432 then--Felfire Flamebelcher
 			warnFelfireFlamebelcher:Show(Count)
-			voiceFelfireSiegeVehicles:Play("ej11437")
+			warnFelfireFlamebelcher:Play("ej11437")
 		elseif cid == 90410 then--Felfire Crusher
 			warnFelfireCrusher:Show(Count)
-			voiceFelfireSiegeVehicles:Play("ej11439")
+			warnFelfireCrusher:Play("ej11439")
 		elseif cid == 90485 then--Felfire Artillery
 			warnFelfireArtillery:Show(Count)
-			voiceFelfireSiegeVehicles:Play("ej11435")
+			warnFelfireArtillery:Play("ej11435")
 		elseif cid == 91103 then--Felfire Demolisher
 			if self.Options.SpecWarnej11429switch then
 				specWarnDemolisher:Show()
 			else
 				warnFelfireDemolisher:Show(Count)
 			end
-			voiceFelfireSiegeVehicles:Play("ej11429")
+			warnFelfireDemolisher:Play("ej11429")
 		elseif cid == 93435 then--Felfire Transporter
 			warnFelfireTransporter:Show(Count)
-			voiceFelfireSiegeVehicles:Play("ej11712")
+			warnFelfireTransporter:Play("ej11712")
 		end
 		if self:IsMythic() then
 			--Confusing way to do it but it's best way to do it for dual timer support
@@ -311,7 +309,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnHowlingAxe:Show()
 			yellHowlingAxe:Yell()
 			countdownHowlingAxe:Start()
-			voiceHowlingAxe:Play("runout")
+			specWarnHowlingAxe:Play("runout")
 			updateRangeFrame(self, true)
 		end
 		if self.Options.HudMapOnAxe then

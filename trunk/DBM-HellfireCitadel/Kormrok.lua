@@ -57,12 +57,6 @@ local timerSwatCD					= mod:NewNextCountTimer(40, 181305, nil, "Tank", nil, 5, n
 local countdownGraspingHands		= mod:NewCountdown(40, 181299)
 local countdownExplosiveBurst		= mod:NewCountdown("Alt10", 181306)
 
-local voicePound					= mod:NewVoice(180244)--scatter
-local voiceFelOutpouring			= mod:NewVoice(181292)--watchwave
-local voiceExplosiveBurst			= mod:NewVoice(181306)--runout
-local voiceGraspingHands			= mod:NewVoice(181299)--gather
-local voiceSwat						= mod:NewVoice(181305, "Tank")--carefly
-
 mod:AddRangeFrameOption("4/40")
 
 mod.vb.explodingTank = nil
@@ -105,7 +99,7 @@ end
 local function trippleBurstCheck(self, target, first)
 	if self:CheckNearby(31, target) then--Second and third check will use smaller range
 		specWarnExplosiveBurstNear:Show(target)
-		voiceExplosiveBurst:Play("justrun")
+		specWarnExplosiveBurstNear:Play("justrun")
 	end
 	if first then
 		self:Schedule(2.5, trippleBurstCheck, self, target)
@@ -133,10 +127,11 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 181292 or spellId == 181293 then
 		if spellId == 181293 then
 			specWarnEmpFelOutpouring:Show()
+			specWarnEmpFelOutpouring:Play("watchwave")
 		else
 			specWarnFelOutpouring:Show()
+			specWarnFelOutpouring:Play("watchwave")
 		end
-		voiceFelOutpouring:Play("watchwave")
 	elseif spellId == 181296 or spellId == 181297 then
 		if spellId == 181297 then
 			specWarnEmpExplosiveRunes:Show()
@@ -154,12 +149,12 @@ function mod:SPELL_CAST_START(args)
 		self.vb.poundActive = true
 		self.vb.poundCount = self.vb.poundCount + 1
 		specWarnPound:Show(self.vb.poundCount)
-		voicePound:Play("scatter")
+		specWarnPound:Play("scatter")
 		updateRangeCheck(self)
 	elseif spellId == 181305 then
 		self.vb.swatCount = self.vb.swatCount + 1
 		specWarnSwat:Show(self.vb.swatCount)
-		voiceSwat:Play("carefly")
+		specWarnSwat:Play("carefly")
 	end
 end
 
@@ -185,7 +180,8 @@ local function delayedHands(self, time)
 	timerGraspingHandsCD:Start(time)
 	countdownGraspingHands:Start(time)
 	if not self:IsMythic() then
-		voiceGraspingHands:Schedule(time-5, "gather")
+		specWarnGraspingHands:CancelVoice()
+		specWarnGraspingHands:ScheduleVoice(time-5, "gather")
 	end
 end
 
@@ -213,11 +209,12 @@ function mod:SPELL_AURA_APPLIED(args)
 		countdownExplosiveBurst:Start()
 		if args:IsPlayer() then
 			specWarnExplosiveBurst:Show(self.vb.explosiveBurst)
+			specWarnExplosiveBurst:Play("targetyou")
 			yellExplosiveBurst:Yell()
 		else
 			if self:CheckNearby(30, args.destName) then
 				specWarnExplosiveBurstNear:Show(args.destName)
-				voiceExplosiveBurst:Play("runout")
+				specWarnExplosiveBurstNear:Play("runout")
 			else
 				warnExplosiveBurst:Show(self.vb.explosiveBurst, args.destName)
 			end
@@ -231,6 +228,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.poundCount = 0
 		self.vb.swatCount = 0
 		warnShadowEnergy:Show()
+		self:Unschedule(delayedPound)
+		self:Unschedule(delayedExplosiveRunes)
+		self:Unschedule(delayedHands)
+		self:Unschedule(delayedFelOutpouring)
+		self:Unschedule(delayedSwat)
+		self:Unschedule(delayedFowlCrush)
+		self:Unschedule(delayedExplosiveBurst)
+		countdownGraspingHands:Cancel()
+		countdownExplosiveBurst:Cancel()
 		if self:IsMythic() and spellId == 186879 then--Mythic AND enraged
 			timerFelOutpouringCD:Start(8)
 			self:Schedule(8, delayedFelOutpouring, self, 65)--73
@@ -264,7 +270,8 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerPoundCD:Start(45, 1)
 			self:Schedule(45, delayedPound, self, 50)--95
 			timerExplosiveRunesCD:Start(63)
-			voiceGraspingHands:Schedule(78, "gather")
+			specWarnGraspingHands:CancelVoice()
+			specWarnGraspingHands:ScheduleVoice(78, "gather")
 			timerGraspingHandsCD:Start(83)
 			countdownGraspingHands:Start(83)
 			timerLeapCD:Start(135.5)
@@ -275,6 +282,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.poundCount = 0
 		self.vb.explosiveBurst = 0
 		warnExplosiveEnergy:Show()
+		self:Unschedule(delayedPound)
+		self:Unschedule(delayedExplosiveRunes)
+		self:Unschedule(delayedHands)
+		self:Unschedule(delayedFelOutpouring)
+		self:Unschedule(delayedSwat)
+		self:Unschedule(delayedFowlCrush)
+		self:Unschedule(delayedExplosiveBurst)
+		countdownGraspingHands:Cancel()
+		countdownExplosiveBurst:Cancel()
 		if (self:IsMythic() and spellId == 186880) then
 			timerExplosiveRunesCD:Start(8)
 			self:Schedule(8, delayedExplosiveRunes, self, 63)--71
@@ -307,7 +323,8 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:Schedule(63, delayedExplosiveBurst, self, 50, 3)
 			timerPoundCD:Start(33, 1)
 			self:Schedule(33, delayedPound, self, 62)--95
-			voiceGraspingHands:Schedule(46, "gather")
+			specWarnGraspingHands:CancelVoice()
+			specWarnGraspingHands:ScheduleVoice(46, "gather")
 			timerGraspingHandsCD:Start(51)
 			countdownGraspingHands:Start(51)
 			timerFelOutpouringCD:Start(71)
@@ -317,6 +334,15 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.poundCount = 0
 		self.vb.foulCrush = 0
 		warnFoulEnergy:Show()
+		self:Unschedule(delayedPound)
+		self:Unschedule(delayedExplosiveRunes)
+		self:Unschedule(delayedHands)
+		self:Unschedule(delayedFelOutpouring)
+		self:Unschedule(delayedSwat)
+		self:Unschedule(delayedFowlCrush)
+		self:Unschedule(delayedExplosiveBurst)
+		countdownGraspingHands:Cancel()
+		countdownExplosiveBurst:Cancel()
 		if (self:IsMythic() and spellId == 186881) then
 			timerGraspingHandsCD:Start(8)
 			countdownGraspingHands:Start(8)
@@ -342,7 +368,8 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerExplosiveRunesCD:Start(69)
 			timerLeapCD:Start()
 		else
-			voiceGraspingHands:Schedule(8, "gather")
+			specWarnGraspingHands:CancelVoice()
+			specWarnGraspingHands:ScheduleVoice(8, "gather")
 			timerGraspingHandsCD:Start(13)
 			countdownGraspingHands:Start(13)
 			self:Schedule(13, delayedHands, self, 108)--121
@@ -382,7 +409,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.poundCount = 0
 		warnFoulEnergy:Show()
 		timerGraspingHandsCD:Start(10)
-		voiceGraspingHands:Schedule(5, "gather")
+		specWarnGraspingHands:CancelVoice()
+		specWarnGraspingHands:ScheduleVoice(5, "gather")
 		countdownGraspingHands:Start(10)
 		self:Schedule(10, delayedHands, self, 35)--45
 		self:Schedule(45, delayedHands, self, 35)--80

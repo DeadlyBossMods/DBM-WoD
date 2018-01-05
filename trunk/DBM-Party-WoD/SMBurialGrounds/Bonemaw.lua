@@ -22,7 +22,6 @@ mod:RegisterEventsInCombat(
 --With that working theory, it's possible to add a 28-30 second timer for it maybe.
 --However, being a 5 man boss. Plus not knowing for certain, not worth the time right now.
 local warnBodySlam				= mod:NewTargetAnnounce(154175, 4)
-local warnInhale				= mod:NewSpellAnnounce(153804, 4)
 local warnCorpseBreath			= mod:NewSpellAnnounce(165578, 2)
 local warnSubmerge				= mod:NewSpellAnnounce(177694, 1)
 
@@ -36,9 +35,6 @@ local timerInhaleCD				= mod:NewCDTimer(35, 153804, nil, nil, nil, 6, nil, DBM_C
 local timerInhale				= mod:NewBuffActiveTimer(9, 153804, nil, nil, nil, 6, nil, DBM_CORE_DEADLY_ICON)
 local timerCorpseBreathCD		= mod:NewCDTimer(28, 165578, nil, false, nil, 5)--32-37 Variation, also not that important so off by default since there will already be up to 3 smash timers
 local timerSubmergeCD			= mod:NewCDTimer(80, 177694, nil, nil, nil, 6)
-
-local voiceBodySlam				= mod:NewVoice(154175)
-local voiceInhale				= mod:NewVoice(153804)
 
 mod.vb.inhaleActive = false
 
@@ -55,7 +51,7 @@ function mod:SPELL_CAST_START(args)
 		warnBodySlam:Show(args.sourceName)
 		if self:AntiSpam(3) then--Throttle special warning when more than 1 slam at once happens.
 			specWarnBodySlam:Show()
-			voiceBodySlam:Play("watchstep")
+			specWarnBodySlam:Play("watchstep")
 		end
 		if args:GetSrcCreatureID() == 75452 then--Source is Bonemaw, not one of his adds
 			timerBodySlamCD:Start(30, args.sourceName, args.sourceGUID)
@@ -93,10 +89,9 @@ end
 function mod:RAID_BOSS_EMOTE(msg)
 	if msg:find("spell:153804") then--Slightly faster than combat log
 		self.vb.inhaleActive = true
-		warnInhale:Show()
 		specWarnInhale:Show()
 		timerInhaleCD:Start()
-		voiceInhale:Play("153804") 
+		specWarnInhale:Play("153804") 
 	end
 end
 

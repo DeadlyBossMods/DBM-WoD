@@ -20,23 +20,17 @@ mod:RegisterEventsInCombat(
 
 --TODO, had bugged transcriptor so no IEEU events. See if IEEU is better for adds joining fight.
 local warnCastDown			= mod:NewTargetAnnounce(153954, 4)
-local warnLensFlare			= mod:NewSpellAnnounce(154032, 3)
-local warnAdd				= mod:NewAnnounce("warnAdd", 1, "Interface\\Icons\\Spell_Holy_BorrowedTime")
 local warnShielding			= mod:NewTargetAnnounce(154055, 2)
 
 local specWarnCastDownSoon	= mod:NewSpecialWarningSoon(153954)--Everyone, becaus it can grab healer too, which affects healer/tank
 local specWarnCastDown		= mod:NewSpecialWarningSwitch(153954, "Dps", nil, nil, 3, 2)--Only dps, because it's their job to stop it.
-local specWarnLensFlareCast	= mod:NewSpecialWarningSpell(154032, nil, nil, nil, 2)--If there is any way to find actual target, like maybe target scanning, this will be changed.
+local specWarnLensFlareCast	= mod:NewSpecialWarningSpell(154032, nil, nil, nil, 2, 2)--If there is any way to find actual target, like maybe target scanning, this will be changed.
 local specWarnLensFlare		= mod:NewSpecialWarningMove(154043, nil, nil, nil, 1, 2)
-local specWarnAdd			= mod:NewSpecialWarning("specWarnAdd", "Dps")
-local specWarnShielding		= mod:NewSpecialWarningInterrupt(154055, "Dps", nil, nil, 1, 2)
+local specWarnAdd			= mod:NewSpecialWarning("specWarnAdd", "Dps", nil, nil, 1, 2)
+local specWarnShielding		= mod:NewSpecialWarningInterrupt(154055, "HasInterrupt", nil, 2, 1, 2)
 
 local timerLenseFlareCD		= mod:NewCDTimer(38, 154032, nil, nil, nil, 3)
 local timerCastDownCD		= mod:NewCDTimer(28, 153954, nil, nil, nil, 1, nil, DBM_CORE_DAMAGE_ICON)
-
-local voiceCastDown			= mod:NewVoice(153954)
-local voiceLensFlare		= mod:NewVoice(154032)
-local voiceShielding		= mod:NewVoice(154055, "Dps")
 
 mod:AddSetIconOption("SetIconOnCastDown", 153954)
 
@@ -71,14 +65,14 @@ end
 function mod:SPELL_CAST_START(args)
 	if args.spellId == 154055 then
 		specWarnShielding:Show(args.sourceName)
-		voiceShielding:Play("kickcast")
+		specWarnShielding:Play("kickcast")
 	end
 end
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId, _, _, _, overkill)
 	if spellId == 154043 and destGUID == UnitGUID("player") and self:AntiSpam(2) then
 		specWarnLensFlare:Show()
-		voiceLensFlare:Play("runaway")
+		specWarnLensFlare:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
@@ -97,19 +91,19 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 153954 then--Cast Down (4-5 sec before pre warning)
 		specWarnCastDownSoon:Show()
 		self:BossTargetScanner(76266, "CastDownTarget", 0.05, 15)
-		voiceCastDown:Play("mobsoon")
+		specWarnCastDownSoon:Play("mobsoon")
 	elseif spellId == 165834 then--Force Demon Creator to Ride Me
 		--TODO, see if victom detectable here instead
 		specWarnCastDown:Show()
 		timerCastDownCD:Start()
-		voiceCastDown:Play("helpme")
-		voiceCastDown:Schedule(2, "helpme2")
+		specWarnCastDown:Play("helpme")
+		specWarnCastDown:ScheduleVoice(2, "helpme2")
 	elseif spellId == 154049 then-- Call Adds
-		warnAdd:Show()
 		specWarnAdd:Show()
+		specWarnAdd:Play("killmob")
 	elseif spellId == 154032 then--Actual Lens Flare cast. 154043 is not cast, despite SUCCESS event. It only fires if beam makes contact with a player. Then SPELL_CAST_SUCCESS and SPELL_AURA_APPLIED fire
-		warnLensFlare:Show()
 		specWarnLensFlareCast:Show()
+		specWarnLensFlareCast:Play("watchstep")
 		timerLenseFlareCD:Start()
 	end
 end

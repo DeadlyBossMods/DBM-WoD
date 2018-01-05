@@ -32,10 +32,6 @@ local timerSpinningSpearCD		= mod:NewNextTimer(20, 162058, nil, "Tank", 2, 5, ni
 local timerMark					= mod:NewTargetTimer(5, 163447)
 local timerMarkCD				= mod:NewNextTimer(20, 163447, nil, nil, nil, 3)
 
-local voiceFreezingSnare		= mod:NewVoice(162066)
-local voiceMark					= mod:NewVoice(163447)
-local voiceDiffusedEnergy		= mod:NewVoice(161588)
-
 mod:AddRangeFrameOption(8, 163447)
 
 local debuffCheck = DBM:GetSpellInfo(163447)
@@ -53,10 +49,10 @@ function mod:FreezingSnareTarget(targetname, uId)
 	if targetname == UnitName("player") then
 		specWarnFreezingSnare:Show()
 		yellFreezingSnare:Yell()
-		voiceFreezingSnare:Play("runaway")
+		specWarnFreezingSnare:Play("runaway")
 	elseif self:CheckNearby(8, targetname) then
 		specWarnFreezingSnareNear:Show(targetname)
-		voiceFreezingSnare:Play("watchstep")
+		specWarnFreezingSnareNear:Play("watchstep")
 	end
 end
   
@@ -78,7 +74,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnMark:Show()
 			yellMark:Yell()
-			voiceMark:Play("runout")
+			specWarnMark:Play("runout")
 		end
 		if self.Options.RangeFrame then
 			if UnitDebuff("player", debuffCheck) then--You have debuff, show everyone
@@ -89,7 +85,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args.spellId == 161588 and args:IsPlayer() and self:AntiSpam() then
 		specWarnDiffusedEnergy:Show()
-		voiceDiffusedEnergy:Play("runaway")
+		specWarnDiffusedEnergy:Play("runaway")
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED

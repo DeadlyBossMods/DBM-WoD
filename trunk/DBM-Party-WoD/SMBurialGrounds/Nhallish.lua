@@ -15,22 +15,15 @@ mod:RegisterEventsInCombat(
 	"SPELL_ABSORBED 153070"
 )
 
-local warnVoidVortex			= mod:NewSpellAnnounce(152801, 3)
-local warnSoulShred				= mod:NewSpellAnnounce(152979, 3)
-local warnVoidDevastation		= mod:NewSpellAnnounce(153067, 4)
-
 local specWarnVoidVortex		= mod:NewSpecialWarningRun(152801, nil, nil, 2, 4, 2)
 local specWarnSoulShred			= mod:NewSpecialWarningSpell(152979, nil, nil, nil, 1, 2)
-local specWarnVoidDevastation	= mod:NewSpecialWarningSpell(153067, nil, nil, nil, 2)
-local specWarnVoidDevastationM	= mod:NewSpecialWarningMove(153070)
+local specWarnVoidDevastation	= mod:NewSpecialWarningSpell(153067, nil, nil, nil, 2, 2)
+local specWarnVoidDevastationM	= mod:NewSpecialWarningMove(153070, nil, nil, nil, 1, 2)
 
 local timerVoidVortexCD			= mod:NewCDTimer(72, 152801, nil, nil, nil, 2)
 local timerSoulShredCD			= mod:NewNextTimer(71, 152979, nil, nil, nil, 6)
 local timerSoulShred			= mod:NewBuffFadesTimer(20, 152979)
 local timerVoidDevastationCD	= mod:NewNextTimer(71, 153067, nil, nil, nil, 3)
-
-local voiceWarnSoulShred		= mod:NewVoice(152979)
-local voiceVoidVortex			= mod:NewVoice(152801)
 
 function mod:OnCombatStart(delay)
 	timerVoidVortexCD:Start(23-delay)
@@ -40,24 +33,22 @@ end
 
 function mod:SPELL_CAST_START(args)
 	if args.spellId == 152801 then
-		warnVoidVortex:Show()
 		timerVoidVortexCD:Start()
 		specWarnVoidVortex:Show()
-		voiceVoidVortex:Play("runaway")
+		specWarnVoidVortex:Play("runaway")
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 152979 and self:AntiSpam() then--SPELL_CAST_SUCCESS is usually missing so have to scan for debuffs
-		warnSoulShred:Show()
 		specWarnSoulShred:Show()
 		timerSoulShredCD:Start()
 		timerSoulShred:Start()
-		voiceWarnSoulShred:Play("killspirit")
+		specWarnSoulShred:Play("killspirit")
 	elseif spellId == 153067 then--SPELL_CAST_SUCCESS is usually missing so have to scan for debuffs
-		warnVoidDevastation:Show()
 		specWarnVoidDevastation:Show()
+		specWarnVoidDevastation:Play("aesoon")
 		timerVoidDevastationCD:Start()
 	end
 end
@@ -71,6 +62,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId)
 	if spellId == 153070 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnVoidDevastationM:Show()
+		specWarnVoidDevastationM:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE

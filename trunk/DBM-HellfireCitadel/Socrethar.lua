@@ -58,7 +58,7 @@ local specWarnApocalypse			= mod:NewSpecialWarningSpell(183329, nil, nil, nil, 2
 local specWarnShadowWordAgony		= mod:NewSpecialWarningInterrupt(184239, false, nil, nil, 1, 2)
 local specWarnShadowBoltVolley		= mod:NewSpecialWarningInterrupt(182392, "HasInterrupt", nil, 2, 1, 2)
 local specWarnSouls					= mod:NewSpecialWarningCount("ej11462", nil, nil, nil, 1)
-local specWarnGhastlyFixation		= mod:NewSpecialWarningYou(182769, nil, nil, nil, 1)--You don't run out or kite. you position yourself so ghosts go through fire dropped by construct
+local specWarnGhastlyFixation		= mod:NewSpecialWarningYou(182769, nil, nil, nil, 1, 2)--You don't run out or kite. you position yourself so ghosts go through fire dropped by construct
 local specWarnSargereiDominator		= mod:NewSpecialWarningSwitchCount("ej11456", "-Healer", nil, nil, 3)
 local specWarnGiftoftheManari		= mod:NewSpecialWarningYou(184124, nil, nil, nil, 1, 2)
 local yellGiftoftheManari			= mod:NewYell(184124)
@@ -72,6 +72,7 @@ local timerVolatileFelOrbCD			= mod:NewCDTimer(23, 180221, 186532, nil, nil, 3)
 local timerFelChargeCD				= mod:NewCDTimer(23, 182051, nil, nil, nil, 3)
 local timerApocalypticFelburstCD	= mod:NewCDCountTimer(30, 188693, 206388, nil, nil, 2, nil, DBM_CORE_HEROIC_ICON)
 --Socrethar
+local timerTransition				= mod:NewPhaseTimer(6.5)
 local timerExertDominanceCD			= mod:NewCDCountTimer(4.5, 183331, nil, "-Healer", nil, 4, nil, DBM_CORE_INTERRUPT_ICON)
 local timerApocalypseCD				= mod:NewCDTimer(46, 183329, nil, nil, nil, 2)
 --Adds
@@ -86,23 +87,6 @@ local timerVoraciousSoulstalkerCD	= mod:NewCDCountTimer(59.5, "ej11778", 151869,
 local countdownReverberatingBlow	= mod:NewCountdown(17, 180008, "Tank", nil, 4)--Every 17 seconds now, so count last 4
 local countdownCharge				= mod:NewCountdown("Alt23", 182051)
 local countdownSouls				= mod:NewCountdown(29, "ej11462")
-
---Construct
-local voiceVolatileFelOrb			= mod:NewVoice(180221)--runout/keepmove
-local voiceFelblazeCharge			= mod:NewVoice(182051)--runout/chargemove
-local voiceFelPrison				= mod:NewVoice(182994)--watchstep
-local voiceFelBurst					= mod:NewVoice(188693)--watchstep
-local voiceVoraciousSoulstalker		= mod:NewVoice("ej11778")--watchstep
---Socrethar
-local timerTransition				= mod:NewPhaseTimer(6.5)
-local voiceExertDominance			= mod:NewVoice(183331, "HasInterrupt")--kickcast
-local voiceApocalypse				= mod:NewVoice(183329)--aesoon
---Adds
-local voiceShadowWordAgony			= mod:NewVoice(184239, false)--kickcast
-local voiceShadowBoltVolley			= mod:NewVoice(182392, "HasInterrupt")--kickcast
---local voiceGhastlyFixation			= mod:NewVoice(182769)--runout/keepmove
-local voiceGiftoftheManari			= mod:NewVoice(184124)--scatter
-local voiceEternalHunger			= mod:NewVoice(188666)--runout/keepmove
 
 mod:AddRangeFrameOption(10, 184124)
 mod:AddHudMapOption("HudMapOnOrb", 180221)
@@ -149,18 +133,18 @@ end
 function mod:ChargeTarget(targetname, uId)
 	if not targetname then
 		specWarnFelCharge:Show(DBM_CORE_UNKNOWN)
-		voiceFelblazeCharge:Play("chargemove")
+		specWarnFelCharge:Play("chargemove")
 		return
 	end
 	if targetname == UnitName("player") then
 		if self:AntiSpam(2, 3) then
 			specWarnFelChargeYou:Show()
 			yellCharge:Yell()
-			voiceFelblazeCharge:Play("runout")
+			specWarnFelChargeYou:Play("runout")
 		end
 	elseif self.Options.SpecWarn182051target then
 		specWarnFelCharge:Show(targetname)
-		voiceFelblazeCharge:Play("chargemove")
+		specWarnFelCharge:Play("chargemove")
 	else
 		warnFelCharge:Show(targetname)
 	end
@@ -243,7 +227,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			timerFelPrisonCD:Start()
 		end
-		voiceFelPrison:Play("watchstep")
+		specWarnFelPrison:Play("watchstep")
 	elseif spellId == 182051 then
 		if self:IsNormal() then
 			timerFelChargeCD:Start(30)
@@ -260,13 +244,13 @@ function mod:SPELL_CAST_START(args)
 			if self:CheckInterruptFilter(args.sourceGUID) and not playerInConstruct then
 				specWarnExertDominance:Show(args.sourceName, self.vb.kickCount2)
 				if self.vb.kickCount2 == 1 then
-					voiceExertDominance:Play("kick1r")
+					specWarnExertDominance:Play("kick1r")
 				elseif self.vb.kickCount2 == 2 then
-					voiceExertDominance:Play("kick2r")
+					specWarnExertDominance:Play("kick2r")
 				elseif self.vb.kickCount2 == 3 then
-					voiceExertDominance:Play("kick3r")
+					specWarnExertDominance:Play("kick3r")
 				elseif self.vb.kickCount2 == 4 then
-					voiceExertDominance:Play("kick4r")
+					specWarnExertDominance:Play("kick4r")
 				end
 			end
 		end
@@ -276,7 +260,7 @@ function mod:SPELL_CAST_START(args)
 		timerExertDominanceCD:Start(nil, self.vb.kickCount2+1)
 	elseif spellId == 183329 then
 		specWarnApocalypse:Show()
-		voiceApocalypse:Play("aesoon")
+		specWarnApocalypse:Play("aesoon")
 		if self:IsNormal() then
 			timerApocalypseCD:Start(48)--48-49
 		else
@@ -284,15 +268,15 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 184239 and self:CheckInterruptFilter(args.sourceGUID) and not playerInConstruct then
 		specWarnShadowWordAgony:Show(args.sourceName)
-		voiceShadowWordAgony:Play("kickcast")
+		specWarnShadowWordAgony:Play("kickcast")
 	elseif spellId == 182392 and self:CheckInterruptFilter(args.sourceGUID) and not playerInConstruct then
 		specWarnShadowBoltVolley:Show(args.sourceName)
-		voiceShadowBoltVolley:Play("kickcast")
+		specWarnShadowBoltVolley:Play("kickcast")
 	elseif spellId == 188693 then
 		self.vb.felBurstCount = self.vb.felBurstCount + 1
 		specWarnApocalypticFelburst:Show(self.vb.felBurstCount)
 		timerApocalypticFelburstCD:Start()
-		voiceFelBurst:Play("watchstep")
+		specWarnApocalypticFelburst:Play("watchstep")
 	end
 end
 
@@ -308,7 +292,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif spellId == 190776 then--Voracious Soulstalker Spawning
 		self.vb.mythicAddSpawn = self.vb.mythicAddSpawn + 1
 		specWarnSoulstalker:Show(self.vb.mythicAddSpawn)
-		voiceVoraciousSoulstalker:Play("watchstep")
+		specWarnSoulstalker:Play("watchstep")
 		timerVoraciousSoulstalkerCD:Start(60, self.vb.mythicAddSpawn+1)
 	elseif spellId == 183023 then--Eject Soul
 		self.vb.dominatorCount = 0
@@ -345,8 +329,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnGhastlyFixation:CombinedShow(2, args.destName)
 		if args:IsPlayer() and self:AntiSpam(3, 1) then
 			specWarnGhastlyFixation:Show()
---			voiceGhastlyFixation:Play("runout")
---			voiceGhastlyFixation:Schedule(2, "keepmove")
+			specWarnGhastlyFixation:Play("targetyou")
 		end
 		if not soulsSeen[args.sourceGUID] then
 			soulsSeen[args.sourceGUID] = true
@@ -371,8 +354,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnEternalHunger:Show()
 			yellEternalHunger:Yell()
-			voiceEternalHunger:Play("runout")
-			voiceEternalHunger:Schedule(2, "keepmove")
+			specWarnEternalHunger:Play("runout")
+			specWarnEternalHunger:ScheduleVoice(2, "keepmove")
 		else
 			warnEternalHunger:Show(args.destName)
 		end	
@@ -384,7 +367,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnGiftoftheManari:Show()
 			yellGiftoftheManari:Yell()
-			voiceGiftoftheManari:Play("scatter")
+			specWarnGiftoftheManari:Play("scatter")
 		end
 		updateRangeFrame(self)
 	elseif spellId == 184053 then--Fel Barrior (Boss becomes immune to damage, Sargerei Dominator spawned and must die)
@@ -410,8 +393,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnVolatileFelOrb:Show()
 			yellVolatileFelOrb:Yell()
-			voiceVolatileFelOrb:Play("runout")
-			voiceVolatileFelOrb:Schedule(2, "keepmove")
+			specWarnVolatileFelOrb:Play("runout")
+			specWarnVolatileFelOrb:ScheduleVoice(2, "keepmove")
 		else
 			warnVolatileFelOrb:Show(args.destName)
 		end
@@ -461,13 +444,13 @@ function mod:SPELL_AURA_REMOVED(args)
 			if self:CheckInterruptFilter(args.destGUID) and not playerInConstruct then
 				specWarnExertDominance:Show(args.destName, self.vb.kickCount2)
 				if self.vb.kickCount2 == 1 then
-					voiceExertDominance:Play("kick1r")
+					specWarnExertDominance:Play("kick1r")
 				elseif self.vb.kickCount2 == 2 then
-					voiceExertDominance:Play("kick2r")
+					specWarnExertDominance:Play("kick2r")
 				elseif self.vb.kickCount2 == 3 then
-					voiceExertDominance:Play("kick3r")
+					specWarnExertDominance:Play("kick3r")
 				elseif self.vb.kickCount2 == 4 then
-					voiceExertDominance:Play("kick4r")
+					specWarnExertDominance:Play("kick4r")
 				end
 			end
 			self.vb.kickCount2 = self.vb.kickCount2 + 1
@@ -488,7 +471,7 @@ function mod:RAID_BOSS_WHISPER(msg)
 		if self:AntiSpam(2, 3) then
 			specWarnFelChargeYou:Show()
 			yellCharge:Yell()
-			voiceFelblazeCharge:Play("runout")
+			specWarnFelChargeYou:Play("runout")
 		end
 	end
 end

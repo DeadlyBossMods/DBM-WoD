@@ -34,20 +34,20 @@ local warnFelBurstCast				= mod:NewCastAnnounce(183817, 3)
 local warnFelBurst					= mod:NewTargetAnnounce(183817, 3, nil, true, 2)
 local warnLight						= mod:NewYouAnnounce(183963, 1)
 --Phase 2: Hand of the Legion
-local warnPhase2					= mod:NewPhaseAnnounce(2, 2)
+local warnPhase2					= mod:NewPhaseAnnounce(2, 2, nil, nil, nil, nil, nil, 2)
 local warnShackledTorment			= mod:NewTargetCountAnnounce(184964, 3)
 local warnUnleashedTorment			= mod:NewAddsLeftAnnounce(185008, 2)--NewAddsLeftAnnounce perfect for this!
 local warnWroughtChaos				= mod:NewTargetCountAnnounce(184265, 4)--Combined both targets into one warning under primary spell name
 local warnDreadFixate				= mod:NewTargetAnnounce(186574, 2, nil, false)--In case it matters on mythic, it was spammy on heroic and unimportant
 local warnOverfiend					= mod:NewCountAnnounce("ej11603", 3, 186662)
 --Phase 3
-local warnPhase3					= mod:NewPhaseAnnounce(3, 2)
+local warnPhase3					= mod:NewPhaseAnnounce(3, 2, nil, nil, nil, nil, nil, 2)
 ----The Nether
 local warnVoidStarFixate			= mod:NewTargetAnnounce(189895, 2)
 --Mythic
 local warnDoomFireStack				= mod:NewStackAnnounce(183586, 3)
 local warnMarkOfLegion				= mod:NewTargetCountAnnounce(187050, 4)
-local warnDarkConduit				= mod:NewCountAnnounce(190394, 2, nil, "Ranged")
+local warnDarkConduit				= mod:NewCountAnnounce(190394, 2, nil, "Ranged", nil, nil, nil, 2)
 
 --Phase 1: The Defiler
 local specWarnDoomfire				= mod:NewSpecialWarningSwitch(189897, "Dps", nil, nil, 1, 5)
@@ -140,25 +140,6 @@ local countdownDeathBrand			= mod:NewCountdown(42, 183828, "Tank", 2, 3)
 local countdownShackledTorment		= mod:NewCountdown("AltTwo42", 184931, "-Tank", nil, 3)
 local countdownSeethingCorruption	= mod:NewCountdown(61.9, 190506)
 local countdownSourceofChaos		= mod:NewCountdown("Alt35", 190703, "Tank")
-
-local voicePhaseChange				= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
-local voiceDeathBrand				= mod:NewVoice(183828, "Tank")--defensive/tauntboss
-local voiceFelBurst					= mod:NewVoice(183817)--Gathershare
-local voiceShackledTorment			= mod:NewVoice(184964)--new voice: break torment first, etc
-local voiceDoomfire					= mod:NewVoice(189897, "Dps")--189897
-local voiceDeathCaller				= mod:NewVoice("ej11582", "Dps")--ej11582
-local voiceWroughtChaos				= mod:NewVoice(186123) --new voice
-local voiceFocusedChaos				= mod:NewVoice(185014) --new voice
-local voiceFlamesofArgus			= mod:NewVoice(186663, "HasInterrupt") --kickcast
-local voiceDemonicFeedback			= mod:NewVoice(186961) --spread/scatter
-local voiceAllureofFlames			= mod:NewVoice(183254) --watch step
-local voiceDesecrate				= mod:NewVoice(185590) --watch step
-local voiceNetherBanish				= mod:NewVoice(186961) --teleyou
-local voiceTouchofShadows			= mod:NewVoice(190050) --kick1r/kick2r
-local voiceDarkConduit				= mod:NewVoice(190394, "Ranged") --spread/scatter
-local voiceSeethingCorruption		= mod:NewVoice(190506) --watch step
-local voiceMarkOfLegion				= mod:NewVoice(187050) --mmX
-local voiceVoidStarFixate			= mod:NewVoice(189895) --orbrun
 
 mod:AddRangeFrameOption("6/8/10")
 mod:AddSetIconOption("SetIconOnFelBurst", 183634, true)
@@ -298,7 +279,7 @@ local function setDarkConduit(self, clear)
 	else
 		self.vb.darkConduit = true
 		specWarnDarkConduitSoon:Show()
-		voiceDarkConduit:Play("scatter")
+		specWarnDarkConduitSoon:Play("scatter")
 	end
 	updateRangeFrame(self)
 end
@@ -308,7 +289,7 @@ local function setDemonicFeedback(self)
 	updateRangeFrame(self)
 	if not playerBanished or not self.Options.FilterOtherPhase then
 		specWarnDemonicFeedbackSoon:Show()
-		voiceDemonicFeedback:Play("scattersoon")
+		specWarnDemonicFeedbackSoon:Play("scattersoon")
 	end
 end
 
@@ -351,7 +332,7 @@ local function showMarkOfLegion(self, spellName)
 			if name == playerName then
 				specWarnMarkOfLegion:Show(message)
 				yellMarkOfLegionPoS:Yell(message, number, number)
-				voiceMarkOfLegion:Play("mm"..number)
+				specWarnMarkOfLegion:Play("mm"..number)
 			end
 		elseif i == 2 then
 			local number, position = i, MELEE
@@ -383,7 +364,7 @@ local function showMarkOfLegion(self, spellName)
 			if name == playerName then
 				specWarnMarkOfLegion:Show(message)
 				yellMarkOfLegionPoS:Yell(message, number, number)
-				voiceMarkOfLegion:Play("mm"..number)
+				specWarnMarkOfLegion:Play("mm"..number)
 			end
 		elseif i == 3 then
 			local number, position = i, RANGED
@@ -415,7 +396,7 @@ local function showMarkOfLegion(self, spellName)
 			if name == playerName then
 				specWarnMarkOfLegion:Show(message)
 				yellMarkOfLegionPoS:Yell(message, number, number)
-				voiceMarkOfLegion:Play("mm"..number)
+				specWarnMarkOfLegion:Play("mm"..number)
 			end
 		else
 			local number, position = i, RANGED
@@ -447,7 +428,7 @@ local function showMarkOfLegion(self, spellName)
 			if name == playerName then
 				specWarnMarkOfLegion:Show(message)
 				yellMarkOfLegionPoS:Yell(message, number, number)
-				voiceMarkOfLegion:Play("mm"..number)
+				specWarnMarkOfLegion:Play("mm"..number)
 			end
 		end
 	end
@@ -465,19 +446,19 @@ local function showMarkOfLegion(self, spellName)
 				local soak = math.ceil(soakers/marks)
 				if (soak == 1) then
 					specWarnMarkOfLegionSoak:Show(MELEE.." "..DBM_CORE_LEFT)
-					voiceMarkOfLegion:Play("frontleft")
+					specWarnMarkOfLegionSoak:Play("frontleft")
 				end
 				if (soak == 2) then
 					specWarnMarkOfLegionSoak:Show(MELEE.." "..DBM_CORE_RIGHT)
-					voiceMarkOfLegion:Play("frontright")
+					specWarnMarkOfLegionSoak:Play("frontright")
 				end
 				if (soak == 3) then
 					specWarnMarkOfLegionSoak:Show(RANGED.." "..DBM_CORE_LEFT)
-					voiceMarkOfLegion:Play("backleft")
+					specWarnMarkOfLegionSoak:Play("backleft")
 				end
 				if (soak == 4) then
 					specWarnMarkOfLegionSoak:Show(RANGED.." "..DBM_CORE_RIGHT)
-					voiceMarkOfLegion:Play("backright")                 
+					specWarnMarkOfLegionSoak:Play("backright")                 
 				end
             end
 		end
@@ -525,13 +506,13 @@ local function breakShackles(self, spellName)
 			yellShackledTorment:Yell(i, i, i)
 			if i == 1 then
 				specWarnBreakShackle:Show(L.First)
-				voiceShackledTorment:Play("184964a")
+				specWarnBreakShackle:Play("184964a")
 			elseif i == 2 then
 				specWarnBreakShackle:Show(L.Second)
-				voiceShackledTorment:Play("184964b")
+				specWarnBreakShackle:Play("184964b")
 			elseif i == 3 then
 				specWarnBreakShackle:Show(L.Third)
-				voiceShackledTorment:Play("184964c")
+				specWarnBreakShackle:Play("184964c")
 			end
 		end
 		if self.Options.SetIconOnShackledTorment2 then
@@ -756,7 +737,7 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 189897 then
 		specWarnDoomfire:Show()
 		timerDoomfireCD:Start()
-		voiceDoomfire:Play("189897")
+		specWarnDoomfire:Play("189897")
 		updateAllTimers(self, 7)
 	elseif spellId == 183817 then
 		table.wipe(felburstTargets)
@@ -775,14 +756,14 @@ function mod:SPELL_CAST_START(args)
 		countdownDeathBrand:Start()
 		local tanking, status = UnitDetailedThreatSituation("player", "boss1")
 		if tanking or (status == 3) then
-			voiceDeathBrand:Play("defensive")
+			specWarnDeathBrand:Play("defensive")
 		else
-			voiceDeathBrand:Play("tauntboss")
+			specWarnDeathBrand:Play("tauntboss")
 		end
 		updateAllTimers(self, 5)
 	elseif spellId == 185590 then
 		specWarnDesecrate:Show()
-		voiceDesecrate:Play("watchstep")
+		specWarnDesecrate:Play("watchstep")
 		timerDesecrateCD:Start()
 		if self.vb.phase < 1.5 then
 			DBM:Debug("Phase 1.5 begin CLEU", 2)
@@ -803,7 +784,7 @@ function mod:SPELL_CAST_START(args)
 			timerSeethingCorruptionCD:Start(cooldown, self.vb.seethingCorruptionCount+1)
 			countdownSeethingCorruption:Start(cooldown)
 		end
-		voiceSeethingCorruption:Play("watchstep")
+		specWarnSeethingCorruption:Play("watchstep")
 	elseif spellId == 184931 then
 		table.wipe(shacklesTargets)
 		self.vb.tormentCast = self.vb.tormentCast + 1
@@ -819,7 +800,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.demonicCount = self.vb.demonicCount + 1
 		if not playerBanished or not self.Options.FilterOtherPhase then
 			specWarnDemonicFeedback:Show(self.vb.demonicCount)
-			voiceDemonicFeedback:Play("scatter")
+			specWarnDemonicFeedback:Play("scatter")
 		end
 		timerDemonicFeedbackCD:Start(nil, self.vb.demonicCount+1)
 		countdownDemonicFeedback:Start()
@@ -842,9 +823,9 @@ function mod:SPELL_CAST_START(args)
 			local count = self.vb.TouchOfShadows
 			specWarnTouchofShadows:Show(args.sourceName, count)
 			if count == 1 then
-				voiceTouchofShadows:Play("kick1r")
+				specWarnTouchofShadows:Play("kick1r")
 			else
-				voiceTouchofShadows:Play("kick2r")
+				specWarnTouchofShadows:Play("kick2r")
 			end
 		end
 	elseif spellId == 190394 then
@@ -852,7 +833,7 @@ function mod:SPELL_CAST_START(args)
 			self.vb.darkConduitSpawn = 0
 			self.vb.darkConduitCast = self.vb.darkConduitCast + 1
 			self:Schedule(8, setDarkConduit, self, true)--Clear current dark conduit radar after 8 seconds (it take 5 seconds for all 3 to spawn)
-			voiceDarkConduit:Play("watchstep")
+			warnDarkConduit:Play("watchstep")
 			local cooldown = darkConduitTimers[self.vb.darkConduitCast+1]
 			if cooldown then
 				timerDarkConduitCD:Start(cooldown, self.vb.darkConduitCast+1)
@@ -882,7 +863,7 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 186663 and self:AntiSpam(2, 9) then
 		specWarnFlamesOfArgus:Show(args.sourceName)
-		voiceFlamesofArgus:Play("kickcast")
+		specWarnFlamesOfArgus:Play("kickcast")
 	elseif spellId == 188514 then
 		table.wipe(legionTargets)
 	elseif spellId == 186961 then
@@ -914,7 +895,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		end
 	elseif spellId == 183254 then
 		specWarnAllureofFlames:Show()
-		voiceAllureofFlames:Play("watchstep")
+		specWarnAllureofFlames:Play("watchstep")
 	elseif spellId == 185590 then
 		timerLightCD:Start()
 	end
@@ -937,8 +918,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			if self:CheckNearby(30, args.destName) and not UnitDebuff("player", args.spellName) and not self:IsTank() then--Range subject to adjustment
 				specWarnFelBurstNear:CombinedShow(0.3, args.destName)--Combined show to prevent spam in a spread, if a spread happens targets are all together and requires even MORE people to soak.
-				voiceFelBurst:Cancel()--Avoid spam
-				voiceFelBurst:Schedule(0.3, "gathershare")
+				specWarnFelBurstNear:CancelVoice()--Avoid spam
+				specWarnFelBurstNear:ScheduleVoice(0.3, "gathershare")
 			end
 		end
 		if self.Options.HudMapOnFelBurst2 then
@@ -959,13 +940,13 @@ function mod:SPELL_AURA_APPLIED(args)
 			if self:IsMythic() and self:AntiSpam(20, 7) and self:IsAlive() then
 				--Only warn once on mythic instead of spamming it, since you always get all of them
 				specWarnWroughtChaos:Show()
-				voiceWroughtChaos:Play("186123")
+				specWarnWroughtChaos:Play("186123")
 			end
 		end
 		if args:IsPlayer() then
 			if not self:IsMythic() then
 				specWarnWroughtChaos:Show()
-				voiceWroughtChaos:Play("186123")
+				specWarnWroughtChaos:Play("186123")
 				yellWroughtChaos:Yell()
 				countdownWroughtChaos:Start()
 			else
@@ -981,7 +962,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			if not self:IsMythic() then
 				specWarnFocusedChaos:Show()
-				voiceFocusedChaos:Play("185014")
+				specWarnFocusedChaos:Play("185014")
 				yellFocusedChaos:Schedule(3, 2)
 				yellFocusedChaos:Schedule(2, 3)
 				yellFocusedChaos:Schedule(1, 4)
@@ -1054,14 +1035,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		countdownNetherBanish:Start()
 		if args:IsPlayer() then
 			specWarnNetherBanish:Show()
-			voiceNetherBanish:Play("teleyou")
+			specWarnNetherBanish:Play("teleyou")
 			yellNetherBanish:Schedule(6, 1)
 			yellNetherBanish:Schedule(5, 2)
 			yellNetherBanish:Schedule(4, 3)
 			yellNetherBanish:Schedule(3, 4)
 			yellNetherBanish:Schedule(2, 5)
 		else
-			voiceNetherBanish:Play("telesoon")
+			specWarnNetherBanish:Play("telesoon")
 			specWarnNetherBanishOther:Show(self.vb.netherBanish2, args.destName)
 		end
 		updateRangeFrame(self)
@@ -1072,7 +1053,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnVoidStarFixate:Show()
 			yellVoidStarFixate:Yell()
-			voiceVoidStarFixate:Play("orbrun")
+			specWarnVoidStarFixate:Play("orbrun")
 		end
 	elseif spellId == 186662 then--Felborne Overfiend Spawn
 		self.vb.overfiendCount = self.vb.overfiendCount + 1
@@ -1236,7 +1217,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		local unitGUID = UnitGUID(uId)
 		--timerShadowBlastCD ommited because it's used near instantly on spawn.
 		specWarnDeathCaller:Show(self.vb.deathBrandCount)
-		voiceDeathCaller:Play("ej11582")
+		specWarnDeathCaller:Play("ej11582")
 --	"<143.60 23:47:14> [UNIT_SPELLCAST_SUCCEEDED] Archimonde(Stellar) [[boss1:Allow Phase 2 Spells::0:190117]]", -- [4158]
 --	"<143.64 23:47:14> [CHAT_MSG_MONSTER_YELL] CHAT_MSG_MONSTER_YELL#The light will not fail!#Exarch Yrel###Archimonde##0#0##0#2601#nil#0#false#false#false", 
 --	"<148.61 23:47:19> [CHAT_MSG_MONSTER_YELL] CHAT_MSG_MONSTER_YELL#I grow tired of this pointless game. You face the immortal Legion, scourge of a thousand worlds.#Archimond
@@ -1256,7 +1237,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		countdownDeathBrand:Cancel()
 		--Begin phase 2
 		warnPhase2:Show()
-		voicePhaseChange:Play("ptwo")
+		warnPhase2:Play("ptwo")
 		if not self:IsEasy() then
 			timerWroughtChaosCD:Start(5)
 		end
@@ -1272,7 +1253,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		self.vb.phase = 3
 		timerFelborneOverfiendCD:Stop()
 		warnPhase3:Show()
-		voicePhaseChange:Play("pthree")
+		warnPhase3:Play("pthree")
 		if not self:IsMythic() then
 			timerAllureofFlamesCD:Stop()--Done for rest of fight
 			timerDeathbrandCD:Stop()--Done for rest of fight

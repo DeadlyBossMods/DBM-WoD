@@ -41,9 +41,7 @@ local warnFelStreak					= mod:NewSpellAnnounce(181190, 3, nil, "Melee")--Change 
 --Gul'dan
 local warnWrathofGuldan				= mod:NewTargetAnnounce(186362, 4)
 --Mannoroth
-local warnPhase2					= mod:NewPhaseAnnounce(2)
-local warnPhase3					= mod:NewPhaseAnnounce(3)
-local warnPhase4					= mod:NewPhaseAnnounce(4)
+local warnPhase						= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 local warnGaze						= mod:NewTargetAnnounce(181597, 3)
 local warnFelseeker					= mod:NewCountAnnounce(181735, 3)
 
@@ -97,19 +95,6 @@ local timerShadowForceCD			= mod:NewCDTimer(52.2, 181799, nil, nil, nil, 3, nil,
 local countdownGlaiveCombo			= mod:NewCountdown("Alt30", 181354, "Tank", nil, 3)
 local countdownMarkOfDoom			= mod:NewCountdownFades("AltTwo15", 181099, nil, nil, 3)
 local countdownShadowForce			= mod:NewCountdown(52, 181799, nil, nil, 3)
-
-local voicePhaseChange				= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
-local voiceGaze						= mod:NewVoice(181597, false) --gather share
-local voiceMarkOfDoom				= mod:NewVoice(181099) --run out/mm
-local voiceFelHellfire				= mod:NewVoice(181191, nil, nil, 2) --runaway
-local voiceShadowBoltVolley			= mod:NewVoice(181126, "HasInterrupt")
-local voiceFelBlast					= mod:NewVoice(181132, false)
-local voiceFelSeeker				= mod:NewVoice(181735)--watchstep
-local voiceFelHellstorm				= mod:NewVoice(181557)--watchstep
-local voiceGlaiveCombo				= mod:NewVoice(181354, "Tank")--defensive
-local voiceMassiveBlast				= mod:NewVoice(181359, "Tank")--tauntboss
-local voiceFelPillar				= mod:NewVoice(190070)--runaway
-local voiceWrath					= mod:NewVoice(186348)--mm
 
 mod:AddRangeFrameOption(20, 181099)
 mod:AddSetIconOption("SetIconOnGaze", 181597, false)
@@ -318,7 +303,7 @@ local function setWrathIcons(self)
 		end
 		if playerIcon then
 			yellWrathofGuldan:Yell(playerIcon, playerIcon, playerIcon)
-			voiceWrath:Play("mm"..playerIcon)
+			specWarnWrathofGuldan:Play("mm"..playerIcon)
 		end
 	end
 end
@@ -411,19 +396,19 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 181557 or spellId == 181948 then
 		specWarnFelHellStorm:Show()
-		voiceFelHellstorm:Play("watchstep")
+		specWarnFelHellStorm:Play("watchstep")
 		timerFelHellfireCD:Start()
 		--updateAllTimers(self, 1.5)
 	elseif spellId == 181126 then
 --		timerShadowBoltVolleyCD:Start(args.sourceGUID)
 		if self:CheckInterruptFilter(args.sourceGUID) then
 			specWarnShadowBoltVolley:Show(args.sourceName)
-			voiceShadowBoltVolley:Play("kickcast")
+			specWarnShadowBoltVolley:Play("kickcast")
 		end
 	elseif spellId == 181132 then
 		if self:CheckInterruptFilter(args.sourceGUID, true) then
 			specWarnFelBlast:Show(args.sourceName)
-			voiceFelBlast:Play("kickcast")
+			specWarnFelBlast:Play("kickcast")
 		end
 	elseif spellId == 183376 or spellId == 185830 then
 		local targetName, uId, bossuid = self:GetBossTarget(91349, true)
@@ -432,7 +417,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			if self:GetNumAliveTanks() >= 3 and not self:CheckNearby(21, targetName) then return end--You are not near current tank, you're probably 3rd tank on Doom Guards that never taunts massive blast
 			specWarnMassiveBlastOther:Schedule(1, targetName)
-			voiceMassiveBlast:Schedule(1, "tauntboss")
+			specWarnMassiveBlastOther:Schedule(1, "tauntboss")
 		end
 	elseif spellId == 181793 or spellId == 182077 then--Melee (10)
 		warnFelseeker:Show(10)
@@ -542,9 +527,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnMarkOfDoom:Show(self:IconNumToString(count))
 			countdownMarkOfDoom:Start()
 			if self:IsMythic() then
-				voiceMarkOfDoom:Play("mm"..count)
+				specWarnMarkOfDoom:Play("mm"..count)
 			else
-				voiceMarkOfDoom:Play("runout")
+				specWarnMarkOfDoom:Play("runout")
 			end
 			yellMarkOfDoom:Yell(count, count, count)
 		end
@@ -553,7 +538,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		updateRangeFrame(self)
 	elseif spellId == 181191 and self:CheckInterruptFilter(args.sourceGUID, true) and self:IsMelee() and self:AntiSpam(2, 5) then--No sense in duplicating code, just use CheckInterruptFilter with arg to skip the filter setting check
-		voiceFelHellfire:Play("runaway")
+		specWarnFelHellfire:Play("runaway")
 		specWarnFelHellfire:Show()--warn melee who are targetting infernal to run out if it's exploding
 	elseif spellId == 181597 or spellId == 182006 then
 		if not tContains(gazeTargets, args.destName) then
@@ -565,12 +550,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			self:Schedule(1, warnGazeTargts, self)--At least 0.5, maybe bigger needed if warning still splits
 		end
-		voiceGaze:Cancel()
+		specWarnGaze:CancelVoice()
 		if args:IsPlayer() then
 			specWarnGaze:Show()
+			specWarnGaze:Play("targetyou")
 		else
 			if not UnitDebuff("player", args.spellName) then
-				voiceGaze:Schedule(0.3, "gathershare")
+				specWarnGaze:ScheduleVoice(0.3, "gathershare")
 			end
 		end
 		if self.Options.HudMapOnGaze2 then
@@ -612,7 +598,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnWrathofGuldan:Show()
 			if icon then
 				yellWrathofGuldan:Yell(icon, icon, icon)
-				voiceWrath:Play("mm"..icon)
+				specWarnWrathofGuldan:Play("mm"..icon)
 			end
 		end
 		if self.Options.InfoFrame then
@@ -653,8 +639,8 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 		if self.vb.portalsLeft == 0 and self:AntiSpam(10, 4) and self:IsInCombat() then
 			self.vb.phase = 2
-			warnPhase2:Show()
-			voicePhaseChange:Play("ptwo")
+			warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(self.vb.phase))
+			warnPhase:Play("ptwo")
 			if not self:IsMythic() then
 				self.vb.ignoreAdds = true
 				--These should be active already from pull on mythic
@@ -735,8 +721,8 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc)
 			timerGlaiveComboCD:Start(44.9)
 			countdownGlaiveCombo:Start(44.9)
 			timerFelSeekerCD:Start(68)
-			warnPhase3:Show()
-			voicePhaseChange:Play("pthree")
+			warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(self.vb.phase))
+			warnPhase:Play("pthree")
 			if self:IsMythic() then
 				if self.vb.wrathIcon then
 					self.vb.wrathIcon = 8
@@ -772,8 +758,8 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc)
 			timerShadowForceCD:Start(47.3)
 			countdownShadowForce:Start(47.3)
 			timerFelSeekerCD:Start(65.6)
-			warnPhase4:Show()
-			voicePhaseChange:Play("pfour")
+			warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(self.vb.phase))
+			warnPhase:Play("pfour")
 			if self:IsMythic() then
 				if timerFelImplosionCD:GetRemaining(self.vb.impCount+1) > 9 then
 					timerFelImplosionCD:Stop()
@@ -794,7 +780,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 181735 then--0.1 seconds faster than combat log event for 10 yard cast.
 		specWarnFelSeeker:Show()
 		timerFelSeekerCD:Start()
-		voiceFelSeeker:Play("watchstep")
+		specWarnFelSeeker:Play("watchstep")
 		updateAllTimers(self, 6)
 	elseif spellId == 181301 then--Summon Adds (phase 2 start/Mythic Phase 3)
 		DBM:Debug("Summon adds 181301 fired", 2)
@@ -855,8 +841,8 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerGlaiveComboCD:Start(39.4)
 		countdownGlaiveCombo:Start(39.4)
 		timerFelSeekerCD:Start(62.5)
-		warnPhase3:Show()
-		voicePhaseChange:Play("pthree")
+		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(self.vb.phase))
+		warnPhase:Play("pthree")
 		if self:IsMythic() then
 			if self.vb.wrathIcon then
 				self.vb.wrathIcon = 8
@@ -893,8 +879,8 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		timerShadowForceCD:Start(41.8)
 		countdownShadowForce:Start(45.8)
 		timerFelSeekerCD:Start(60.1)
-		warnPhase4:Show()
-		voicePhaseChange:Play("pfour")
+		warnPhase:Show(DBM_CORE_AUTO_ANNOUNCE_TEXTS.stage:format(self.vb.phase))
+		warnPhase:Play("pfour")
 		if self:IsMythic() then
 			if timerFelImplosionCD:GetRemaining(self.vb.impCount+1) > 3.8 then
 				timerFelImplosionCD:Stop()
@@ -911,7 +897,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 		specWarnGlaiveCombo:Show()
 		timerGlaiveComboCD:Start()
 		countdownGlaiveCombo:Start()
-		voiceGlaiveCombo:Play("defensive")
+		specWarnGlaiveCombo:Play("defensive")
 		updateAllTimers(self, 4)
 	end
 end
@@ -919,10 +905,10 @@ end
 function mod:SPELL_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 181192 and destGUID == UnitGUID("player") and self:AntiSpam(2, 5) then
 		specWarnFelHellfire:Show()
-		voiceFelHellfire:Play("runaway")
+		specWarnFelHellfire:Play("runaway")
 	elseif spellId == 190070 and destGUID == UnitGUID("player") and self:AntiSpam(1.5, 7) then
 		specWarnFelPillar:Show()
-		voiceFelPillar:Play("runaway")
+		specWarnFelPillar:Play("runaway")
 	end
 end
 mod.SPELL_MISSED = mod.SPELL_DAMAGE

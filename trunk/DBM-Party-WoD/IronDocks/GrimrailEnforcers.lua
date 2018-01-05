@@ -19,17 +19,12 @@ mod:RegisterEventsInCombat(
 
 mod:SetBossHealthInfo(80816, 80805, 80808)
 
-local warnSanguineSphere		= mod:NewTargetAnnounce(163689, 3)
-local warnFlamingSlash			= mod:NewCastAnnounce(163665, 4)
-local warnLavaSwipe				= mod:NewSpellAnnounce(165152, 2)
 local warnOgreTraps				= mod:NewCastAnnounce(163390, 3)
-local warnBigBoom				= mod:NewSpellAnnounce(163379, 1)
 
 local specWarnSanguineSphere	= mod:NewSpecialWarningReflect(163689, "-Healer", nil, 2, 1, 2)
 local specWarnSanguineSphereEnd	= mod:NewSpecialWarningEnd(163689, "-Healer", nil, 2)
 local specWarnFlamingSlash		= mod:NewSpecialWarningDodge(163665, nil, nil, nil, 3)--Devastating in challenge modes. move or die.
 local specWarnLavaSwipe			= mod:NewSpecialWarningSpell(165152, nil, nil, nil, 2)
-local specWarnOgreTraps			= mod:NewSpecialWarningSpell(163390, false, nil, 2)--Pre warning for bomb immediately after. Maybe change to a Soon warning with bomb spellid instead so that's clear?
 local specWarnBigBoom			= mod:NewSpecialWarningSpell(163379, nil, nil, nil, 2)--maybe use switch.
 
 local timerSanguineSphere		= mod:NewTargetTimer(15, 163689)
@@ -38,8 +33,6 @@ local timerLavaSwipeCD			= mod:NewNextTimer(29, 165152, nil, nil, nil, 3)
 local timerOgreTrapsCD			= mod:NewCDTimer(25, 163390, nil, nil, nil, 3)--25-30 variation.
 
 local countdownFlamingSlash		= mod:NewCountdown(29, 163665)
-
-local voiceSanguineSphere		= mod:NewVoice(163689, "-Healer")
 
 function mod:OnCombatStart(delay)
 	timerFlamingSlashCD:Start(5-delay)
@@ -50,7 +43,6 @@ end
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 163665 then
-		warnFlamingSlash:Show()
 		specWarnFlamingSlash:Show()
 		if self:IsNormal() then
 			timerFlamingSlashCD:Start(41.5)
@@ -61,19 +53,16 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 163390 then
 		warnOgreTraps:Show()
-		specWarnOgreTraps:Show()
 		timerOgreTrapsCD:Start()
 	elseif spellId == 163379 then
-		warnBigBoom:Show()
 		specWarnBigBoom:Show()
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 163689 then
-		warnSanguineSphere:Show(args.destName)
 		specWarnSanguineSphere:Show(args.destName)
-		voiceSanguineSphere:Play("stopattack")
+		specWarnSanguineSphere:Play("stopattack")
 		local unitid
 		for i = 1, 3 do
 			if UnitGUID("boss"..i) == args.destGUID then
@@ -111,7 +100,6 @@ end
 
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 164956 and self:AntiSpam(5, 2) then
-		warnLavaSwipe:Show()
 		specWarnLavaSwipe:Show()
 		if self:IsHeroic() then
 			timerLavaSwipeCD:Start()

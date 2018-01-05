@@ -21,24 +21,18 @@ mod:RegisterEventsInCombat(
 local warnToxicSpiderling			= mod:NewAddsLeftAnnounce("ej10492", 2, "Interface\\ICONS\\Spell_Nature_Web")
 --local warnVenomCrazedPaleOne		= mod:NewSpellAnnounce("ej10502", 3)--I can't find a way to detect these, at least not without flat out scanning all DAMAGE events but that's too much work.
 local warnInhale					= mod:NewSpellAnnounce(169233, 3)
-local warnPhase2					= mod:NewPhaseAnnounce(2, 2)
-local warnConsume					= mod:NewSpellAnnounce(169248, 4)
-local warnGaseousVolley				= mod:NewSpellAnnounce(169248, 3)
+local warnPhase2					= mod:NewPhaseAnnounce(2, 2, nil, nil, nil, nil, nil, 2)
 
 local specWarnVenomCrazedPaleOne	= mod:NewSpecialWarningSwitch("ej10502", "-Healer")
---local specWarnConsume				= mod:NewSpecialWarningSpell(169248)
-local specWarnGaseousVolley			= mod:NewSpecialWarningSpell(169382, nil, nil, nil, 2)
-local specWarnToxicGas				= mod:NewSpecialWarningMove(169223)
-
-local voiceConsume					= mod:NewVoice(169248)
-local voicePhaseChange				= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
+local specWarnGaseousVolley			= mod:NewSpecialWarningSpell(169382, nil, nil, nil, 2, 2)
+local specWarnToxicGas				= mod:NewSpecialWarningMove(169223, nil, nil, nil, 1, 2)
 
 mod.vb.spiderlingCount = 4
-mod.vb.phase2 = false
+mod.vb.phase = 1
 
 function mod:OnCombatStart(delay)
 	self.vb.spiderlingCount = 4
-	self.vb.phase2 = false
+	self.vb.phase = 1
 end
 
 function mod:SPELL_CAST_START(args)
@@ -46,18 +40,18 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 169233 then
 		warnInhale:Show()
 	elseif spellId == 169248 then
-		warnConsume:Show()
 		specWarnVenomCrazedPaleOne:Show()
-		voiceConsume:Play("killmob")
+		specWarnVenomCrazedPaleOne:Play("killmob")
 	elseif spellId == 169382 then
-		warnGaseousVolley:Show()
 		specWarnGaseousVolley:Show()
+		specWarnGaseousVolley:Play("watchstep")
 	end
 end
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 169223 and destGUID == UnitGUID("player") and self:AntiSpam(2) then
 		specWarnToxicGas:Show()
+		specWarnToxicGas:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
@@ -73,9 +67,9 @@ function mod:UNIT_DIED(args)
 end
 
 function mod:UNIT_TARGETABLE_CHANGED()
-	if not self.vb.phase2 then
-		self.vb.phase2 = true
+	if self.vb.phase == 1 then
+		self.vb.phase = 2
 		warnPhase2:Show()
-		voicePhaseChange:Play("ptwo")
+		warnPhase2:Play("ptwo")
 	end
 end

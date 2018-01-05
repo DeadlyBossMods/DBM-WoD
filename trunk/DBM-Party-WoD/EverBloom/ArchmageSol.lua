@@ -15,20 +15,14 @@ mod:RegisterEventsInCombat(
 
 --Again, too lazy to work on CD timers, someone else can do it. raid mods are putting too much strain on me to give 5 man mods as much attention
 --Probalby should also add a close warning for Frozen Rain
-local warnFirePhase				= mod:NewSpellAnnounce(166475 ,1)
---local warnFireBloom				= mod:NewSpellAnnounce(166492, 4)--Very useless. only confusing
-local warnFrostPhase			= mod:NewSpellAnnounce(166476 ,1)
-local warnArcanePhase			= mod:NewSpellAnnounce(166477 ,1)
+local warnFrostPhase			= mod:NewSpellAnnounce(166476, 2, nil, nil, nil, nil, nil, 2)
+local warnArcanePhase			= mod:NewSpellAnnounce(166477, 2, nil, nil, nil, nil, nil, 2)
 
 local specWarnParasiticGrowth	= mod:NewSpecialWarningCount(168885, "Tank")
 --local specWarnFireBloom			= mod:NewSpecialWarningSpell(166492, nil, nil, nil, 2)
 local specWarnFrozenRainMove	= mod:NewSpecialWarningMove(166726, nil, nil, nil, 1, 2)
 
 local timerParasiticGrowthCD	= mod:NewCDCountTimer(11.5, 168885, nil, "Tank|Healer", 2, 5, nil, DBM_CORE_TANK_ICON)--Every 12 seconds unless comes off cd during fireball/frostbolt, then cast immediately after.
-
---local voiceFireBloom= mod:NewVoice(166492)
-local voiceFrozenRain			= mod:NewVoice(166726)
-local voicePhaseChange			= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
 
 mod.vb.ParasiteCount = 0
 
@@ -50,20 +44,17 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	--if args:IsSpellID(166492, 166572) and self:AntiSpam(12) then--Because the dumb spell has no cast Id, we can only warn when someone gets hit by one of rings.
-		--warnFireBloom:Show()
 		--specWarnFireBloom:Show()
-		--voiceFireBloom:Play("firecircle")
+		--specWarnFireBloom:Play("firecircle")
 	if spellId == 166726 and args:IsPlayer() and self:AntiSpam(2) then--Because dumb spell has no cast Id, we can only warn when people get debuff from standing in it.
 		specWarnFrozenRainMove:Show()
-		voiceFrozenRain:Play("runaway")
-	elseif spellId == 166475 then
-		warnFirePhase:Show()
+		specWarnFrozenRainMove:Play("runaway")
 	elseif spellId == 166476 then
 		warnFrostPhase:Show()
-		voicePhaseChange:Play("ptwo")
+		warnFrostPhase:Play("ptwo")
 	elseif spellId == 166477 then
 		warnArcanePhase:Show()
-		voicePhaseChange:Play("pthree")
+		warnArcanePhase:Play("pthree")
 	end
 end
 

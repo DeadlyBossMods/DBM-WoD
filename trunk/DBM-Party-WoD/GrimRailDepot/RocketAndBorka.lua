@@ -33,8 +33,6 @@ local timerSlamCD				= mod:NewCDTimer(15, 162617, nil, "SpellCaster")
 local timerSlam					= mod:NewCastTimer(1.5, 162617, nil, "SpellCaster")
 local timerRecovering			= mod:NewBuffActiveTimer(6, 163947)
 
-local voiceSlam					= mod:NewVoice(162617, "SpellCaster")
-
 local rocketsName = DBM:EJ_GetSectionInfo(9430)
 local borkaID = nil
 mod.vb.VXCast = 0
@@ -88,7 +86,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.SlamCast = self.vb.SlamCast + 1
 		specWarnSlam:Show()
 		timerSlam:Start()
-		voiceSlam:Play("stopcast")
+		specWarnSlam:Play("stopcast")
 		if self.vb.SlamCast == 2 then
 			timerSlamCD:Start(30)
 		else

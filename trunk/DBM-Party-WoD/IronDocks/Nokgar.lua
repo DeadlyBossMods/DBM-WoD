@@ -20,50 +20,42 @@ mod:RegisterEventsInCombat(
 )
 
 local warnNokgar						= mod:NewSpellAnnounce("ej10433", 3, "Interface\\ICONS\\INV_Misc_Head_Orc_01.blp")
-local warnBurningArrows					= mod:NewSpellAnnounce(164635, 3)
-local warnRecklessProvocation			= mod:NewTargetAnnounce(164426, 3)
-local warnEnrage						= mod:NewSpellAnnounce(164835, 3, nil, "RemoveEnrage|Tank")
 
-local specWarnBurningArrows				= mod:NewSpecialWarningSpell(164635, nil, nil, nil, 2)
+local specWarnBurningArrows				= mod:NewSpecialWarningSpell(164635, nil, nil, nil, 2, 2)
 local specWarnBurningArrowsMove			= mod:NewSpecialWarningMove(164635, nil, nil, nil, 1, 2)
 local specWarnRecklessProvocation		= mod:NewSpecialWarningReflect(164426, nil, nil, nil, 1, 2)
-local specWarnRecklessProvocationEnd	= mod:NewSpecialWarningEnd(164426)
+local specWarnRecklessProvocationEnd	= mod:NewSpecialWarningEnd(164426, nil, nil, nil, 1, 2)
 local specWarnEnrage					= mod:NewSpecialWarningDispel(164835, "RemoveEnrage", nil, nil, 1, 2)
 
 local timerRecklessProvocation			= mod:NewBuffActiveTimer(5, 164426)
 --local timerBurningArrowsCD			= mod:NewNextTimer(25, 164635)--25~42 variable (patterned?)
 
-local voiceRecklessProvocation			= mod:NewVoice(164426)
-local voiceEnrage						= mod:NewVoice(164835, "RemoveEnrage")
-local voiceBurningArrows				= mod:NewVoice(164632)
-
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 164426 then
-		warnRecklessProvocation:Show(args.destName)
 		specWarnRecklessProvocation:Show(args.destName)
 		timerRecklessProvocation:Start()
-		voiceRecklessProvocation:Play("stopattack")
+		specWarnRecklessProvocation:Play("stopattack")
 	elseif args.spellId == 164835 and self:AntiSpam(2, 1) then
-		warnEnrage:Show()
 		specWarnEnrage:Show(args.destName)
-		voiceEnrage:Play("trannow") --multi sound
+		specWarnEnrage:Play("trannow") --multi sound
 	elseif args.spellId == 164632 and args:IsPlayer() and self:AntiSpam(2, 2) then
 		specWarnBurningArrowsMove:Show()
-		voiceBurningArrows:Play("runaway")
+		specWarnBurningArrowsMove:Play("runaway")
 	end
 end
 
 function mod:SPELL_AURA_REMOVED(args)
 	if args.spellId == 164426 then
 		specWarnRecklessProvocationEnd:Show()
+		specWarnRecklessProvocationEnd:Play("safenow")
 	end
 end
 
 --Not detectable in phase 1. Seems only cleanly detectable in phase 2, in phase 1 boss has no "boss" unitid so cast hidden.
 function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
 	if spellId == 164635 then
-		warnBurningArrows:Show()
 		specWarnBurningArrows:Show()
+		specWarnBurningArrows:Play("watchstep")
 		--timerBurningArrowsCD:Start()
 	end
 end
