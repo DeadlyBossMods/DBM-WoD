@@ -23,8 +23,6 @@ local warnRainOfFire			= mod:NewSpellAnnounce(156857, 3)
 local warnFixate				= mod:NewTargetAnnounce(157168, 2, nil, nil, 2)
 --Affliction Abilities
 local warnSeedOfMalevolence		= mod:NewTargetAnnounce(156921, 3)
---Destruction Abilities
-local warnChaosBolt				= mod:NewSpellAnnounce(156975, 4)--You can get target from yell immediately after cast start, but not much reason to localize for that, you always interrupt.
 --Demonic Abilities
 local warnDemonForm				= mod:NewSpellAnnounce(156919, 3)
 local warnDemonicLeap			= mod:NewTargetAnnounce(157039, 3)
@@ -70,13 +68,6 @@ local timerDemonicLeapCD		= mod:NewCDTimer(20, 157039, nil, nil, nil, 3)
 --Affliction Abilities
 local countdownSeedOfMelevolence= mod:NewCountdownFades(18, 156921)
 
-local voiceWarnChaosWave		= mod:NewVoice(157001)
-local voiceCorruption			= mod:NewVoice(156842, "Healer")
-local voiceWarnImmolate			= mod:NewVoice(156964, "Healer")
-local voiceSeedOfMelevolence	= mod:NewVoice(156921)
-local voiceChaosBolt			= mod:NewVoice(156975, "-Healer")
-local voiceWarnExhaustion		= mod:NewVoice(164841, "RemoveCurse")
-
 mod:AddRangeFrameOption(10, 156921)
 
 local seedDebuff = DBM:GetSpellInfo(156921)
@@ -105,7 +96,7 @@ function mod:ChaosWaveTarget(targetname, uId)
 	if targetname == UnitName("player") then
 		specWarnChaosWave:Show()
 		yellWarnChaosWave:Yell()
-		voiceWarnChaosWave:Play("runaway")
+		specWarnChaosWave:Play("runaway")
 	end
 end
 
@@ -129,7 +120,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		specWarnDoom:Show(args.destName)
 	elseif spellId == 156842 and self:CheckDispelFilter() then
 		specWarnCorruption:Show(args.destName)
-		voiceCorruption:Play("dispelnow")
+		specWarnCorruption:Play("dispelnow")
 	elseif spellId == 156921 and args:IsDestTypePlayer() then--This debuff can be spread to the boss. bugged?
 		self.vb.seedCount = self.vb.seedCount + 1
 		warnSeedOfMalevolence:Show(args.destName)
@@ -138,7 +129,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnSeedOfMelevolence:Show()
 			countdownSeedOfMelevolence:Start()
-			voiceSeedOfMelevolence:Play("runout")
+			specWarnSeedOfMelevolence:Play("runout")
 		end
 		if self.Options.RangeFrame then
 			if UnitDebuff("player", seedDebuff) then--You have debuff, show everyone
@@ -155,12 +146,12 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 164841 and self:CheckDispelFilter() then
 		specWarnExhaustion:Show(args.destName)
-		voiceWarnExhaustion:Play("dispelnow")
+		specWarnExhaustion:Play("dispelnow")
 		--timerExhaustionCD:Start()
 	elseif spellId == 156964 and self:CheckDispelFilter() then--Base version cast only in phase 1
 		specWarnImmolate:Show(args.destName)
 		timerImmolateCD:Start()
-		voiceWarnImmolate:Plat("dispelnow")
+		specWarnImmolate:Play("dispelnow")
 	elseif spellId == 156856 and args:IsPlayer() then
 		specWarnRainOfFireMove:Show()
 	end
@@ -191,13 +182,12 @@ function mod:SPELL_CAST_START(args)
 		timerChaosWaveCD:Start()
 		self:BossTargetScanner(77734, "ChaosWaveTarget", 0.1, 16)--Timing not verified, but Boss DOES look at leap target
 	elseif spellId == 156975 then
-		warnChaosBolt:Show()
 		specWarnChaosBolt:Show(args.sourceName)
 		timerChaosBoltCD:Start()--TODO, verify it's 20 on heroic and normal too. it's definitely 20 on CM
 		if self:IsTank() then
-			voiceChaosBolt:Play("kickcast")
+			specWarnChaosBolt:Play("kickcast")
 		else
-			voiceChaosBolt:Play("helpkick")
+			specWarnChaosBolt:Play("helpkick")
 		end	
 	elseif spellId == 156857 then--Base version cast only in phase 1
 		warnRainOfFire:Show()

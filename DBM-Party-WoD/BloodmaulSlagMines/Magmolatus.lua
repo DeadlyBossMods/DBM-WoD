@@ -19,11 +19,7 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
--------------------------------------------
-local warnFirestorm				= mod:NewSpellAnnounce(149997, 3)
 local warnDancingFlames			= mod:NewTargetAnnounce(149975, 3, nil, "Healer")
-local warnPhase2				= mod:NewPhaseAnnounce(2)
-local warnWitheringFlames		= mod:NewTargetAnnounce(150032, 3, nil, "Healer")
 
 local specWarnMagmaBarrage		= mod:NewSpecialWarningMove(150011)
 local specWarnRoughSmash		= mod:NewSpecialWarningDodge(149941, "Melee")
@@ -31,20 +27,12 @@ local specWarnRuination			= mod:NewSpecialWarningSwitch("ej8622", "-Healer", nil
 local specWarnCalamity			= mod:NewSpecialWarningSwitch("ej8626", "-Healer", nil, nil, 1, 2)
 local specWarnFirestorm			= mod:NewSpecialWarningInterrupt(149997, "HasInterrupt", nil, 2, 1, 2)
 local specWarnDancingFlames		= mod:NewSpecialWarningDispel(149975, "Healer", nil, nil, 1, 2)
-local specWarnMagmolatus		= mod:NewSpecialWarningSwitch("ej8621", "Tank")--Dps can turn this on too I suppose but 5 seconds after boss spawns they are switching to add anyways, so this is mainly for tank to pick it up
+local specWarnMagmolatus		= mod:NewSpecialWarningSwitch("ej8621", nil, nil, 2, 1, 2)--Dps can turn this on too I suppose but 5 seconds after boss spawns they are switching to add anyways, so this is mainly for tank to pick it up
 local specWarnSlagSmash			= mod:NewSpecialWarningDodge(150023, "Melee", nil, nil, 1, 2)
 local specWarnMoltenImpact		= mod:NewSpecialWarningSpell(150038, nil, nil, nil, 2)
 local specWarnWitheringFlames	= mod:NewSpecialWarningDispel(150032, "Healer", nil, nil, 1, 2)
 
 local timerMoltenImpactCD		= mod:NewNextTimer(21.5, 150038, nil, nil, nil, 1)
-
-local voiceRuination			= mod:NewVoice("ej8622", "-Healer")
-local voiceCalamity				= mod:NewVoice("ej8626", "-Healer")
-local voicePhaseChange			= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
-local voiceFirestorm			= mod:NewVoice(149997, "HasInterrupt")
-local voiceDancingFlames		= mod:NewVoice(149975, "Healer")
-local voiceWitheringFlames		= mod:NewVoice(150032, "Healer")
-local voiceSlagSmash			= mod:NewVoice(150023, "Melee")
 
 local activeAddGUIDS = {}
 
@@ -70,20 +58,19 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 			--Ruination#Creature:0:3314:1175:11531:74570
 			if cid == 74570 then--Ruination
 				specWarnRuination:Show()
-				voiceRuination:Play("mobsoon")
+				specWarnRuination:Play("mobsoon")
 				if DBM.BossHealth:IsShown() then
 					DBM.BossHealth:AddBoss(74570)
 				end
 			elseif cid == 74571 then--Calamity
 				specWarnCalamity:Show()
-				voiceCalamity:Play("mobsoon")
+				specWarnCalamity:Play("mobsoon")
 				if DBM.BossHealth:IsShown() then
 					DBM.BossHealth:AddBoss(74571)
 				end
 			elseif cid == 74475 then--Magmolatus
-				warnPhase2:Show()
-				voicePhaseChange:Play("ptwo")
 				specWarnMagmolatus:Show()
+				specWarnMagmolatus:Play("bigmob")
 				timerMoltenImpactCD:Start(5)
 				if DBM.BossHealth:IsShown() then
 					DBM.BossHealth:AddBoss(74475)
@@ -96,25 +83,23 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 149997 then
-		warnFirestorm:Show()
 		specWarnFirestorm:Show(args.sourceName)
 		if self:IsTank() then
-			voiceFirestorm:Play("kickcast")
+			specWarnFirestorm:Play("kickcast")
 		else
-			voiceFirestorm:Play("helpkick")
+			specWarnFirestorm:Play("helpkick")
 		end
 	elseif spellId == 149975 then
 		warnDancingFlames:CombinedShow(0.3, args.destName)--heroic is 2 targets so combined.
 		if self:CheckDispelFilter() then--only show once. (prevent loud sound)
 			specWarnDancingFlames:CombinedShow(0.3, args.destName)
 			if self:AntiSpam(2, 2) then
-				voiceDancingFlames:Play("dispelnow")
+				specWarnDancingFlames:Play("dispelnow")
 			end
 		end
 	elseif spellId == 150032 and self:CheckDispelFilter() then
-		warnWitheringFlames:Show(args.destName)
 		specWarnWitheringFlames:Show(args.destName)
-		voiceWitheringFlames:Play("dispelnow")
+		specWarnWitheringFlames:Play("dispelnow")
 	end
 end
 
@@ -127,7 +112,7 @@ function mod:SPELL_CAST_START(args)
 		timerMoltenImpactCD:Start()
 	elseif spellId == 150023 then
 		specWarnSlagSmash:Show()
-		voiceSlagSmash:Play("runaway")
+		specWarnSlagSmash:Play("runaway")
 	end
 end
 

@@ -31,11 +31,11 @@ local warnSealofDecay						= mod:NewStackAnnounce(180000, 2, nil, "Tank|Healer")
 --Stage One: Oppression
 local warnAnnihilationStrike				= mod:NewTargetCountAnnounce(180260, 4)
 --Stage Two: Contempt
-local warnAuraofContempt					= mod:NewSpellAnnounce(179986, 3)
+local warnAuraofContempt					= mod:NewSpellAnnounce(179986, 3, nil, nil, nil, nil, nil, 2)
 local warnTaintedShadows					= mod:NewSpellAnnounce(180533, 2, nil, false)--Every 5 seconds, spammy
 local warnFontofCorruption					= mod:NewTargetAnnounce(180526, 3)
 --Stage Three: Malice
-local warnAuraofMalice						= mod:NewSpellAnnounce(179991, 3)
+local warnAuraofMalice						= mod:NewSpellAnnounce(179991, 3, nil, nil, nil, nil, nil, 2)
 local warnBulwarkoftheTyrant				= mod:NewTargetCountAnnounce(180600, 2)
 
 --All
@@ -92,19 +92,6 @@ local countdownInfernalTempest				= mod:NewCountdown("Alt50", 180300)
 local countdownFontofCorruption				= mod:NewCountdownFades("AltTwo50", 180526)
 local countdownBulwarkofTyrant				= mod:NewCountdown(10, 180608, nil, nil, 3)
 local countdownGavel						= mod:NewCountdown("Alt10", 180608, nil, nil, 3)
-
-local voicePhaseChange						= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
-local voiceEnforcer							= mod:NewVoice("ej11155", "-Healer")--bigmob
-local voiceHarbinger						= mod:NewVoice("ej11163", "-Healer")--bigmob
-local voiceSovereign						= mod:NewVoice("ej11170", "-Healer")--bigmob
-local voiceInfernalTempest					= mod:NewVoice(180300)--watchstep
-local voiceEdictofCondemnation				= mod:NewVoice(182459)--runin or gather
-local voiceHarbingersMending				= mod:NewVoice(180025, "HasInterrupt|MagicDispeller")--kickcast/dispelboss
-local voiceGaveloftheTyrant					= mod:NewVoice(180608)--carefly
-local voiceEnforcerOnslaught				= mod:NewVoice(180004, "Tank", nil, 2)--watchorb
-local voiceSealofDecay						= mod:NewVoice(180000)--tauntboss
-local voiceVoidZone							= mod:NewVoice(180604)--runaway
---stopmove
 
 mod:AddRangeFrameOption("5/4")
 mod:AddHudMapOption("HudMapOnStrike", 180260)
@@ -197,7 +184,7 @@ function mod:SPELL_CAST_START(args)
 		self:BossTargetScanner(90269, "AnnTarget", 0.05, 20, true)
 	elseif spellId == 180004 then
 		specWarnEnforcersOnslaught:Show()
-		voiceEnforcerOnslaught:Play("watchorb")
+		specWarnEnforcersOnslaught:Play("watchorb")
 		if self:IsMythic() then
 			timerEnforcersOnslaughtCD:Start(10)
 		else
@@ -206,13 +193,13 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 180608 then
 		self.vb.gavelCount = self.vb.gavelCount+1
 		specWarnGaveloftheTyrant:Show(self.vb.gavelCount)
-		voiceGaveloftheTyrant:Play("carefly")
+		specWarnGaveloftheTyrant:Play("carefly")
 		timerBulwarkoftheTyrantCD:Start(nil, 1)
 		countdownBulwarkofTyrant:Start()
 	elseif spellId == 180300 then
 		self.vb.infernalTempestCount = self.vb.infernalTempestCount + 1
 		specWarnInfernalTempest:Show(self.vb.infernalTempestCount)
-		voiceInfernalTempest:Play("watchstep")
+		specWarnInfernalTempest:Play("watchstep")
 		self.vb.annihilationCount = 0
 		timerAnnihilatingStrikeCD:Start(nil, 1)
 		countdownAnnihilatingStrike:Start()
@@ -236,7 +223,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerInfernalTempestCD:Stop()
 		timerTaintedShadowsCD:Start()
 		timerFontofCorruptionCD:Start(22)
-		voicePhaseChange:Play("ptwo")
+		warnAuraofContempt:Play("ptwo")
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Show(5, debuffFilter)
 		end
@@ -246,7 +233,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerFontofCorruptionCD:Stop()
 		timerBulwarkoftheTyrantCD:Start(nil, 1)
 		countdownBulwarkofTyrant:Start()
-		voicePhaseChange:Play("pthree")
+		warnAuraofMalice:Play("pthree")
 		if self.Options.RangeFrame then
 			DBM.RangeCheck:Hide()
 		end
@@ -254,7 +241,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 		self.vb.bulwarkCount = self.vb.bulwarkCount + 1
 		if (self:IsTank() or self:CheckNearby(5, args.destName)) and self:AntiSpam(2, 1) then
 			specWarnDespoiledGround:Show()
-			voiceVoidZone:Play("runaway")
+			specWarnDespoiledGround:Play("runaway")
 		end
 		warnBulwarkoftheTyrant:Show(self.vb.bulwarkCount, args.destName)
 		if self.vb.bulwarkCount == 3 then
@@ -277,7 +264,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerEdictofCondemnationCD:Start(nil, self.vb.edictCount+1)
 		if args:IsPlayer() then
 			specWarnEdictofCondemnation:Show(self.vb.edictCount)
-			voiceEdictofCondemnation:Play("runin")
+			specWarnEdictofCondemnation:Play("runin")
 			yellEdictofCondemnation:Schedule(8, 1)
 			yellEdictofCondemnation:Schedule(6, 3)
 			yellEdictofCondemnation:Schedule(5, 4)
@@ -285,7 +272,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if self.Options.SpecWarn185241moveto then--This specific voice only meant for specWarnEdictofCondemnationOther
 			specWarnEdictofCondemnationOther:Schedule(5, args.destName)
-			voiceEdictofCondemnation:Schedule(5, "gather")
+			specWarnEdictofCondemnationOther:ScheduleVoice(5, "gather")
 		end
 		if self.Options.HudMapEdict2 then
 			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 9, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
@@ -321,7 +308,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 180025 then
 		specWarnHarbingersMendingDispel:Show(args.destName)
 		if self:IsMagicDispeller() then
-			voiceHarbingersMending:Play("dispelboss")
+			specWarnHarbingersMendingDispel:Play("dispelboss")
 		end
 	elseif spellId == 180000 then
 		warnSealofDecay:Show(args.destName, 1)
@@ -346,7 +333,7 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 				--Swap at 2 WHEN POSSIBLE but sometimes you have to go to 3.
 				if debuffTime < 6 and not UnitIsDeadOrGhost("player") then
 					specWarnSealofDecayOther:Show(args.destName)
-					voiceSealofDecay:Play("tauntboss")
+					specWarnSealofDecayOther:Play("tauntboss")
 				else
 					warnSealofDecay:Show(args.destName, amount)
 				end
@@ -380,7 +367,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 180604 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnDespoiledGround:Show()
-		voiceVoidZone:Play("runaway")
+		specWarnDespoiledGround:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
@@ -392,7 +379,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc, _, _, target)
 				DBM.BossHealth:AddBoss(90270, AncientEnforcer)
 			end
 			specWarnAncientEnforcer:Show()
-			voiceEnforcer:Play("bigmob")
+			specWarnAncientEnforcer:Play("bigmob")
 			if self:IsMythic() then
 				timerEnforcersOnslaughtCD:Start(13)
 			else
@@ -403,14 +390,14 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc, _, _, target)
 				DBM.BossHealth:AddBoss(90271, AncientHarbinger)
 			end
 			specWarnAncientHarbinger:Show()
-			voiceHarbinger:Play("bigmob")
+			specWarnAncientHarbinger:Play("bigmob")
 			timerHarbingersMendingCD:Start(17)--VERIFY
 		elseif npc == AncientSovereign then
 			if DBM.BossHealth:IsShown() then
 				DBM.BossHealth:AddBoss(90272, AncientSovereign)
 			end
 			specWarnAncientSovereign:Show()
-			voiceSovereign:Play("bigmob")
+			specWarnAncientSovereign:Play("bigmob")
 		end
 	end
 end
@@ -423,9 +410,9 @@ function mod:UNIT_SPELLCAST_START(uId, _, _, _, spellId)
 		specWarnHarbingersMending:Show(AncientHarbinger, self.vb.interruptCount)
 		timerHarbingersMendingCD:Start()
 		if count == 1 then
-			voiceHarbingersMending:Play("kick1r")
+			specWarnHarbingersMending:Play("kick1r")
 		elseif count == 2 then
-			voiceHarbingersMending:Play("kick2r")
+			specWarnHarbingersMending:Play("kick2r")
 		end
 	end
 end

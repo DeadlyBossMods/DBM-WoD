@@ -17,22 +17,17 @@ mod:RegisterEventsInCombat(
 
 --TODO, verify gron smash numbers and see if it is time based or damage based.
 local warnRapidFire			= mod:NewTargetAnnounce(168398, 3)
-local warnGronSmash			= mod:NewSpellAnnounce(168227, 3)
-local warnCannonBarrage		= mod:NewSpellAnnounce(168929, 4)
 local warnBackdraft			= mod:NewCastAnnounce(169129, 4)
 
 local specWarnRapidFire		= mod:NewSpecialWarningMoveAway(168398, nil, nil, nil, 1, 2)
 local yellRapidFire			= mod:NewYell(168398)
-local specWarnGronSmash		= mod:NewSpecialWarningSpell(168227, nil, nil, nil, 2)
+local specWarnGronSmash		= mod:NewSpecialWarningSpell(168227, nil, nil, nil, 2, 2)
 local specWarnCannonBarrage	= mod:NewSpecialWarningSpell(168929, nil, nil, nil, 3, 2)--Use the one time cast trigger instead of drycode when relogging
-local specWarnCannonBarrageE= mod:NewSpecialWarningEnd(168929)
+local specWarnCannonBarrageE= mod:NewSpecialWarningEnd(168929, nil, nil, nil, 1, 2)
 
 local timerRapidFireCD		= mod:NewNextTimer(12, 168398, nil, nil, nil, 3)
 local timerRapidFire		= mod:NewTargetTimer(5, 168398, nil, "-Tank")
 local timerGronSmashCD		= mod:NewCDTimer(70, 168227, nil, nil, nil, 2)--Timer is too variable, which is why i never enabled. every time i kill boss it's diff. today 2nd gron smash happened at 49 seconds, 21 seconds sooner than this timer
-
-local voiceRapidFire		= mod:NewVoice(168398)
-local voiceCannonBarrage	= mod:NewVoice(168929)
 
 mod.vb.flameCast = false
 
@@ -46,13 +41,14 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 168398 then
-		warnRapidFire:Show(args.destName)
 		timerRapidFire:Start(args.destName)
 		timerRapidFireCD:Start()
 		if args:IsPlayer() then
 			specWarnRapidFire:Show()
 			yellRapidFire:Yell()
-			voiceRapidFire:Play("runout")
+			specWarnRapidFire:Play("runout")
+		else
+			warnRapidFire:Show(args.destName)
 		end
 	end
 end
@@ -61,14 +57,13 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 168227 then
 		timerRapidFireCD:Cancel()
-		warnGronSmash:Show()
 		specWarnGronSmash:Show()
+		specWarnGronSmash:Play("carefly")
 --		timerGronSmashCD:Start()
 		self.vb.flameCast = false
 	elseif spellId == 168929 then
-		warnCannonBarrage:Show()
 		specWarnCannonBarrage:Show()
-		voiceCannonBarrage:Play("findshelter")
+		specWarnCannonBarrage:Play("findshelter")
 	elseif spellId == 169129 and not self.vb.flameCast then
 		self.vb.flameCast = true
 		warnBackdraft:Show()
@@ -79,6 +74,7 @@ end
 function mod:UNIT_SPELLCAST_INTERRUPTED(uId, _, _, _, spellId)
 	if spellId == 168929 then
 		specWarnCannonBarrageE:Show()
+		specWarnCannonBarrageE:Play("phasechange")
 	end
 end
 

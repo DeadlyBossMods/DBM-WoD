@@ -34,8 +34,8 @@ local specWarnImmolation			= mod:NewSpecialWarningMove(182074, nil, nil, nil, 1,
 local specWarnBarrage				= mod:NewSpecialWarningCount(185282, nil, nil, nil, 2, 5)--Count probably better than dodge
 local specWarnPounding				= mod:NewSpecialWarningCount(182020, nil, nil, nil, 2, 2)
 local specWarnBlitz					= mod:NewSpecialWarningCount(179889, nil, nil, nil, 2, 2)--Count probably better than dodge
-local specWarnFullCharge			= mod:NewSpecialWarningSpell(182055, nil, nil, nil, 1)
-local specWarnFallingSlam			= mod:NewSpecialWarningSpell(182066, nil, nil, nil, 2)--Phase change
+local specWarnFullCharge			= mod:NewSpecialWarningSpell(182055, nil, nil, nil, 1, 2)--Phase change
+local specWarnFallingSlam			= mod:NewSpecialWarningSpell(182066, nil, nil, nil, 2, 2)--Phase change
 local specWarnFirebomb				= mod:NewSpecialWarningSwitchCount(181999, "-Healer", nil, nil, 1, 5)
 
 --mod:AddTimerLine(ALL)--Uncomment when ground phase and air phase are done, don't want to enable this line now and incorrectly flag everything as "All"
@@ -54,16 +54,8 @@ local timerVolatileBombCD			= mod:NewNextCountTimer(15, 182534, nil, nil, nil, 1
 local berserkTimer					= mod:NewBerserkTimer(514)
 
 local countdownBarrage				= mod:NewCountdown(15, 185282)
-local countdownArtillery			= mod:NewCountdown("AltTwo15", 182108)--Important to have different voice from fades, because they are happening at same time most of time
+local countdownArtillery			= mod:NewCountdown("AltTwo15", 182108)--Important to have different count from fades, because they are happening at same time most of time
 local countdownArtilleryFade		= mod:NewCountdownFades("Alt13", 182280)--Duration not in spell tooltip, countdown add when duration discovered from testing
-
-local voicePhaseChange				= mod:NewVoice(nil, nil, DBM_CORE_AUTO_VOICE2_OPTION_TEXT)
-local voiceArtillery				= mod:NewVoice(182280)--runout
-local voicePounding					= mod:NewVoice(182020)--aesoon
-local voiceBlitz					= mod:NewVoice(179889)--chargemove
-local voiceImmolation				= mod:NewVoice(182074)--runaway
-local voiceBarrage					= mod:NewVoice(185282)--185282
-local voiceFirebomb					= mod:NewVoice(181999)--attbomb
 
 mod:AddRangeFrameOption("8/30")
 mod:AddSetIconOption("SetIconOnArtillery", 182280, true)
@@ -216,7 +208,7 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 179889 then
 		self.vb.blitzCount = self.vb.blitzCount + 1
 		specWarnBlitz:Show(self.vb.blitzCount)
-		voiceBlitz:Play("chargemove")
+		specWarnBlitz:Play("chargemove")
 		local cooldown = blitzTimers[self.vb.blitzCount+1]
 		if cooldown then
 			timerBlitzCD:Start(cooldown, self.vb.blitzCount+1)
@@ -224,12 +216,13 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 182066 or spellId == 186449 then--182066 confirmed on heroic. Mythic uses 186449 (Confirmed)
 		specWarnFallingSlam:Show()
 		updateRangeFrame(self)
-		voicePhaseChange:Play("phasechange")
+		specWarnFallingSlam:Play("phasechange")
+		specWarnFallingSlam:ScheduleVoice(1.5, "watchstep")
 	elseif spellId == 181999 then
 		self.vb.firebombCount = self.vb.firebombCount + 1
 		local count = self.vb.firebombCount
 		specWarnFirebomb:Show(count)
-		voiceFirebomb:Play("attbomb")
+		specWarnFirebomb:Play("attbomb")
 		if self.vb.groundPhase then--Should only happen on mythic
 			self.vb.volatileCount = self.vb.volatileCount + 5
 			if count == 1 then
@@ -260,7 +253,7 @@ function mod:SPELL_CAST_START(args)
 			timerBarrageCD:Start(cooldown, self.vb.barrageCount+1)
 			countdownBarrage:Start(cooldown)
 		end
-		voiceBarrage:Play("185282")
+		specWarnBarrage:Play("185282")
 	elseif spellId == 182055 then
 		self.vb.groundPhase = false
 		self.vb.fuelCount = 0
@@ -279,7 +272,7 @@ function mod:SPELL_CAST_START(args)
 		timerArtilleryCD:Start(9, 1)
 		countdownArtillery:Start(9)
 		timerFallingSlamCD:Start()
-		voicePhaseChange:Play("phasechange")
+		specWarnFullCharge:Play("phasechange")
 	elseif spellId == 182668 then
 		self.vb.fuelCount = self.vb.fuelCount + 1
 		warnFuelStreak:Show(self.vb.fuelCount)
@@ -318,7 +311,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellArtillery:Schedule(8.5, 4)
 			yellArtillery:Schedule(7.5, 5)
 			yellArtillery:Schedule(5.5, 7)
-			voiceArtillery:Schedule(5, "runout")
+			specWarnArtillery:ScheduleVoice(5, "runout")
 			countdownArtilleryFade:Start()
 		end
 		if self.Options.SetIconOnArtillery then
@@ -340,14 +333,14 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 182020 then
 		self.vb.poundingCount = self.vb.poundingCount + 1
 		specWarnPounding:Show(self.vb.poundingCount)
-		voicePounding:Play("aesoon")
+		specWarnPounding:Play("aesoon")
 		local cooldown = poundingTimers[self.vb.poundingCount+1]
 		if cooldown then
 			timerPoundingCD:Start(cooldown, self.vb.poundingCount+1)
 		end
 	elseif spellId == 182074 and args:IsPlayer() and self:AntiSpam(2, 2) then
 		specWarnImmolation:Show()
-		voiceImmolation:Play("runaway")
+		specWarnImmolation:Play("runaway")
 	elseif spellId == 182001 then
 		warnUnstableOrb:CombinedShow(0.3, self.vb.unstableOrbCount, args.destName)
 	end

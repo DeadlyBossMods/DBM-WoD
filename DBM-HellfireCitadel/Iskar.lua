@@ -45,7 +45,7 @@ local warnFelConduit					= mod:NewCastAnnounce(181827, 3, nil, nil, "-Healer")
 local specWarnEyeofAnzu					= mod:NewSpecialWarningYou(179202)
 local specWarnThrowAnzu					= mod:NewSpecialWarning("specWarnThrowAnzu", nil, nil, nil, 1, 5)
 local specWarnFocusedBlast				= mod:NewSpecialWarningCount(181912, nil, nil, nil, 2)
-local specWarnPhantasmalWinds			= mod:NewSpecialWarningYou(181957, nil, nil, nil, 3)
+local specWarnPhantasmalWinds			= mod:NewSpecialWarningYou(181957, nil, nil, nil, 3, 2)
 local specWarnFelChakram				= mod:NewSpecialWarningMoveAway(182178, nil, nil, nil, 1, 2)
 local yellFelChakram					= mod:NewYell(182178)
 local specWarnFelChakramTank			= mod:NewSpecialWarningTaunt(182178, nil, nil, nil, 1, 2)
@@ -57,14 +57,14 @@ local specWarnFelLaserGTFO				= mod:NewSpecialWarningMove(182600, nil, nil, nil,
 local yellFelLaser						= mod:NewYell(182582)
 local specWarnShadowRiposte				= mod:NewSpecialWarningSpell(185345, nil, nil, nil, 3)--Has eye of anzu, they need to know this badly.
 --Adds
-local specWarnPhantasmalCorruption		= mod:NewSpecialWarningYou(181824)--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
+local specWarnPhantasmalCorruption		= mod:NewSpecialWarningYou(181824, nil, nil, nil, 1, 2)--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
 local yellPhantasmalCorruption			= mod:NewYell(181824)--For eye of anzu holder. Explosion shouldn't happen.
-local specWarnPhantasmalFelBomb			= mod:NewSpecialWarningYou(179219)--Not move away on purpose, correct way to handle is get eye of anzu to real fel bomb
+local specWarnPhantasmalFelBomb			= mod:NewSpecialWarningYou(179219, nil, nil, nil, 1, 2)--Not move away on purpose, correct way to handle is get eye of anzu to real fel bomb
 local yellPhantasmalFelBomb				= mod:NewYell(179219, nil, false)--Fake bombs off by default, they will never explode and eye of anzu holder will get distracted
-local specWarnFelBomb					= mod:NewSpecialWarningYou(181753)--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
+local specWarnFelBomb					= mod:NewSpecialWarningYou(181753, nil, nil, nil, 1, 2)--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
 local yellFelBomb						= mod:NewYell(181753)--Yell for real fel bomb on by default only
 local specWarnFelBombDispel				= mod:NewSpecialWarningDispel(181753, nil, nil, nil, 1, 2)--Doesn't need option default, it's filtered by anzu check
-local specWarnDarkBindings				= mod:NewSpecialWarningYou(185510)--Mythic
+local specWarnDarkBindings				= mod:NewSpecialWarningYou(185510, nil, nil, nil, 1, 2)--Mythic
 local specWarnFelConduit				= mod:NewSpecialWarningInterrupt(181827, nil, nil, nil, 1, 2)--On for everyone, filtered by eye of anzu, if this person can't interrupt, then they better pass it to someone who can
 
 local timerFelLaserCD					= mod:NewCDTimer(16, 182582, nil, nil, nil, 3)--16-22. Never pauses, used all phases
@@ -84,13 +84,6 @@ local countdownFelBomb					= mod:NewCountdown("Alt18", 181753)
 local countdownCorruption				= mod:NewCountdown("AltTwo14", 181824, "Tank")
 
 local berserkTimer						= mod:NewBerserkTimer(540)
-
-local voiceFocusedBlast					= mod:NewVoice(181912)--gather
-local voiceFelConduit					= mod:NewVoice(181827)--kickcast
-local voiceFelChakram					= mod:NewVoice(182178)--runout
-local voiceFelLaser						= mod:NewVoice(182582)--runout
-local voiceFelBombDispel				= mod:NewVoice(181753)	--dispel now
-local voiceThrowAnzu					= mod:NewVoice(179202)	--New, 179202,"throw eye to someone with debuff"; 179202h,"throw eye to healer"; 179202m,"throw eye to melee"
 
 mod:AddRangeFrameOption(15)--Both aoes are 15 yards, ref 187991 and 181748
 mod:AddSetIconOption("SetIconOnAnzu", 179202, false)
@@ -220,7 +213,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.focusedBlast = self.vb.focusedBlast + 1
 		specWarnFocusedBlast:Show(self.vb.focusedBlast)
 		if not UnitDebuff("player", corruption) and not UnitDebuff("player", realFelBomb) and not UnitDebuff("player", phantasmalFelBomb) and not UnitDebuff("player", darkBindings) then--Filter debuffs that kill other players
-			voiceFocusedBlast:Play("gather")
+			specWarnFocusedBlast:Play("gather")
 		end
 		timerFocusedBlast:Start()
 	elseif spellId == 181827 or spellId == 187998 then--Both versions of it. I assume the 5 second version is probably LFR/Normal
@@ -229,9 +222,9 @@ function mod:SPELL_CAST_START(args)
 			specWarnFelConduit:Show(args.sourceName)
 			if self:IsHealer() then--It's still on healer that did last dispel, they need to throw to better interruptor, probably tank
 				specWarnThrowAnzu:Show(TANK)
-				voiceThrowAnzu:Play("179202m") --throw to melee (maybe change to throw to tank, in strat i saw, it was best to bounce eye between tank and healer since throwing to tank also made immune to Phantasmal Corruption as added bonus)
+				specWarnThrowAnzu:Play("179202m") --throw to melee (maybe change to throw to tank, in strat i saw, it was best to bounce eye between tank and healer since throwing to tank also made immune to Phantasmal Corruption as added bonus)
 			else
-				voiceFelConduit:Play("kickcast")
+				specWarnFelConduit:Play("kickcast")
 			end
 		else
 			warnFelConduit:Show()
@@ -328,14 +321,14 @@ function mod:SPELL_AURA_APPLIED(args)
 			if self.vb.bombActive then
 				if self:IsHealer() then--Can dispel
 					specWarnFelBombDispel:Show(self.vb.bombActive)
-					voiceFelBombDispel:Play("dispelnow")
+					specWarnFelBombDispel:Play("dispelnow")
 				else--Cannot dispel, get eye to a healer asap!
 					specWarnThrowAnzu:Show(HEALER)
-					voiceThrowAnzu:Play("179202h")
+					specWarnThrowAnzu:Play("179202h")
 				end
 			elseif self.vb.windsTargets > 0 then
 				specWarnThrowAnzu:Show(phantWinds)
-				voiceThrowAnzu:Play("179202")
+				specWarnThrowAnzu:Play("179202")
 			else--No bombs or winds, show generic "eye on you" warning
 				specWarnEyeofAnzu:Show()
 			end
@@ -345,6 +338,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.windsTargets = self.vb.windsTargets + 1
 		if args:IsPlayer() then
 			specWarnPhantasmalWinds:Show()
+			specWarnPhantasmalWinds:Play("keepmove")
 			yellPhantasmalWinds:Yell()
 		end
 		if self.Options.SetIconOnWinds and not self:IsLFR() then
@@ -352,7 +346,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if playerHasAnzu and self:AntiSpam(3, 1) then
 			specWarnThrowAnzu:Show(args.spellName)
-			voiceThrowAnzu:Play("179202")
+			specWarnThrowAnzu:Play("179202")
 		end
 	elseif spellId == 182325 then
 		warnPhantasmalWounds:CombinedShow(1, args.destName)--It goes out kind of slow
@@ -379,11 +373,12 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			updateRangeFrame(self)
 			specWarnPhantasmalCorruption:Show()
+			specWarnPhantasmalCorruption:Play("targetyou")
 			yellPhantasmalCorruption:Yell()
 		else
 			if playerHasAnzu then
 				specWarnThrowAnzu:Show(args.destName)
-				voiceThrowAnzu:Play("179202")
+				specWarnThrowAnzu:Play("179202")
 			end
 		end
 	elseif spellId == 179219 then
@@ -391,6 +386,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			updateRangeFrame(self)
 			specWarnPhantasmalFelBomb:Schedule(0.3)
+			specWarnPhantasmalFelBomb:ScheduleVoice(0.3, "targetyou")
 			yellPhantasmalFelBomb:Schedule(0.3)
 		end
 	elseif spellId == 181753 then
@@ -406,8 +402,10 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			updateRangeFrame(self)
 			specWarnPhantasmalFelBomb:Cancel()
+			specWarnPhantasmalFelBomb:CancelVoice()
 			yellPhantasmalFelBomb:Cancel()
 			specWarnFelBomb:Show()
+			specWarnFelBomb:Play("targetyou")
 			yellFelBomb:Yell()
 			if self.Options.RangeFrame then
 				DBM.RangeCheck:Show(15)
@@ -416,10 +414,10 @@ function mod:SPELL_AURA_APPLIED(args)
 			if playerHasAnzu then
 				if self:IsHealer() then--Can dispel
 					specWarnFelBombDispel:Show(args.destName)
-					voiceFelBombDispel:Play("dispelnow")
+					specWarnFelBombDispel:Play("dispelnow")
 				else--Cannot dispel, get eye to a healer asap!
 					specWarnThrowAnzu:Show(HEALER)
-					voiceThrowAnzu:Play("179202h")
+					specWarnThrowAnzu:Play("179202h")
 				end
 			end
 		end
@@ -430,10 +428,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnDarkBindings:CombinedShow(0.3, args.destName)
 		if args:IsPlayer() then
 			specWarnDarkBindings:Show()
+			specWarnDarkBindings:Play("scatter")
 		end
 		if playerHasAnzu and self:AntiSpam(3, 3) then
 			specWarnThrowAnzu:Show(args.spellName)
-			voiceThrowAnzu:Play("179202")
+			specWarnThrowAnzu:Play("179202")
 		end
 	elseif spellId == 182178 or spellId == 182200 then
 		chakramTargets[#chakramTargets+1] = args.destName
@@ -445,7 +444,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnFelChakram:Show()
-			voiceFelChakram:Play("runout")
+			specWarnFelChakram:Play("runout")
 			yellFelChakram:Yell()
 		end
 		--Check if it's a tank
@@ -453,7 +452,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self:IsTanking(uId, "boss1") and not UnitIsUnit("player", uId) then
 			--It is a tank and we're not tanking. Fire taunt warning
 			specWarnFelChakramTank:Show(args.destName)
-			voiceFelChakram:Play("tauntboss")
+			specWarnFelChakramTank:Play("tauntboss")
 		end
 	end
 end
@@ -497,7 +496,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 182600 and destGUID == UnitGUID("player") and self:AntiSpam(2, 4) then
 		specWarnFelLaserGTFO:Show()
-		voiceFelLaser:Play("runaway")
+		specWarnFelLaserGTFO:Play("runaway")
 	end
 end
 mod.SPELL_PERIODIC_MISSED = mod.SPELL_PERIODIC_DAMAGE
@@ -506,7 +505,7 @@ function mod:RAID_BOSS_WHISPER(msg)
 	if msg:find("spell:182582") then
 		specWarnFelLaser:Show()
 		yellFelLaser:Yell()
-		voiceFelLaser:Play("runout")
+		specWarnFelLaser:Play("runout")
 	end
 end
 

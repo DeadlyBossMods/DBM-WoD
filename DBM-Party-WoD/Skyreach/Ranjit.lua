@@ -17,22 +17,17 @@ mod:RegisterEventsInCombat(
 )
 
 local warnSpinningBlade		= mod:NewSpellAnnounce(153544, 3)
-local warnFourWinds			= mod:NewSpellAnnounce(156793, 4)
 local warnWindFall			= mod:NewSpellAnnounce(153315, 2)
 local warnPiercingRush		= mod:NewTargetAnnounce(165731, 2)--EJ shows tank warning but in my encounter it could target anyone. If this changes I'll tweak the default to tank/healer
 local warnLensFlare			= mod:NewSpellAnnounce(154043, 3)
 
-local specWarnSpinningBlade	= mod:NewSpecialWarningSpell(153544, false, nil, nil, 2)
 local specWarnFourWinds		= mod:NewSpecialWarningSpell(156793, nil, nil, nil, 2, 2)
-local specWarnWindFallMove	= mod:NewSpecialWarningMove(153315)
+local specWarnWindFallMove	= mod:NewSpecialWarningMove(153315, nil, nil, nil, 1, 2)
 local specWarnLensFlare		= mod:NewSpecialWarningSpell(154043, nil, nil, nil, 2)
 local specWarnLensFlareMove	= mod:NewSpecialWarningMove(154043, nil, nil, nil, 1, 2)
 
 local timerFourWinds		= mod:NewBuffActiveTimer(18, 156793)
 local timerFourWindsCD		= mod:NewCDTimer(30, 156793)
-
-local voiceFourWinds		= mod:NewVoice(156793)
-local voiceLensFlare		= mod:NewVoice(154043)
 
 local skyTrashMod = DBM:GetModByName("SkyreachTrash")
 
@@ -48,13 +43,11 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 153544 then
 		warnSpinningBlade:Show()
-		specWarnSpinningBlade:Show()
 	elseif spellId == 156793 then
-		warnFourWinds:Show()
 		specWarnFourWinds:Show()
 		timerFourWinds:Start()
 		timerFourWindsCD:Start()
-		voiceFourWinds:Play("wwsoon")
+		specWarnFourWinds:Play("wwsoon")
 	elseif spellId == 153315 then
 		warnWindFall:Show()
 	end
@@ -74,9 +67,10 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId, _, _, _, overkill)
 	if spellId == 154043 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnLensFlareMove:Show()
-		voiceLensFlare:Play("runaway")
+		specWarnLensFlareMove:Play("runaway")
 	elseif spellId == 153759 and destGUID == UnitGUID("player") and self:AntiSpam(2, 2) then
 		specWarnWindFallMove:Show()
+		specWarnWindFallMove:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE

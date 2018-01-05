@@ -41,11 +41,6 @@ local specWarnFocusedFire			= mod:NewSpecialWarningYou(187110)
 local yellFocusedFire				= mod:NewYell(187110)
 local specWarnMarkofKaz				= mod:NewSpecialWarningYou(189512)
 
-local voiceSeverSoul				= mod:NewVoice(189533, "Tank")--changemt
-local voiceCrowdControl				= mod:NewVoice(189595)--turnaway
-local voiceBloodthirster			= mod:NewVoice("ej11266", "Dps", nil, 2)
-local voiceRendingHowl				= mod:NewVoice(189612, "HasInterrupt")--kickcast
-
 mod:RemoveOption("HealthFrame")
 mod:AddRangeFrameOption(15)
 
@@ -56,10 +51,10 @@ function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 189595 then
 		specWarnCrowdControl:Show()
-		voiceCrowdControl:Play("turnaway")
+		specWarnCrowdControl:Play("turnaway")
 	elseif spellId == 189612 and self:CheckInterruptFilter(args.sourceGUID) and self:AntiSpam(3, 1) then
 		specWarnRendingHowl:Show(args.sourceName)
-		voiceRendingHowl:Play("kickcast")
+		specWarnRendingHowl:Play("kickcast")
 	end
 end
 
@@ -67,11 +62,12 @@ function mod:SPELL_AURA_APPLIED(args)
 	if not self.Options.Enabled then return end
 	local spellId = args.spellId
 	if spellId == 189533 then
-		voiceSeverSoul:Play("changemt")
 		if args:IsPlayer() then
 			specWarnSeverSoul:Show()
+			specWarnSeverSoul:Play("changemt")
 		else
 			specWarnSeverSoulOther:Show(args.destName)
+			specWarnSeverSoulOther:Play("tauntboss")
 		end
 	elseif spellId == 188476 and not args:IsPlayer() and not UnitDebuff("player", args.spellName) then
 		local uId = DBM:GetRaidUnitId(args.destName)
@@ -137,7 +133,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc)
 		local kilroggMod = DBM:GetModByName("1396")
 		if not kilroggMod:IsInCombat() and self:AntiSpam(2, 2) then--Don't activate if kilrogg is engaged
 			specWarnBloodthirster:Show()
-			voiceBloodthirster:Play("ej11266")
+			specWarnBloodthirster:Play("ej11266")
 		end
 	end
 end

@@ -21,9 +21,7 @@ mod:RegisterEventsInCombat(
 local warnCurtainOfFlame			= mod:NewTargetAnnounce(153396, 4)
 local warnFelLash					= mod:NewTargetAnnounce(153234, 3, nil, "Tank|Healer", 2)
 local warnFelStomp					= mod:NewCastAnnounce(157173, 3, nil, nil, "Tank")
-local warnClawsOfArgus				= mod:NewSpellAnnounce(153764, 3)
 local warnSummonFelguard			= mod:NewSpellAnnounce(164081, 3, 56285, "-Healer")
-local warnFelblast					= mod:NewCastAnnounce(154221, 3, nil, nil, "-Healer")--Spammy but still important. May improve by checking if interrupt spells on CD, if are, don't show warning, else, spam warning because interrupt SHOULD be on CD
 local warnFelPool					= mod:NewSpellAnnounce(153616, 1)
 
 local specWarnCurtainOfFlame		= mod:NewSpecialWarningMoveAway(153396, nil, nil, nil, 1, 2)
@@ -35,8 +33,8 @@ local specWarnClawsOfArgus			= mod:NewSpecialWarningSpell(153764, nil, nil, nil,
 local specWarnClawsOfArgusEnd		= mod:NewSpecialWarningEnd(153764, nil, nil, nil, 1, 2)
 local specWarnSummonFelguard		= mod:NewSpecialWarningSwitch(164081, "Tank")
 local specWarnFelblast				= mod:NewSpecialWarningInterrupt(154221, "HasInterrupt", nil, 2, 1, 2)--Very spammy
-local specWarnFelPool				= mod:NewSpecialWarningMove(153616)
-local specWarnFelSpark				= mod:NewSpecialWarningMove(153726)
+local specWarnFelPool				= mod:NewSpecialWarningMove(153616, nil, nil, nil, 1, 2)
+local specWarnFelSpark				= mod:NewSpecialWarningMove(153726, nil, nil, nil, 1, 2)
 
 local timerCurtainOfFlameCD			= mod:NewNextTimer(20, 153396, nil, nil, nil, 3)--20sec cd but can be massively delayed by adds phases
 local timerFelLash					= mod:NewTargetTimer(7.5, 153234, nil, "Tank|Healer", 2, 5)
@@ -45,10 +43,6 @@ local timerClawsOfArgusCD			= mod:NewNextTimer(70, 153764, nil, nil, nil, 6)
 
 local countdownClawsOfArgus			= mod:NewCountdown(70, 153764)
 local countdownCurtainOfFlame		= mod:NewCountdown("Alt20", 153396)
-
-local voiceCurtainOfFlame			= mod:NewVoice(153392)
-local voiceClawsOfArgus				= mod:NewVoice(153764)
-local voiceFelblast					= mod:NewVoice(154221, false)
 
 mod:AddRangeFrameOption(5, 153396)
 
@@ -71,7 +65,7 @@ function mod:OnCombatStart(delay)
 	countdownCurtainOfFlame:Start(16-delay)
 	timerClawsOfArgusCD:Start(34-delay)
 	countdownClawsOfArgus:Start(34-delay)
-	voiceClawsOfArgus:Schedule(27.5-delay, "mobsoon")
+	specWarnClawsOfArgus:ScheduleVoice(27.5-delay, "mobsoon")
 end
 
 function mod:OnCombatEnd()
@@ -99,11 +93,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnCurtainOfFlame:Show()
 			yellWarnCurtainOfFlame:Yell()
-			voiceCurtainOfFlame:Play("runout")
+			specWarnCurtainOfFlame:Play("runout")
 		else
 			if self:CheckNearby(5, targetname) then
 				specWarnCurtainOfFlameNear:Show(targetname)
-				voiceCurtainOfFlame:Play("runaway")
+				specWarnCurtainOfFlameNear:Play("runaway")
 			end
 		end
 		if self.Options.RangeFrame then
@@ -132,26 +126,26 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif spellId == 153764 then--Claws of Argus ending
 		self.vb.flamesCast = 0
 		specWarnClawsOfArgusEnd:Show()
+		specWarnClawsOfArgusEnd:Play("phasechange")
 		timerCurtainOfFlameCD:Start(7)
 		timerClawsOfArgusCD:Start()
 		countdownClawsOfArgus:Start()
-		voiceClawsOfArgus:Schedule(63.5, "mobsoon")
+		specWarnClawsOfArgus:ScheduleVoice(63.5, "mobsoon")
 	end
 end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 153764 then
-		warnClawsOfArgus:Show()
 		specWarnClawsOfArgus:Show()
+		specWarnClawsOfArgus:Play("killmob")
 		timerClawsOfArgus:Start()
 	elseif spellId == 154221 then
-		warnFelblast:Show()
 		specWarnFelblast:Show(args.sourceName)
 		if self:IsTank() then
-			voiceFelblast:Play("kickcast")
+			specWarnFelblast:Play("kickcast")
 		else
-			voiceFelblast:Play("helpkick")
+			specWarnFelblast:Play("helpkick")
 		end
 	elseif spellId == 157173 then
 		warnFelStomp:Show()
@@ -162,8 +156,10 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 153616 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnFelPool:Show()
+		specWarnFelPool:Play("runaway")
 	elseif spellId == 153726 and destGUID == UnitGUID("player") and self:AntiSpam(2, 2) then
 		specWarnFelSpark:Show()
+		specWarnFelSpark:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE

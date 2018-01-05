@@ -15,23 +15,16 @@ mod:RegisterEventsInCombat(
 	"SPELL_ABSORBED 153227"
 )
 
-local warnFieryBoulder			= mod:NewCountAnnounce(153247, 3)
-local warnHeatWave				= mod:NewSpellAnnounce(152940, 3)
+local warnHeatWave				= mod:NewSpellAnnounce(152940, 3, nil, nil, nil, nil, nil, 2)
 local warnBurningSlag			= mod:NewSpellAnnounce(152939, 3)
 
-local specWarnFieryBoulder		= mod:NewSpecialWarningSpell(153247, nil, nil, 2, 2, 2)--Important to everyone
-local specWarnHeatWave			= mod:NewSpecialWarningSpell(152940, false, nil, nil, 2, 2)
-local specWarnBurningSlag		= mod:NewSpecialWarningSpell(152939, false, nil, nil, 2)
+local specWarnFieryBoulder		= mod:NewSpecialWarningCount(153247, nil, nil, 2, 2, 2)--Important to everyone
 local specWarnBurningSlagFire	= mod:NewSpecialWarningMove(152939, nil, nil, nil, 2, 2)
 
 local timerFieryBoulderCD		= mod:NewNextTimer(13.3, 153247, nil, nil, nil, 3)--13.3-13.4 Observed
 local timerHeatWave				= mod:NewBuffActiveTimer(9.5, 152940)
 local timerHeatWaveCD			= mod:NewNextTimer(9.5, 152940, nil, nil, nil, 2)--9.5-9.8 Observed
 local timerBurningSlagCD		= mod:NewNextTimer(10.7, 152939, nil, nil, nil, 3)--10.7-11 Observed
-
-local voiceFieryBoulder			= mod:NewVoice(153247)
-local voiceHeatWave				= mod:NewVoice(152940)
-local voiceBurningSlag			= mod:NewVoice(152939)
 
 mod.vb.boulderCount = 0
 mod.vb.burningSlagCast = false--More robust than using a really huge anti spam, because this will work with recovery, antispam won't
@@ -47,10 +40,9 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 153247 then--Boulder
 		if self.vb.burningSlagCast then self.vb.burningSlagCast = false end
 		self.vb.boulderCount = self.vb.boulderCount + 1
-		warnFieryBoulder:Show(self.vb.boulderCount)
-		specWarnFieryBoulder:Show()
+		specWarnFieryBoulder:Show(self.vb.boulderCount)
 		if self.vb.boulderCount == 1 then
-			voiceFieryBoulder:Play("153247")
+			specWarnFieryBoulder:Play("153247")
 		end
 		if self.vb.boulderCount == 3 then
 			timerHeatWaveCD:Start()
@@ -60,30 +52,28 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 152940 then--Heat Wave
 		warnHeatWave:Show()
-		specWarnHeatWave:Show()
 		timerHeatWave:Start()
 		timerBurningSlagCD:Start()
-		voiceHeatWave:Play("aesoon")
+		warnHeatWave:Play("aesoon")
 	elseif spellId == 152939 and not self.vb.burningSlagCast then--Burning Slag
 		self.vb.burningSlagCast = true
 		warnBurningSlag:Show()
-		specWarnBurningSlag:Show()
 		timerFieryBoulderCD:Start()
-		--voiceBurningSlag:Play("firecircle") not proper voice. disable.
+		--warnBurningSlag:Play("firecircle") not proper voice. disable.
 	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 153227 and args:IsPlayer() and self:AntiSpam(2, 1) then
 		specWarnBurningSlagFire:Show()
-		voiceBurningSlag:Play("runaway")
+		specWarnBurningSlagFire:Play("runaway")
 	end
 end
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 153227 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnBurningSlagFire:Show()
-		voiceBurningSlag:Play("runaway")
+		specWarnBurningSlagFire:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE

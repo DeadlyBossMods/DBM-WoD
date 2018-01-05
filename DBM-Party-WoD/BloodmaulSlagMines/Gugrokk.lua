@@ -16,8 +16,6 @@ mod:RegisterEventsInCombat(
 )
 
 --TODO, Add heroic ability "Flame Buffet"? Seems to just stack up over time and not really need warnings.
-local warnUnstableSlag			= mod:NewSpellAnnounce(150677, 3)
-local warnMagmaEruption			= mod:NewSpellAnnounce(150784, 3)
 local warnMoltenCore			= mod:NewTargetAnnounce(150678, 2)
 
 local specWarnMoltenBlast		= mod:NewSpecialWarningInterrupt(150677, "HasInterrupt", nil, 3, 1, 2)
@@ -31,11 +29,6 @@ local timerUnstableSlagCD		= mod:NewCDTimer(20, 150755, nil, nil, nil, 1)
 
 local countdownUnstableSlag		= mod:NewCountdown(20, 150755)
 
-local voiceMoltenBlast			= mod:NewVoice(150677, "-Healer")
-local voiceUnstableSlag			= mod:NewVoice(150755, "Dps")
-local voiceMagmaEruption		= mod:NewVoice(150784)
-local voiceMoltenCore			= mod:NewVoice(150678, "MagicDispeller")
-
 function mod:OnCombatStart(delay)
 --	timerMagmaEruptionCD:Start(8-delay)--Poor sample size
 	timerUnstableSlagCD:Start(-delay)--Also poor sample size but more likely to be correct.
@@ -47,20 +40,18 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 150677 then
 		specWarnMoltenBlast:Show(args.sourceName)
 		if self:IsTank() then
-			voiceMoltenBlast:Play("kickcast")
+			specWarnMoltenBlast:Play("kickcast")
 		else
-			voiceMoltenBlast:Play("helpkick")
+			specWarnMoltenBlast:Play("helpkick")
 		end
 	elseif spellId == 150784 then
-		warnMagmaEruption:Show()
 		specWarnMagmaEruptionCast:Show()
 		timerMagmaEruptionCD:Start()
 	elseif spellId == 150755 then
-		warnUnstableSlag:Show()
 		specWarnUnstableSlag:Show()
 		timerUnstableSlagCD:Start()
 		countdownUnstableSlag:Start()
-		voiceUnstableSlag:Play("mobkill")
+		specWarnUnstableSlag:Play("mobkill")
 	end
 end
 
@@ -69,17 +60,17 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 150678 and not args:IsDestTypePlayer() then
 		if self.Options.SpecWarn150678dispel then
 			specWarnMoltenCore:Show(args.destName)
+			specWarnMoltenCore:Play("dispelboss")
 		else
 			warnMoltenCore:Show(args.destName)
 		end
-		voiceMoltenCore:Play("dispelboss")
 	end
 end
 
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 150784 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnMagmaEruption:Show()
-		voiceMagmaEruption:Play("runaway")
+		specWarnMagmaEruption:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE

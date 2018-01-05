@@ -21,12 +21,8 @@ mod:RegisterEventsInCombat(
 mod:SetBossHealthInfo(83894, 83892, 83893)
 
 --Timers are too difficult to do, rapidTides messes up any chance of ever having decent timers.
-local warnRevitalizingWaters		= mod:NewSpellAnnounce(168082, 4)
-local warnBriarskin					= mod:NewTargetAnnounce(168041, 3, nil, "MagicDispeller", 2)
-local warnRapidTides				= mod:NewTargetAnnounce(168105, 4)
 local warnGraspingVine				= mod:NewTargetAnnounce(168375, 2)
 local warnSlash						= mod:NewSpellAnnounce(168383, 3, nil, nil, 3)
-local warnNoxious					= mod:NewSpellAnnounce(175997, 3, nil, nil, 2)
 local warnShapersFortitude			= mod:NewTargetAnnounce(168520, 3)
 
 local specWarnRevitalizingWaters	= mod:NewSpecialWarningInterrupt(168082, "HasInterrupt", nil, 2, 1, 2)
@@ -41,11 +37,6 @@ local timerShapersFortitude			= mod:NewTargetTimer(15, 168520, nil, false, 2)
 local timerNoxiousCD				= mod:NewCDTimer(16, 175997, nil, "Melee")
 local timerGraspingVineCD			= mod:NewNextTimer(31.5, 168375)
 
-local voiceRevitalizingWaters		= mod:NewVoice(168082, "HasInterrupt")
-local voiceNoxious					= mod:NewVoice(175997, "Melee")
-local voiceRapidTides				= mod:NewVoice(168105, "MagicDispeller")
-local voiceBramble					= mod:NewVoice(167977)
-
 function mod:GraspingVineTarget(targetname, uId)
 	if not targetname then return end
 	warnGraspingVine:Show(targetname)
@@ -54,12 +45,11 @@ end
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 168082 then
-		warnRevitalizingWaters:Show()
 		specWarnRevitalizingWaters:Show(args.sourceName)
 		if self:IsTank() then
-			voiceRevitalizingWaters:Play("kickcast")
+			specWarnRevitalizingWaters:Play("kickcast")
 		else
-			voiceRevitalizingWaters:Play("helpkick")
+			specWarnRevitalizingWaters:Play("helpkick")
 		end
 	elseif spellId == 168041 then
 		specWarnBriarskin:Show(args.sourceName)
@@ -67,10 +57,9 @@ function mod:SPELL_CAST_START(args)
 		warnSlash:Show()
 		specWarnSlash:Show()
 	elseif spellId == 175997 then
-		warnNoxious:Show()
 		specWarnNoxious:Show()
 		timerNoxiousCD:Start()
-		voiceNoxious:Play("watchstep")
+		specWarnNoxious:Play("justrun")
 	end
 end
 
@@ -84,11 +73,9 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 168105 then
-		warnRapidTides:Show(args.destName)
 		specWarnRapidTidesDispel:Show(args.destName)
-		voiceRapidTides:Play("dispelboss")
+		specWarnRapidTidesDispel:Play("dispelboss")
 	elseif spellId == 168041 then
-		warnBriarskin:Show(args.destName)
 		specWarnBriarskinDispel:Show(args.destName)
 	elseif spellId == 168520 then
 		warnShapersFortitude:Show(args.destName)
@@ -106,7 +93,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 167977 and destGUID == UnitGUID("player") and self:AntiSpam(2, 1) then
 		specWarnBramble:Show()
-		voiceBramble:Play("runaway")
+		specWarnBramble:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE

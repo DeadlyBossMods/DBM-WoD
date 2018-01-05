@@ -63,13 +63,6 @@ local timerCrushingDarkness				= mod:NewCastTimer(6, 180017, nil, false)
 local countdownShadowofDeath			= mod:NewCountdownFades("Alt5", 179864)
 local countdownDigest					= mod:NewCountdown("Alt40", 181295, nil, nil, 8)
 
-local voiceTouchofDoom					= mod:NewVoice(179977)--runout
-local voiceHungerforLife				= mod:NewVoice(180148)--justrun
-local voiceBellowingShout				= mod:NewVoice(181582, "HasInterrupt")--kickcast
-local voiceShadowofDeath				= mod:NewVoice(179864)--teleyou, new voice, teleport into a new phase phase
-local voiceSharedFate					= mod:NewVoice(179909)--linegather, new voice, like Blood-Queen Lana'thel's Pact of the Darkfallen, line gather will be better.
-local voiceBurning						= mod:NewVoice(185189) --changemt
-
 mod:AddSetIconOption("SetIconOnFate", 179909)
 mod:AddSetIconOption("SetIconOnDoom", 179977, false)
 mod:AddHudMapOption("HudMapOnSharedFate", 179909)--Smart hud, distinquishes rooted from non rooted by larger dot/font and lines/arrows
@@ -118,7 +111,7 @@ local function sharedFateDelay(self)
 			local name = sharedFateTargets[i]
 			if name == playerName then
 				specWarnSharedFate:Show(self.vb.rootedFate)
-				voiceSharedFate:Play("linegather")
+				specWarnSharedFate:Play("linegather")
 			end
 			if marker1 and name and DBM:GetRaidUnitId(name) then
 				local marker2 = DBMHudMap:RegisterRangeMarkerOnPartyMember(179908, "party", name, 0.4, 10, nil, nil, nil, 0.5):Appear():SetLabel(name, nil, nil, nil, nil, nil, 0.8, nil, -16, 9, nil)
@@ -193,7 +186,7 @@ function mod:SPELL_CAST_START(args)
 		self:SendSync("FeastOfSouls")
 	elseif spellId == 181582 and self:CheckInterruptFilter(args.sourceGUID) then
 		specWarnBellowingShout:Show(args.sourceName)
-		voiceBellowingShout:Play("kickcast")
+		specWarnBellowingShout:Play("kickcast")
 	elseif spellId == 187814 then
 		warnRagingCharge:Show(args.sourceName)
 	elseif spellId == 181085 then
@@ -222,14 +215,14 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnShadowofDeath:Show(self.vb.shadowOfDeathCount)
 			countdownShadowofDeath:Start()
-			voiceShadowofDeath:Play("teleyou")
+			specWarnShadowofDeath:Play("teleyou")
 		end
 		--Check if it's a tank (todo, maybe just change it to count == 2 to reduce cpu, the tank is pretty much always 2/6
 		local uId = DBM:GetRaidUnitId(args.destName)
 		if self:IsTanking(uId, "boss1") and not UnitIsUnit("player", uId) then
 			--It is a tank and we're not tanking. Fire taunt warning
 			specWarnShadowofDeathTank:Show(args.destName)
-			voiceShadowofDeath:Play("tauntboss")
+			specWarnShadowofDeathTank:Play("tauntboss")
 		end
 	elseif spellId == 179977 or spellId == 189434 then
 		if not playerDown then
@@ -237,7 +230,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() and not self:IsLFR() then
 			specWarnTouchofDoom:Show()
-			voiceTouchofDoom:Play("runout")
+			specWarnTouchofDoom:Play("runout")
 			yellTouchofDoom:Yell()
 		end
 		if self.Options.SetIconOnDoom then
@@ -274,7 +267,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnHungerforLife:CombinedShow(0.5, args.destName)
 		if args:IsPlayer() and self:AntiSpam(5, 2) then
 			specWarnHungerforLife:Show()
-			voiceHungerforLife:Play("justrun")
+			specWarnHungerforLife:Play("justrun")
 		end
 	elseif spellId == 181295 then
 		if args:IsPlayer() then
@@ -295,12 +288,13 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 185189 then
 		local amount = args.amount or 1
 		if (amount >= 4) and self:AntiSpam(3, 5) then
-			voiceBurning:Play("changemt")
 			if args:IsPlayer() then
 				specWarnBurning:Show(amount)
+				specWarnBurning:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
 				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnBurningOther:Show(args.destName)
+					specWarnBurningOther:Play("tauntboss")
 				end
 			end
 		end

@@ -15,8 +15,6 @@ mod:RegisterEventsInCombat(
 
 --TODO, soul vessel is probably wrong now.
 --Even on CM, fights too short to get a good soulvessel timer. Still need better logs
-local warnSoulVessel			= mod:NewSpellAnnounce(155327, 4)
-local warnTornSpirits			= mod:NewSpellAnnounce(153991, 3)
 
 local specWarnSWP				= mod:NewSpecialWarningDispel(154477, "Healer", nil, nil, 1, 2)
 local specWarnSoulVessel		= mod:NewSpecialWarningSpell(155327, nil, nil, nil, 2, 2)
@@ -27,10 +25,6 @@ local timerSoulVessel			= mod:NewBuffActiveTimer(11.5, 155327, nil, nil, nil, 2,
 local timerSoulVesselCD			= mod:NewCDTimer(51.5, 155327, nil, nil, nil, 6)
 local timerTornSpiritsCD		= mod:NewCDTimer(25.5, 153991, nil, nil, nil, 1)
 
-local voiceSWP					= mod:NewVoice(154477, "Healer")
-local voiceSoulVessel			= mod:NewVoice(155327)
-local voiceTornSpirits			= mod:NewVoice(153994)
-
 function mod:OnCombatStart(delay)
 	timerSoulVesselCD:Start(20-delay)
 end
@@ -38,23 +32,22 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args.spellId == 154477 and args:IsDestTypePlayer() and self:CheckDispelFilter() then
 		specWarnSWP:Show(args.destName)
-		voiceSWP:Play("dispelnow")
+		specWarnSWP:Play("dispelnow")
 	end
 end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
 	if spellId == 155327 then
-		warnSoulVessel:Show()
 		specWarnSoulVessel:Show()
 		specWarnSoulVesselEnd:Schedule(11.5)
 		timerSoulVessel:Start()
 		timerTornSpiritsCD:Start()
 		timerSoulVesselCD:Start()
-		voiceSoulVessel:Play("findshadow")
+		specWarnSoulVessel:Play("findshadow")
+		specWarnSoulVesselEnd:ScheduleVoice("safenow")
 	elseif spellId == 153994 then
-		warnTornSpirits:Show()
 		specWarnTornSpirits:Show()
-		voiceTornSpirits:Play("mobsoon")
+		specWarnTornSpirits:Play("mobsoon")
 	end
 end
