@@ -69,7 +69,7 @@ local specWarnHeartoftheMountain= mod:NewSpecialWarningSwitch("ej10808", "Tank")
 local specWarnHeat				= mod:NewSpecialWarningStack(155242, nil, 2, nil, nil, nil, 2)
 local specWarnHeatOther			= mod:NewSpecialWarningTaunt(155242, nil, nil, nil, nil, 2)
 --All
-local specWarnBlast				= mod:NewSpecialWarningSoon(155209, nil, nil, nil, 2)
+local specWarnBlast				= mod:NewSpecialWarningSoon(155209, nil, nil, nil, 2, 2)
 
 mod:AddTimerLine(SCENARIO_STAGE:format(1))
 local timerBomb					= mod:NewBuffFadesTimer(15, 155192)
@@ -727,6 +727,7 @@ do
 				self.vb.blastWarned = true
 				if totalTime > 10 then
 					specWarnBlast:Show()
+					specWarnBlast:Play("aesoon")
 				end
 			elseif bossPower < 5 and self.vb.blastWarned then--Should catch 0, if not, at least 1-4 will fire it but then timer may be a second or so off
 				self.vb.blastWarned = false

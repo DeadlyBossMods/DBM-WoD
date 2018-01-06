@@ -34,7 +34,7 @@ local specWarnGraspingEarth			= mod:NewSpecialWarningMoveTo(157060, nil, DBM_COR
 local specWarnThunderingBlows		= mod:NewSpecialWarningSpell(157054, nil, nil, nil, 3)
 local specWarnRipplingSmash			= mod:NewSpecialWarningDodge(157592, nil, nil, nil, 2, 2)
 local specWarnStoneBreath			= mod:NewSpecialWarningCount(156852, nil, nil, nil, 2, 2)
-local specWarnSlam					= mod:NewSpecialWarningSpell(156704, "Tank")
+local specWarnSlam					= mod:NewSpecialWarningDefensive(156704, "Tank", nil, nil, 1, 2)
 local specWarnWarpedArmor			= mod:NewSpecialWarningStack(156766, nil, 2)
 local specWarnWarpedArmorOther		= mod:NewSpecialWarningTaunt(156766)
 local specWarnTremblingEarth		= mod:NewSpecialWarningCount(173917, nil, nil, nil, 2)
@@ -122,6 +122,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnRipplingSmash:Play("shockwave")
 	elseif spellId == 156704 then
 		specWarnSlam:Show()
+		specWarnSlam:Play("defensive")
 		timerSlamCD:Start()
 	elseif spellId == 158217 then--Probably not in combat log, it's scripted. Probably needs a UNIT_SPELLCAST event
 		self.vb.mountainCast = self.vb.mountainCast + 1

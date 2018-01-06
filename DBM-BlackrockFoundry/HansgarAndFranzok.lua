@@ -19,16 +19,16 @@ mod:RegisterEventsInCombat(
 local warnSkullcracker					= mod:NewSpellAnnounce(153470, 3, nil, false)--This seems pretty worthless.
 local warnJumpSlam						= mod:NewTargetCountAnnounce("ej9854", 3)--Find pretty icon
 
-local specWarnJumpSlam					= mod:NewSpecialWarningYou("ej9854")
-local specWarnJumpSlamNear				= mod:NewSpecialWarningClose("ej9854")
+local specWarnJumpSlam					= mod:NewSpecialWarningYou("ej9854", nil, nil, nil, 1, 2)
+local specWarnJumpSlamNear				= mod:NewSpecialWarningClose("ej9854", nil, nil, nil, 1, 2)
 local yellJumpSlam						= mod:NewYell("ej9854")
 local specWarnDisruptingRoar			= mod:NewSpecialWarningCast(160838, "SpellCaster", nil, 2, nil, 2)
 --Move specWarnCripplingSupplex to a health check, warn when near 85, 55, or 25%
 local specWarnCripplingSupplex			= mod:NewSpecialWarningPreWarn(156938, "Tank|Healer", 3, nil, 3, 3)--pop a cooldown.
-local specWarnSearingPlates				= mod:NewSpecialWarningSpell(161570, nil, nil, nil, 2)
-local specWarnStampers					= mod:NewSpecialWarningSpell(174825, nil, nil, nil, 2)
-local specWarnSearingPlatesEnd			= mod:NewSpecialWarningEnd(161570, nil, nil, nil, nil, 2)
-local specWarnStampersEnd				= mod:NewSpecialWarningEnd(174825, nil, nil, nil, nil, 2)
+local specWarnSearingPlates				= mod:NewSpecialWarningSpell(161570, nil, nil, nil, 2, 2)
+local specWarnStampers					= mod:NewSpecialWarningSpell(174825, nil, nil, nil, 2, 2)
+local specWarnSearingPlatesEnd			= mod:NewSpecialWarningEnd(161570, nil, nil, nil, 1, 2)
+local specWarnStampersEnd				= mod:NewSpecialWarningEnd(174825, nil, nil, nil, 1, 2)
 
 local timerDisruptingRoar				= mod:NewCastTimer(2.5, 160838, nil, "SpellCaster")
 local timerDisruptingRoarCD				= mod:NewCDTimer(45, 160838, nil, "SpellCaster")
@@ -55,9 +55,11 @@ function mod:JumpTarget(targetname, uId)
 	self.vb.jumpCount = self.vb.jumpCount + 1
 	if targetname == UnitName("player") then
 		specWarnJumpSlam:Show()
+		specWarnJumpSlam:Play("targetyou")
 		yellJumpSlam:Yell()
 	elseif self:CheckNearby(12, targetname) then--Near warning disabled on mythic, mythic mechanic requires being near it on purpose. Plus raid always stacked
 		specWarnJumpSlamNear:Show(targetname)
+		specWarnJumpSlamNear:Play("runaway")
 	else
 		warnJumpSlam:Show(self.vb.jumpCount, targetname)--No reason to show this if you got a special warning. so reduce spam and display this only to let you know jump is far away and you're safe
 	end
