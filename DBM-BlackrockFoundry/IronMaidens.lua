@@ -72,22 +72,22 @@ local specWarnCorruptedBlood			= mod:NewSpecialWarningMove(158683)
 ----Admiral Gar'an
 local specWarnRapidFire					= mod:NewSpecialWarningRun(156631, nil, nil, nil, 4, 2)
 local yellRapidFire						= mod:NewYell(156631)
-local specWarnRapidFireNear				= mod:NewSpecialWarningClose(156631, false)
-local specWarnPenetratingShot			= mod:NewSpecialWarningYou(164271, nil, nil, nil, nil, 2)
+local specWarnRapidFireNear				= mod:NewSpecialWarningClose(156631, false, nil, nil, 1, 2)
+local specWarnPenetratingShot			= mod:NewSpecialWarningYou(164271, nil, nil, nil, 1, 2)
 local specWarnPenetratingShotOther		= mod:NewSpecialWarningTargetCount(164271, false)
 local yellPenetratingShot				= mod:NewYell(164271)
 local specWarnDeployTurret				= mod:NewSpecialWarningSwitch(158599, "RangedDps", nil, 3, 3, 2)--Switch warning since most need to switch and kill, but on for EVERYONE because tanks/healers need to avoid it while it's up
 ----Enforcer Sorka
-local specWarnBladeDash					= mod:NewSpecialWarningYou(155794)
-local specWarnBladeDashOther			= mod:NewSpecialWarningClose(155794)
-local specWarnConvulsiveShadows			= mod:NewSpecialWarningMoveAway(156214, nil, nil, nil, nil, 2)--Does this still drop lingering shadows, if not moveaway is not appropriate
+local specWarnBladeDash					= mod:NewSpecialWarningYou(155794, nil, nil, nil, 1, 2)
+local specWarnBladeDashOther			= mod:NewSpecialWarningClose(155794, nil, nil, nil, 1, 2)
+local specWarnConvulsiveShadows			= mod:NewSpecialWarningMoveAway(156214, nil, nil, nil, 1, 2)--Does this still drop lingering shadows, if not moveaway is not appropriate
 local specWarnConvulsiveShadowsOther	= mod:NewSpecialWarningTargetCount(156214, false)
 local yellConvulsiveShadows				= mod:NewYell(156214, nil, false)
-local specWarnDarkHunt					= mod:NewSpecialWarningYou(158315, nil, nil, nil, nil, 2)
+local specWarnDarkHunt					= mod:NewSpecialWarningYou(158315, nil, nil, nil, 1, 2)
 local specWarnDarkHuntOther				= mod:NewSpecialWarningTarget(158315, false)--Healer may want this, or raid leader
 ----Marak the Blooded
-local specWarnBloodRitual				= mod:NewSpecialWarningYou(158078)
-local specWarnBloodRitualOther			= mod:NewSpecialWarningTargetCount(158078, "Tank")
+local specWarnBloodRitual				= mod:NewSpecialWarningYou(158078, nil, nil, nil, 1, 2)
+local specWarnBloodRitualOther			= mod:NewSpecialWarningTargetCount(158078, "Tank", nil, nil, 1, 2)
 local yellBloodRitual					= mod:NewYell(158078)
 local specWarnBloodsoakedHeartseeker	= mod:NewSpecialWarningRun(158010, nil, nil, nil, 4, 2)
 local yellHeartseeker					= mod:NewYell(158010, nil, false)
@@ -107,7 +107,7 @@ local timerDeployTurretCD				= mod:NewCDCountTimer(20.2, 158599, nil, nil, nil, 
 ----Enforcer Sorka
 mod:AddTimerLine(Sorka)
 local timerBladeDashCD					= mod:NewCDCountTimer(20, 155794, nil, "Ranged|Tank", nil, 5, nil, DBM_CORE_TANK_ICON)
-local timerConvulsiveShadowsCD			= mod:NewNextCountTimer(56, 156214, nil, nil, nil, 3)--Timer only enabled on mythicOn non mythic, it's just an unimportant dot. On mythic, MUCH more important because user has to run out of raid and get dispelled.
+local timerConvulsiveShadowsCD			= mod:NewNextCountTimer(55.6, 156214, nil, nil, nil, 3)--Timer only enabled on mythic, On non mythic, it's just an unimportant dot. On mythic, MUCH more important because user has to run out of raid and get dispelled.
 ----Marak the Blooded
 mod:AddTimerLine(Marak)
 local timerBloodRitualCD				= mod:NewCDCountTimer(20, 158078, nil, nil, nil, 5, nil, DBM_CORE_TANK_ICON)
@@ -194,8 +194,10 @@ function mod:BladeDashTarget(targetname, uId)
 		if targetname == UnitName("player") then
 			if UnitDebuff("player", preyDebuff) and self.Options.filterBladeDash3 then return end
 			specWarnBladeDash:Show()
+			specWarnBladeDash:Play("targetyou")
 		elseif self:CheckNearby(8, targetname) then
 			specWarnBladeDashOther:Show(targetname)
+			specWarnBladeDashOther:Play("runaway")
 		else
 			warnBladeDash:Show(self.vb.bladeDash, targetname)
 		end
@@ -391,10 +393,11 @@ function mod:SPELL_AURA_APPLIED(args)
 			else
 				if self.Options.SpecWarn158078targetcount then
 					specWarnBloodRitualOther:Show(self.vb.bloodRitual, args.destName)
+					specWarnBloodRitualOther:Play("helpsoak")
 				else
 					warnBloodRitual:Show(self.vb.bloodRitual, args.destName)
 				end
-				specWarnBloodRitualOther:Play("farfromline")--Good sound fit for everyone ELSE
+				specWarnBloodRitual:Play("farfromline")--Good sound fit for everyone ELSE
 			end
 		end
 	elseif spellId == 156631 then
@@ -405,6 +408,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if (noFilter or not isPlayerOnBoat()) then
 				if self:CheckNearby(5, args.destName) and self.Options.SpecWarn156631close then
 					specWarnRapidFireNear:Show(args.destName)
+					specWarnRapidFireNear:Play("runaway")
 				else
 					warnRapidFire:Show(self.vb.rapidfire, args.destName)
 				end
@@ -588,6 +592,7 @@ function mod:CHAT_MSG_ADDON(prefix, msg, channel, targetName)
 			if DBM.Options.DontShowFarWarnings and isPlayerOnBoat() then return end--Anything below this line doesn't concern people on boat
 			if self:CheckNearby(5, targetName) and self.Options.SpecWarn156631close then
 				specWarnRapidFireNear:Show(targetName)
+				specWarnRapidFireNear:Play("runaway")
 			else
 				warnRapidFire:Show(self.vb.rapidfire, targetName)
 			end
