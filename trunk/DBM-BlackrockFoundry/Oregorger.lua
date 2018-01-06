@@ -28,7 +28,7 @@ local warnCollectOre				= mod:NewCountAnnounce(165184, 2)
 local warnRollingFury				= mod:NewCountAnnounce(155898, 3, nil, false)
 
 local specWarnBlackrockBarrage		= mod:NewSpecialWarningInterruptCount(156877, false, nil, nil, nil, 3)--Off by default since only interruptors want this on for their duty
-local specWarnAcidTorrent			= mod:NewSpecialWarningCount(156240, "Tank", nil, nil, 3)--No voice filter, because voice is for tank swap that comes AFTER breath, this warning is to alert tank they need to move into position to soak breath, NOT taunt
+local specWarnAcidTorrent			= mod:NewSpecialWarningCount(156240, "Tank", nil, nil, 3, 2)--No voice filter, because voice is for tank swap that comes AFTER breath, this warning is to alert tank they need to move into position to soak breath, NOT taunt
 local yellRetchedBlackrock			= mod:NewYell(156179)
 local specWarnRetchedBlackrockNear	= mod:NewSpecialWarningClose(156179)
 local specWarnRetchedBlackrock		= mod:NewSpecialWarningMove(156203, nil, nil, nil, nil, 2)
@@ -87,12 +87,13 @@ function mod:SPELL_CAST_START(args)
 		self.vb.torrentCount = self.vb.torrentCount + 1
 		if self.Options.SpecWarn156240count then
 			specWarnAcidTorrent:Show(self.vb.torrentCount)
+			specWarnAcidTorrent:Play("defensive")
 		else
 			warnAcidTorrent:Show(self.vb.torrentCount)
 		end
 		timerAcidTorrentCD:Start(nil, self.vb.torrentCount+1)
 		countdownAcidTorrent:Start()
-		specWarnAcidTorrent:Schedule(3, "changemt")
+		specWarnAcidTorrent:ScheduleVoice(3, "changemt")
 	elseif spellId == 156179 then
 		self:ScheduleMethod(0.1, "BossTargetScanner", 77182, "RetchedBlackrockTarget", 0.04, 16)--give 0.1 delay before scan start.
 		timerRetchedBlackrockCD:Start()

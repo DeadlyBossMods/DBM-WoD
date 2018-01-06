@@ -28,13 +28,13 @@ local warnTrain						= mod:NewTargetCountAnnounce(176312, 4, nil, nil, nil, nil,
 local warnDelayedSiegeBomb			= mod:NewTargetAnnounce(159481, 3)
 
 --Operator Thogar
-local specWarnProtoGrenade			= mod:NewSpecialWarningMove(165195, nil, nil, nil, nil, 2)
-local specWarnProtoGrenadeNear		= mod:NewSpecialWarningClose(165195)
+local specWarnProtoGrenade			= mod:NewSpecialWarningMove(165195, nil, nil, nil, 1, 2)
+local specWarnProtoGrenadeNear		= mod:NewSpecialWarningClose(165195, nil, nil, nil, 1, 2)
 local yellProtoGrenade				= mod:NewYell(165195)
-local specWarnEnkindle				= mod:NewSpecialWarningStack(155921, nil, 2)--Maybe need 3 for new cd?
-local specWarnEnkindleOther			= mod:NewSpecialWarningTaunt(155921)
-local specWarnTrain					= mod:NewSpecialWarningDodge(176312, nil, nil, nil, 3)
-local specWarnSplitSoon				= mod:NewSpecialWarning("specWarnSplitSoon")--TODO, maybe include types in the split?
+local specWarnEnkindle				= mod:NewSpecialWarningStack(155921, nil, 2, nil, nil, 1, 6)--Maybe need 3 for new cd?
+local specWarnEnkindleOther			= mod:NewSpecialWarningTaunt(155921, nil, nil, nil, 1, 2)
+local specWarnTrain					= mod:NewSpecialWarningDodge(176312, nil, nil, nil, 3, 2)
+local specWarnSplitSoon				= mod:NewSpecialWarning("specWarnSplitSoon", nil, nil, nil, 1, 2)--TODO, maybe include types in the split?
 --Adds
 local specWarnCauterizingBolt		= mod:NewSpecialWarningInterrupt(160140, "-Healer", nil, 2)
 local specWarnCauterizingBoltDispel	= mod:NewSpecialWarningDispel(160140, "MagicDispeller")
@@ -379,6 +379,7 @@ local function laneCheck(self)
 	local playerLane = lanePos(self)
 	if TrainTable[train] and TrainTable[train][playerLane] then
 		specWarnTrain:Show()
+		specWarnTrain:Play("chargemove")
 	end
 end
 
@@ -551,6 +552,7 @@ function mod:GrenadeTarget(targetname, uId)
 		end
 	elseif self:CheckNearby(5, targetname) then
 		specWarnProtoGrenadeNear:Show(targetname)
+		specWarnProtoGrenadeNear:Play("runaway")
 	else
 		warnProtoGrenade:Show(targetname)
 	end
@@ -626,6 +628,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if amount >= 2 then
 			if args:IsPlayer() then
 				specWarnEnkindle:Show(amount)
+				specWarnEnkindle:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
 				local _, _, _, _, _, duration, expires = UnitDebuff("player", args.spellName)
 				local debuffTime = 0
@@ -634,6 +637,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				end
 				if debuffTime < 12 and not UnitIsDeadOrGhost("player") then--No debuff, or debuff will expire before next cast.
 					specWarnEnkindleOther:Show(args.destName)
+					specWarnEnkindleOther:Play("tauntboss")
 				else
 					warnEnkindle:Show(args.destName, amount)
 				end
@@ -723,6 +727,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 				elseif count == 20 then
 					specWarnSplitSoon:Cancel()
 					specWarnSplitSoon:Schedule(5-fakeAdjust)
+					specWarnSplitSoon:ScheduleVoice(5-fakeAdjust, "mobsoon")
 					self:Schedule(7, showHud, self, count)
 				end
 			elseif count == 4 or count == 15 or count == 18 or count == 19  or count == 21 or count == 27 or count == 28 then
@@ -744,7 +749,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 			elseif count == 9 then
 				expectedTime = 35
 				specWarnSplitSoon:Cancel()
+				specWarnSplitSoon:CancelVoice()
 				specWarnSplitSoon:Schedule(25)--10 is a split, pre warn 10 seconds before 10
+				specWarnSplitSoon:ScheduleVoice(25, "mobsoon")
 				self:Schedule(30-fakeAdjust, showHud, self, count)--hud marker 5 seconds before split. later you move the better the bomb placements.
 			end
 			if expectedTime then
@@ -779,7 +786,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 				expectedTime = 15
 				if not self:IsLFR() and count == 8 then
 					specWarnSplitSoon:Cancel()
+					specWarnSplitSoon:CancelVoice()
 					specWarnSplitSoon:Schedule(5)
+					specWarnSplitSoon:ScheduleVoice(5, "mobsoon")
 				end
 			elseif count == 13 or count == 17 or count == 24 or count == 28 then
 				expectedTime = 20
@@ -789,7 +798,9 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 				expectedTime = 30
 				if not self:IsLFR() and count == 22 then
 					specWarnSplitSoon:Cancel()
+					specWarnSplitSoon:CancelVoice()
 					specWarnSplitSoon:Schedule(20)
+					specWarnSplitSoon:ScheduleVoice(20, "mobsoon")
 				end
 			elseif count == 9 then
 				expectedTime = 40
