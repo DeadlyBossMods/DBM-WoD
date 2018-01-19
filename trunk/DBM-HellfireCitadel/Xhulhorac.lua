@@ -117,7 +117,7 @@ local UnitExists, UnitGUID, UnitDetailedThreatSituation = UnitExists, UnitGUID, 
 local AddsSeen = {}
 
 local debuffFilter
-local debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:etSpellInfo(186134)
+local debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:GetSpellInfo(186134)
 local UnitDebuff = UnitDebuff
 do
 	debuffFilter = function(uId)
@@ -200,7 +200,7 @@ function mod:EmpoweredFelChains(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:etSpellInfo(186134)
+	debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:GetSpellInfo(186134)
 	self.vb.EmpFelChainCount = 0
 	self.vb.phase = 1
 	self.vb.impCount = 0
