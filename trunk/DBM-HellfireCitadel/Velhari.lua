@@ -108,7 +108,7 @@ mod.vb.interruptCount = 0
 local AncientEnforcer = DBM:EJ_GetSectionInfo(11155)
 local AncientHarbinger = DBM:EJ_GetSectionInfo(11163)
 local AncientSovereign = DBM:EJ_GetSectionInfo(11170)
-local TyrantVelhari = DBM:EJ_GetSectionInfo(1394)
+local TyrantVelhari = EJ_GetEncounterInfo(1394)
 
 local debuffFilter, debuffFilter2
 local UnitDebuff = UnitDebuff
