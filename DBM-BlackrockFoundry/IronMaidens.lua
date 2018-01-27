@@ -28,8 +28,6 @@ mod:RegisterEventsInCombat(
 	"UNIT_POWER_FREQUENT boss1 boss2 boss3"
 )
 
-mod:SetBossHealthInfo(77557, 77231, 77477)
-
 local Ship	= DBM:EJ_GetSectionInfo(10019)
 local Marak = DBM:EJ_GetSectionInfo(10033)
 local Sorka = DBM:EJ_GetSectionInfo(10030)

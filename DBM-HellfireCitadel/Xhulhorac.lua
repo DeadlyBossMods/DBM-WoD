@@ -466,15 +466,9 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 					timerFelChainsCD:Start(12)
 				end
 				timerFelBlazeFlurryCD:Start(5.5)
-				if DBM.BossHealth:IsShown() then
-					DBM.BossHealth:AddBoss(cid, UnitName(uId))
-				end
 			elseif cid == 94239 then--Omnus
 				timerWitheringGazeCD:Start(4)
 				timerBlackHoleCD:Start(18, 1)
-				if DBM.BossHealth:IsShown() then
-					DBM.BossHealth:AddBoss(cid, UnitName(uId))
-				end
 			end
 		end
 	end
@@ -493,9 +487,6 @@ function mod:UNIT_DIED(args)
 				playerTanking = 0--Vanguard died, set player tanking to 0
 			end
 		end
-		if DBM.BossHealth:IsShown() then
-			DBM.BossHealth:RemoveBoss(cid)
-		end
 	elseif cid == 94239 then--Omnus
 		self.vb.bothDead = self.vb.bothDead + 1
 		timerWitheringGazeCD:Stop()
@@ -506,9 +497,6 @@ function mod:UNIT_DIED(args)
 			if playerTanking == 2 then
 				playerTanking = 0--Omnus died, set player tanking to 0
 			end
-		end
-		if DBM.BossHealth:IsShown() then
-			DBM.BossHealth:RemoveBoss(cid)
 		end
 	elseif cid == 94231 then--Imps
 		self.vb.impActive = self.vb.impActive - 1

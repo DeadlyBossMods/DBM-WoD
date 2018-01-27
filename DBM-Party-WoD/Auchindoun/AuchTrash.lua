@@ -20,8 +20,6 @@ local specWarnVoidMending			= mod:NewSpecialWarningInterrupt(154623)
 local specWarnFelStomp				= mod:NewSpecialWarningDodge(157173, "Tank")
 local specWarnArbitersHammer		= mod:NewSpecialWarningInterrupt(157797)
 
-mod:RemoveOption("HealthFrame")
-
 local isTrivial = mod:IsTrivial(110)
 
 function mod:SPELL_CAST_START(args)

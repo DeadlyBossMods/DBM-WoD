@@ -34,9 +34,6 @@ mod.vb.flameCast = false
 function mod:OnCombatStart(delay)
 	self.vb.flameCast = false
 	timerGronSmashCD:Start(30-delay)
-	if DBM.BossHealth:IsShown() then
-		DBM.BossHealth:AddBoss(83613)
-	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -79,14 +76,9 @@ function mod:UNIT_SPELLCAST_INTERRUPTED(uId, _, _, _, spellId)
 end
 
 function mod:UNIT_DIED(args)
-	if not DBM.BossHealth:IsShown() then return end
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 83613 then
 		timerRapidFireCD:Cancel()
 		timerRapidFire:Cancel()
-		DBM.BossHealth:RemoveBoss(83613)
-		DBM.BossHealth:AddBoss(83616)
-	elseif cid == 83616 then
-		DBM.BossHealth:RemoveBoss(83616)
 	end
 end

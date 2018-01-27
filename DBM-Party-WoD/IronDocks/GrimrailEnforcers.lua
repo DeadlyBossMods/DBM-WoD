@@ -17,8 +17,6 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED boss1 boss2 boss3"
 )
 
-mod:SetBossHealthInfo(80816, 80805, 80808)
-
 local warnOgreTraps				= mod:NewCastAnnounce(163390, 3)
 
 local specWarnSanguineSphere	= mod:NewSpecialWarningReflect(163689, "-Healer", nil, 2, 1, 2)

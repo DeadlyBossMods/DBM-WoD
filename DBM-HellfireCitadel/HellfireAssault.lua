@@ -22,8 +22,6 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED"--Have to register all unit ids to catch the boss when she casts haste
 )
 
-mod:SetBossHealthInfo(90019, 94515)
-
 --ability.id = 180927 and type = "applybuff" or overkill > 0 and target.name in ("Felfire Crusher", "Felfire Artillery", "Felfire Demolisher", "Felfire Flamebelcher")
 --Siegemaster Mar'tak
 local warnHowlingAxe				= mod:NewTargetAnnounce(184369, 3)
@@ -375,9 +373,6 @@ end
 function mod:OnSync(msg)
 	if not self:IsInCombat() then return end
 	if msg == "BossLeaving" and self:AntiSpam(20, 5) then
-		if DBM.BossHealth:IsShown() then
-			DBM.BossHealth:RemoveBoss(94515)
-		end
 		timerHowlingAxeCD:Stop()
 		countdownHowlingAxe:Cancel()
 		timerShockwaveCD:Stop()

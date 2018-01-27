@@ -41,7 +41,6 @@ local specWarnFocusedFire			= mod:NewSpecialWarningYou(187110)
 local yellFocusedFire				= mod:NewYell(187110)
 local specWarnMarkofKaz				= mod:NewSpecialWarningYou(189512)
 
-mod:RemoveOption("HealthFrame")
 mod:AddRangeFrameOption(15)
 
 local Bloodthirster = DBM:EJ_GetSectionInfo(11266)

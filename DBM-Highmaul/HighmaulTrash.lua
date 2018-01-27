@@ -25,7 +25,6 @@ local specWarnArcaneVol				= mod:NewSpecialWarningMoveAway(166200)
 local yellArcaneVol					= mod:NewYell(166200)
 local specWarnWildFlames			= mod:NewSpecialWarningMove(173827)
 
-mod:RemoveOption("HealthFrame")
 mod:AddRangeFrameOption(8, 166200)
 
 local debuff = DBM:GetSpellInfo(166200)

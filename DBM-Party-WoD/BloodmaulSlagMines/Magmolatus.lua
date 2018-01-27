@@ -7,16 +7,13 @@ mod:SetEncounterID(1655)
 mod:SetMainBossID(74475)
 mod:SetZone()
 
-mod:SetBossHealthInfo(74366)
-
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 149997 149975 150032",
 	"SPELL_CAST_START 149941 150038 150023",
 	"SPELL_PERIODIC_DAMAGE 150011",
-	"SPELL_ABSORBED 150011",
-	"UNIT_DIED"
+	"SPELL_ABSORBED 150011"
 )
 
 local warnDancingFlames			= mod:NewTargetAnnounce(149975, 3, nil, "Healer")
@@ -59,22 +56,13 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 			if cid == 74570 then--Ruination
 				specWarnRuination:Show()
 				specWarnRuination:Play("mobsoon")
-				if DBM.BossHealth:IsShown() then
-					DBM.BossHealth:AddBoss(74570)
-				end
 			elseif cid == 74571 then--Calamity
 				specWarnCalamity:Show()
 				specWarnCalamity:Play("mobsoon")
-				if DBM.BossHealth:IsShown() then
-					DBM.BossHealth:AddBoss(74571)
-				end
 			elseif cid == 74475 then--Magmolatus
 				specWarnMagmolatus:Show()
 				specWarnMagmolatus:Play("bigmob")
 				timerMoltenImpactCD:Start(5)
-				if DBM.BossHealth:IsShown() then
-					DBM.BossHealth:AddBoss(74475)
-				end
 			end
 		end
 	end
@@ -122,15 +110,3 @@ function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
-
-function mod:UNIT_DIED(args)
-	if not DBM.BossHealth:IsShown() then return end
-	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 74366 then
-		DBM.BossHealth:RemoveBoss(74366)
-	elseif cid == 74570 then
-		DBM.BossHealth:RemoveBoss(74570)
-	elseif cid == 74571 then
-		DBM.BossHealth:RemoveBoss(74571)
-	end
-end

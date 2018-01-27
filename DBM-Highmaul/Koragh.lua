@@ -137,9 +137,6 @@ function mod:OnCombatStart(delay)
 	if self:IsMythic() then
 		timerExpelMagicFelCD:Start(5-delay)
 	end
-	if DBM.BossHealth:IsShown() then--maybe need another option
-		DBM.BossHealth:AddBoss(function() return UnitPower("boss1", 10) end, barName)--Null Barrier health bar
-	end
 end
 
 function mod:OnCombatEnd()

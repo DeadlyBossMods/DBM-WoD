@@ -348,19 +348,6 @@ function mod:OnCombatStart(delay)
 		countdownEngineer:Start(firstTimer)
 		berserkTimer:Start(-delay)
 	end
-	if DBM.BossHealth:IsShown() then
-		DBM.BossHealth:Clear()
-		self:Schedule(1, function()
-			for i = 1, 5 do
-				local uid = "boss"..i
-				local guid = UnitGUID(uid)
-				local cid = self:GetCIDFromGUID(guid)
-				if cid == 76808 then
-					DBM.BossHealth:AddBoss(guid)
-				end
-			end
-		end)
-	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Show(3, "function", updateInfoFrame1)
 	end
@@ -625,10 +612,6 @@ function mod:UNIT_DIED(args)
 			specWarnHeartoftheMountain:Show()
 			warnPhase3:Play("pthree")
 			updateRangeFrame(self)
-			if DBM.BossHealth:IsShown() then
-				DBM.BossHealth:Clear()
-				DBM.BossHealth:AddBoss(76806)
-			end
 			if self.Options.InfoFrame then
 				DBM.InfoFrame:Hide()
 			end
@@ -660,9 +643,6 @@ function mod:UNIT_DIED(args)
 				self:Schedule(76, FireCaller, self)
 				timerFireCaller:Start(76, 1)
 			end
-			if DBM.BossHealth:IsShown() then
-				DBM.BossHealth:Clear()
-			end
 			self:RegisterShortTermEvents(
 				"INSTANCE_ENCOUNTER_ENGAGE_UNIT"
 			)
@@ -680,7 +660,6 @@ function mod:UNIT_DIED(args)
 end
 
 function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
-	if not DBM.BossHealth:IsShown() then return end
 	for i = 1, 5 do
 		local unitID = "boss"..i
 		local unitGUID = UnitGUID(unitID)
@@ -688,7 +667,6 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 		if self.vb.phase == 2 and cid == 76815 and UnitExists(unitID) and not activePrimalGUIDS[unitGUID] then
 			activePrimal = activePrimal + 1
 			activePrimalGUIDS[unitGUID] = true
-			DBM.BossHealth:AddBoss(unitGUID)
 		end
 	end
 end

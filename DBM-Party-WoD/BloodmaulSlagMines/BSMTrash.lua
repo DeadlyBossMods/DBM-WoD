@@ -22,8 +22,6 @@ local specWarnBloodRage					= mod:NewSpecialWarningDispel(151548, "MagicDispelle
 local specWarnSubjugate					= mod:NewSpecialWarningDispel(151697, "Healer")
 local specWarnSlaversRage				= mod:NewSpecialWarningDispel(151965, "RemoveEnrage")
 
-mod:RemoveOption("HealthFrame")
-
 local isTrivial = mod:IsTrivial(110)
 
 local UnitExists, UnitGUID, UnitAffectingCombat = UnitExists, UnitGUID, UnitAffectingCombat

@@ -16,8 +16,6 @@ local specWarnSolarDetonation		= mod:NewSpecialWarningMoveAway(160288, nil, nil,
 
 mod:AddRangeFrameOption(3, 160288)--Range guessed. Maybe 5. one tooltip says 1.5 but it def seemed bigger then that. closer to 3-5
 
-mod:RemoveOption("HealthFrame")
-
 local isTrivial = mod:IsTrivial(110)
 
 mod.vb.debuffCount = 0

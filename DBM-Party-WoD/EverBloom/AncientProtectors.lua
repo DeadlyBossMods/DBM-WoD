@@ -18,8 +18,6 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-mod:SetBossHealthInfo(83894, 83892, 83893)
-
 --Timers are too difficult to do, rapidTides messes up any chance of ever having decent timers.
 local warnGraspingVine				= mod:NewTargetAnnounce(168375, 2)
 local warnSlash						= mod:NewSpellAnnounce(168383, 3, nil, nil, 3)
