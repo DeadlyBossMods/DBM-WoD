@@ -15,8 +15,6 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-mod:SetBossHealthInfo(77803, 77816)
-
 local warnVX18B					= mod:NewCountAnnounce(162500, 2)--Cast twice, 3rd cast is X2101, then repeats
 local warnX2101AMissile			= mod:NewSpellAnnounce(162407, 4)
 local warnMadDash				= mod:NewSpellAnnounce(161090, 3)

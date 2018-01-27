@@ -31,8 +31,6 @@ local specWarnEruption					= mod:NewSpecialWarningDodge(155037, "Tank")
 local timerSmashCD						= mod:NewCDTimer(13, 155572, nil, nil, nil, 3)
 local timerEruptionCD					= mod:NewCDTimer(10, 155037, nil, false, nil, 3)--10-15 sec variation. May be distracting or spammy since two of them
 
-mod:RemoveOption("HealthFrame")
-
 local isTrivial = mod:IsTrivial(110)
 
 function mod:SPELL_AURA_APPLIED(args)

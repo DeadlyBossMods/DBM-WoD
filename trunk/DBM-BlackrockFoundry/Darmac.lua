@@ -99,22 +99,6 @@ mod.vb.tantrumCount = 0
 mod.vb.epicenterCount = 0
 local activeBossGUIDS = {}
 
-local function updateBeasts(cid, status, beastName)
-	if DBM.BossHealth:IsShown() then
-		if status == 3 then--Add Boss, keep Beast
-			DBM.BossHealth:AddBoss(76865, L.name)
-		elseif status == 2 then--Just Remove Beast
-			DBM.BossHealth:RemoveBoss(cid, beastName)
-		elseif status == 1 then--Add beast, remove boss
-			DBM.BossHealth:RemoveBoss(76865)
-			DBM.BossHealth:AddBoss(cid, beastName)
-		else--Status 0, remove beast add boss
-			DBM.BossHealth:RemoveBoss(cid)
-			DBM.BossHealth:AddBoss(76865, L.name)
-		end
-	end
-end
-
 local function updateBeastTimers(self, all, spellId, adjust)
 	local dismountAdjust = 0--default of 0, so -0 doesn't affect timers unless mythic and UNIT_TARGETABLE is trigger
 	if adjust then dismountAdjust = 2 end--Dismount event is a little slow, fires 2 seconds after true dismount, so must adjust all timers for dismounts
@@ -400,7 +384,6 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 			if cid == 76884 or cid == 76874 or cid == 76945 or cid == 76946 then
 				DBM:Debug("INSTANCE_ENCOUNTER_ENGAGE_UNIT, Boss mounting", 2)
 				local name = UnitName(unitID)
-				updateBeasts(cid, 1, name)
 				warnMount:Show(name)
 				if cid == 76884 then--Cruelfang
 					timerRendandTearCD:Start(5)
@@ -455,7 +438,6 @@ function mod:UNIT_TARGETABLE_CHANGED(uId)
 	local cid = self:GetCIDFromGUID(UnitGUID(uId))
 	if (cid == 76865) and UnitExists(uId) and self:IsMythic() then--Boss dismounting living beast on mythic
 		DBM:Debug("UNIT_TARGETABLE_CHANGED, Boss Dismounting", 2)
-		updateBeasts(cid, 3)
 		updateBeastTimers(self, true, nil, true)
 	end
 end	
@@ -479,11 +461,6 @@ function mod:UNIT_DIED(args)
 		elseif cid == 76946 then
 			timerEpicenterCD:Stop()
 			countdownEpicenter:Cancel()
-		end
-		if self:IsMythic() then
-			updateBeasts(cid, 2)
-		else
-			updateBeasts(cid, 0)
 		end
 	end
 end

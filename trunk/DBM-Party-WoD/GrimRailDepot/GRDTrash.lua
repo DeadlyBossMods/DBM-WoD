@@ -24,8 +24,6 @@ local specWarnFlametongueGround			= mod:NewSpecialWarningMove(176033)--Ground ao
 local specWarnShrapnelblast				= mod:NewSpecialWarningMove(166675, "Tank", nil, nil, 3)--160943 boss version, 166675 trash version.
 local specWarnThunderzone				= mod:NewSpecialWarningMove(166340)
 
-mod:RemoveOption("HealthFrame")
-
 local isTrivial = mod:IsTrivial(110)
 
 function mod:SPELL_AURA_APPLIED(args)

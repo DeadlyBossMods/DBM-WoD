@@ -9,8 +9,6 @@ mod:SetBossHPInfoToHighest(false)
 
 mod:RegisterCombat("combat")
 
-mod:SetBossHealthInfo(80098)
-
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 162090",
 	"SPELL_AURA_APPLIED 161833",
@@ -80,16 +78,5 @@ end
 function mod:UNIT_TARGETABLE_CHANGED()
 	if UnitExists("boss1") then
 		warnTharbek:Show()
-		if DBM.BossHealth:IsShown() then
-			DBM.BossHealth:AddBoss(79912)
-		end
-	end
-end
-
-function mod:UNIT_DIED(args)
-	if not DBM.BossHealth:IsShown() then return end
-	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 80098 then
-		DBM.BossHealth:RemoveBoss(80098)
 	end
 end

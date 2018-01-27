@@ -9,14 +9,11 @@ mod:SetBossHPInfoToHighest(false)
 
 mod:RegisterCombat("combat")
 
-mod:SetBossHealthInfo(81297)
-
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 164426 164835 164632",
 	"SPELL_AURA_REMOVED 164426",
 	"UNIT_SPELLCAST_SUCCEEDED boss1",
-	"UNIT_TARGETABLE_CHANGED",
-	"UNIT_DIED"
+	"UNIT_TARGETABLE_CHANGED"
 )
 
 local warnNokgar						= mod:NewSpellAnnounce("ej10433", 3, "Interface\\ICONS\\INV_Misc_Head_Orc_01.blp")
@@ -62,15 +59,4 @@ end
 
 function mod:UNIT_TARGETABLE_CHANGED()
 	warnNokgar:Show()
-	if DBM.BossHealth:IsShown() then
-		DBM.BossHealth:AddBoss(81305)
-	end
-end
-
-function mod:UNIT_DIED(args)
-	if not DBM.BossHealth:IsShown() then return end
-	local cid = self:GetCIDFromGUID(args.destGUID)
-	if cid == 81297 then
-		DBM.BossHealth:RemoveBoss(81297)
-	end
 end
