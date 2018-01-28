@@ -17,7 +17,7 @@
 ## X-DBM-Mod-Type: RAID
 ## X-DBM-Mod-Category: WOD
 ## X-DBM-Mod-Has-Mythic : 1
-## X-DBM-Mod-Sort: 100
+## X-DBM-Mod-Sort: 601
 ## X-DBM-Mod-MapID: 1448
 ## X-DBM-Mod-MinCoreRevision: 15211
 localization.en.lua
