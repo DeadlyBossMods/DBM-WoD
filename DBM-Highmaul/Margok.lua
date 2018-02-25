@@ -22,7 +22,6 @@ mod:RegisterEventsInCombat(
 	"UNIT_SPELLCAST_SUCCEEDED boss1 boss2"
 )
 
---TODO, do more fancy stuff with radar in phase 4 when i have more logs, like closing it when it's not needed. Or may just leave it as is depending on preferences.
 --TODO, Night-Twisted Faithful stuff (no spawn trigger or yell, but 30 second loop, like oozes on that boss in ToT)
 --TODO, see if target scanning works on dark star, or if that player gets an emote whisper or something. If can find dark star target, then need "nearby" warnings to move away from location
 --TODO, 3 tank strat makes the accelerated confusing. todo, check number of tanks on pull, if 3, require margok be current target for accelerated warning
