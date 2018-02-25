@@ -47,7 +47,7 @@ local warnFelseeker					= mod:NewCountAnnounce(181735, 3)
 
 --Adds
 ----Doom Lords
-local specWarnCurseofLegion			= mod:NewSpecialWarningYou(181275)
+local specWarnCurseofLegion			= mod:NewSpecialWarningYou(181275, nil, nil, nil, 1, 2)
 local yellCurseofLegion				= mod:NewFadesYell(181275)--Don't need to know when it's applied, only when it's fading does it do aoe/add spawn
 local specWarnMarkOfDoom			= mod:NewSpecialWarningYou(181099, nil, nil, nil, 1, 2)
 local yellMarkOfDoom				= mod:NewPosYell(181099, 31348)-- This need to know at apply, only player needs to know when it's fading
@@ -65,10 +65,10 @@ local specWarnFelPillar				= mod:NewSpecialWarningDodge(190070, nil, nil, 3, 1, 
 local specWarnGlaiveCombo			= mod:NewSpecialWarningDefensive(181354, "Tank", nil, nil, 3, 2)--Active mitigation or die mechanic
 local specWarnMassiveBlastOther		= mod:NewSpecialWarningTaunt(181359, nil, nil, nil, 1, 2)
 local specWarnFelHellStorm			= mod:NewSpecialWarningSpell(181557, nil, nil, nil, 2, 2)
-local specWarnGaze					= mod:NewSpecialWarningYou(181597)
+local specWarnGaze					= mod:NewSpecialWarningYou(181597, nil, nil, nil, 1, 2)
 local yellGaze						= mod:NewPosYell(181597, 134029)
 local specWarnFelSeeker				= mod:NewSpecialWarningDodge(181735, nil, nil, nil, 2, 2)
-local specWarnShadowForce			= mod:NewSpecialWarningSpell(181799, nil, nil, nil, 3)
+local specWarnShadowForce			= mod:NewSpecialWarningSpell(181799, nil, nil, nil, 3, 2)
 
 --Adds
 mod:AddTimerLine(OTHER)
@@ -430,6 +430,7 @@ function mod:SPELL_CAST_START(args)
 		if self:IsTank() and self.vb.phase == 3 then return end--Doesn't target tanks in phase 3, ever.
 		countdownShadowForce:Start(52.5)
 		specWarnShadowForce:Show()
+		specWarnShadowForce:Play("keepmove")
 		updateAllTimers(self, 8)
 	elseif spellId == 181099 then
 		table.wipe(doomTargets)
@@ -499,6 +500,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 181275 then
 		if args:IsPlayer() then
 			specWarnCurseofLegion:Show()
+			specWarnCurseofLegion:Play("targetyou")
 			local _, _, _, _, _, _, expires = UnitDebuff("Player", args.spellName)
 			local debuffTime = expires - GetTime()
 			yellCurseofLegion:Schedule(debuffTime - 1, 1)

@@ -79,9 +79,9 @@ local yellNetherBanish				= mod:NewFadesYell(186961)
 local specWarnTouchofShadows		= mod:NewSpecialWarningInterruptCount(190050, nil, nil, nil, 1, 5)
 local specWarnVoidStarFixate		= mod:NewSpecialWarningYou(189895, nil, nil, nil, 1, 5)
 local yellVoidStarFixate			= mod:NewYell(189895, nil, false)
-local specWarnNetherStorm			= mod:NewSpecialWarningMove(187255)
+local specWarnNetherStorm			= mod:NewSpecialWarningMove(187255, nil, nil, nil, 1, 2)
 --Phase 3.5
-local specWarnRainofChaos			= mod:NewSpecialWarningCount(189953, nil, nil, nil, 2)
+local specWarnRainofChaos			= mod:NewSpecialWarningCount(189953, nil, nil, nil, 2, 2)
 --Mythic
 local specWarnDarkConduitSoon		= mod:NewSpecialWarningSoon(190394, "Ranged", nil, nil, 1, 2)
 local specWarnSeethingCorruption	= mod:NewSpecialWarningCount(190506, nil, nil, nil, 2, 2)
@@ -90,11 +90,11 @@ local specWarnMarkOfLegionSoak		= mod:NewSpecialWarningSoakPos(187050, nil, nil,
 local yellDoomFireFades				= mod:NewFadesYell(183586, nil, false)
 local yellMarkOfLegion				= mod:NewFadesYell(187050, 28836)
 local yellMarkOfLegionPoS			= mod:NewPosYell(187050, 28836)
-local specWarnSourceofChaosYou		= mod:NewSpecialWarningYou(190703)
+local specWarnSourceofChaosYou		= mod:NewSpecialWarningYou(190703, nil, nil, nil, 2, 2)
 local yellSourceofChaos				= mod:NewYell(190703)
-local specWarnSourceofChaos			= mod:NewSpecialWarningSwitchCount(190703, "Dps")--Maybe exclude ranged or healers. Not sure if just dps is enough to soak it, at very least dps have to kill it
-local specWarnInfernals				= mod:NewSpecialWarningSwitchCount(187111, "-Healer")--Tanks should probably help pick these up and spread them
-local specWarnTwistedDarkness		= mod:NewSpecialWarningSwitchCount(190821, "RangedDps")
+local specWarnSourceofChaos			= mod:NewSpecialWarningSwitchCount(190703, "Dps", nil, nil, 2, 2)--Maybe exclude ranged or healers. Not sure if just dps is enough to soak it, at very least dps have to kill it
+local specWarnInfernals				= mod:NewSpecialWarningSwitchCount(187111, "-Healer", nil, nil, 2, 2)--Tanks should probably help pick these up and spread them
+local specWarnTwistedDarkness		= mod:NewSpecialWarningSwitchCount(190821, "RangedDps", nil, nil, 2, 2)
 
 --Phase 1: The Defiler
 mod:AddTimerLine(SCENARIO_STAGE:format(1))
@@ -809,6 +809,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.rainOfChaos = self.vb.rainOfChaos + 1
 		if not playerBanished or not self.Options.FilterOtherPhase then
 			specWarnRainofChaos:Show(self.vb.rainOfChaos)
+			specWarnRainofChaos:Play("killmob")
 		end
 		timerRainofChaosCD:Start(nil, self.vb.rainOfChaos+1)
 		if self.vb.phase < 3.5 then
@@ -847,6 +848,7 @@ function mod:SPELL_CAST_START(args)
 		self:Unschedule(sourceOfChaosCheck)
 		self.vb.sourceOfChaosCast = self.vb.sourceOfChaosCast + 1
 		specWarnSourceofChaos:Show(self.vb.sourceOfChaosCast)
+		specWarnSourceofChaos:Play("killmob")
 		local cooldown = sourceofChaosTimers[self.vb.sourceOfChaosCast+1]
 		if cooldown then
 			timerSourceofChaosCD:Start(cooldown, self.vb.sourceOfChaosCast+1)
@@ -857,6 +859,7 @@ function mod:SPELL_CAST_START(args)
 	elseif spellId == 190821 then--Stars
 		self.vb.twistedDarknessCast = self.vb.twistedDarknessCast + 1
 		specWarnTwistedDarkness:Show(self.vb.twistedDarknessCast)
+		specWarnTwistedDarkness:Play("killmob")
 		local cooldown = twistedDarknessTimers[self.vb.twistedDarknessCast+1]
 		if cooldown then
 			timerTwistedDarknessCD:Start(cooldown, self.vb.twistedDarknessCast+1)
@@ -1094,10 +1097,13 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 190703 then
 		if args:IsPlayer() then
 			specWarnSourceofChaosYou:Show()
+			specWarnSourceofChaosYou:Play("targetyou")
+			specWarnSourceofChaosYou:ScheduleVoice(1.5, "keepmove")
 			yellSourceofChaos:Yell()
 		end
 	elseif spellId == 187255 and args:IsPlayer() and self:AntiSpam(2, 2) then
 		specWarnNetherStorm:Show()
+		specWarnNetherStorm:Play("runaway")
 	elseif spellId == 183963 and args:IsPlayer() and self:AntiSpam(5, 6) then
 		warnLight:Show()
 	elseif spellId == 183586 and args:IsPlayer() then
@@ -1180,6 +1186,7 @@ function mod:SPELL_SUMMON(args)
 		if self:AntiSpam(15, 5) and self:IsMythic() then
 			self.vb.InfernalsCast = self.vb.InfernalsCast + 1
 			specWarnInfernals:Show(self.vb.InfernalsCast)
+			specWarnInfernals:Play("killmob")
 			local cooldown = infernalTimers[self.vb.InfernalsCast+1]
 			if cooldown then
 				timerInfernalsCD:Start(cooldown, self.vb.InfernalsCast+1)
@@ -1319,6 +1326,7 @@ end
 function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, _, _, _, spellId)
 	if spellId == 187255 and destGUID == UnitGUID("player") and self:AntiSpam(2, 2) then
 		specWarnNetherStorm:Show()
+		specWarnNetherStorm:Play("runaway")
 	end
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
