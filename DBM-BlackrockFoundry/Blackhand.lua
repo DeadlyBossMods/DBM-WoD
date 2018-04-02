@@ -427,7 +427,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self:IsMythic() and slagPlayerCount == 2 then--Counter 2, do checkSlag immediately, this of course means function has to run for everyone instead of just player, but that's harmless
 			checkSlag(self)
 		end
-		if args:IsPlayer() then
+		if args:IsPlayer() and self:AntiSpam(3, 6) then
 			specWarnAttachSlagBombs:Show()
 			if not self:IsMythic() then
 				yellAttachSlagBombs:Yell()
@@ -446,7 +446,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			self:Schedule(2, warnSlag, self)
 		end
-		if args:IsPlayer() then
+		if args:IsPlayer() and self:AntiSpam(3, 6) then
 			specWarnAttachSlagBombs:Show()
 			yellAttachSlagBombs:Yell()
 			if self.Options.RangeFrame then
