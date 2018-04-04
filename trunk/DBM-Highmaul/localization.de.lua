@@ -6,6 +6,10 @@ local L
 ---------------
 L= DBM:GetModLocalization(1128)
 
+L:SetTimerLocalization({
+	timerSweeperCD			= "Nächster Arena Sweeper"
+})
+
 ---------------------------
 -- The Butcher --
 ---------------------------
