@@ -89,7 +89,7 @@ end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
 
 --This boss actually does fire IEEU so boss1 works
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 154996 then
 		specWarnEngulfingFire:Show()
 		if not self.vb.firstBreath then

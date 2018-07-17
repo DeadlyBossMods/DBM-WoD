@@ -37,17 +37,15 @@ local timerGrowUntamedMandragoraCD	= mod:NewCDTimer(30, 176013, nil, nil, nil, 1
 --mod:AddReadyCheckOption(37462, false)
 --mod:AddRangeFrameOption(8, 175979)
 
-local UnitDebuff = UnitDebuff
 local debuffName = DBM:GetSpellInfo(176004)
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		return UnitDebuff(uId, debuffName)
+		return DBM:UnitDebuff(uId, debuffName)
 	end
 end
 
 function mod:OnCombatStart(delay, yellTriggered)
-	debuffName = DBM:GetSpellInfo(176004)
 --	if yellTriggered then
 		--Vines--7
 		--Colossal Bow--14
@@ -99,7 +97,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if self.Options.RangeFrame then
-			if UnitDebuff("player", debuffName) then
+			if DBM:UnitDebuff("player", debuffName) then
 				DBM.RangeCheck:Show(8, nil)
 			else
 				DBM.RangeCheck:Show(8, debuffFilter, nil, nil, nil, 8)

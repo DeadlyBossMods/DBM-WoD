@@ -109,7 +109,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnTenderizer:Show(amount)
 				specWarnTenderizer:Play("stackhigh")
 			else
-				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+				if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnTenderizerOther:Show(args.destName)
 					specWarnTenderizerOther:Play("tauntboss")
 				else
@@ -171,7 +171,7 @@ function mod:SPELL_PERIODIC_DAMAGE(_, _, _, _, destGUID, destName, _, _, spellId
 end
 mod.SPELL_ABSORBED = mod.SPELL_PERIODIC_DAMAGE
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 156197 or spellId == 156257 then
 		self.vb.cleaveCount = 0
 		self.vb.boundingCleave = self.vb.boundingCleave + 1

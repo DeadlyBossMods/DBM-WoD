@@ -81,12 +81,10 @@ mod.vb.latentIcon = 8
 local yellSeeds2 = mod:NewPosYell(181508, nil, true, false)
 local seedsTargets = {}
 local befouledName, latentDebuff = DBM:GetSpellInfo(179711), DBM:GetSpellInfo(182008)
-local UnitDebuff = UnitDebuff
 local debuffFilter
 do
-	local UnitDebuff = UnitDebuff
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, befouledName) then
+		if DBM:UnitDebuff(uId, befouledName) then
 			return true
 		end
 	end
@@ -94,7 +92,7 @@ end
 
 local function updateRangeFrame(self)
 	if not self.Options.RangeFrame then return end
-	if UnitDebuff("player", befouledName) then
+	if DBM:UnitDebuff("player", befouledName) then
 		DBM.RangeCheck:Show(10)
 	elseif self.vb.befouledTargets > 0 then
 		DBM.RangeCheck:Show(10, debuffFilter)
@@ -188,7 +186,6 @@ local function delayModCheck(self)
 end
 
 function mod:OnCombatStart(delay)
-	befouledName, latentDebuff = DBM:GetSpellInfo(179711), DBM:GetSpellInfo(182008)
 	table.wipe(seedsTargets)
 	self.vb.befouledTargets = 0
 	self.vb.FissureCount = 0
@@ -386,7 +383,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 181461 then--Sometimes does NOT show in combat log, this is only accurate way
 		self.vb.CavitationCount = self.vb.CavitationCount + 1
 		warnWake(self)

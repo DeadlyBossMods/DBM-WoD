@@ -54,7 +54,7 @@ local firePillar = DBM:EJ_GetSectionInfo(9394)
 local chainName = DBM:GetSpellInfo(159947)
 
 local function checkHurl()
-	if not UnitDebuff("player", chainName) then
+	if not DBM:UnitDebuff("player", chainName) then
 		specWarnChainHurl:Play("otherout")
 	end
 end
@@ -73,7 +73,6 @@ function mod:BerserkerRushTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	chainName = DBM:GetSpellInfo(159947)
 	timerPillarCD:Start(24-delay)
 	timerImpaleCD:Start(35-delay)
 	countdownImpale:Start(35-delay)
@@ -147,7 +146,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if args:IsPlayer() then--At this point the other tank SHOULD be clear.
 				specWarnOpenWounds:Show(amount)
 			else--Taunt as soon as stacks are clear, regardless of stack count.
-				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+				if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnOpenWoundsOther:Show(args.destName)
 				else
 					warnOpenWounds:Show(args.destName, amount)

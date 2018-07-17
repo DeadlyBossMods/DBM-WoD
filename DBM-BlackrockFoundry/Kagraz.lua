@@ -182,7 +182,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				if args:IsPlayer() then--At this point the other tank SHOULD be clear.
 					specWarnRisingFlames:Show(amount)
 				else--Taunt as soon as stacks are clear, regardless of stack count.
-					if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+					if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 						specWarnRisingFlamesOther:Show(args.destName)
 						specWarnRisingFlamesOther:Play("tauntboss")
 					else
@@ -201,7 +201,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				if args:IsPlayer() then
 					specWarnCharringBreath:Show(amount)
 				else--Taunt as soon as stacks are clear, regardless of stack count.
-					if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+					if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 						specWarnCharringBreathOther:Show(args.destName)
 					else
 						warnCharringBreath:Show(args.destName, amount)
@@ -305,7 +305,7 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 163644 then
 		warnSummonEnchantedArmaments:Show()
 		if self:IsMythic() then

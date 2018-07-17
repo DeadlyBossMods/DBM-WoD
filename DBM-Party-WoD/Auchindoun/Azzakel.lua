@@ -49,16 +49,14 @@ mod:AddRangeFrameOption(5, 153396)
 mod.vb.debuffCount = 0
 mod.vb.flamesCast = 2
 local curtainDebuff = DBM:GetSpellInfo(153396)
-local UnitDebuff = UnitDebuff
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		return UnitDebuff(uId, curtainDebuff)
+		return DBM:UnitDebuff(uId, curtainDebuff)
 	end
 end
 
 function mod:OnCombatStart(delay)
-	curtainDebuff = DBM:GetSpellInfo(153396)
 	self.vb.debuffCount = 0
 	self.vb.flamesCast = 2--Set to 2 on pull to offset first argus
 	timerCurtainOfFlameCD:Start(16-delay)
@@ -101,7 +99,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if self.Options.RangeFrame then
-			if UnitDebuff("player", curtainDebuff) then--You have debuff, show everyone
+			if DBM:UnitDebuff("player", curtainDebuff) then--You have debuff, show everyone
 				DBM.RangeCheck:Show(5, nil)
 			else--You do not have debuff, only show players who do
 				DBM.RangeCheck:Show(5, debuffFilter)
@@ -171,7 +169,7 @@ function mod:SPELL_SUMMON(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 153500 then
 		warnFelPool:Show()
 	end

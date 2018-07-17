@@ -58,7 +58,7 @@ function mod:SPELL_SUMMON(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 154671 then
 		specWarnRitualOfBones:Show()
 		timerRitualOfBonesCD:Start()

@@ -68,7 +68,7 @@ function mod:SPELL_CAST_START(args)
 end
 
 --Not completely reliable. if you reach him between barrages, before he casts a new one, you won't interrupt any cast and get no event for it.
-function mod:UNIT_SPELLCAST_INTERRUPTED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_INTERRUPTED(uId, _, spellId)
 	if spellId == 168929 then
 		specWarnCannonBarrageE:Show()
 		specWarnCannonBarrageE:Play("phasechange")

@@ -1,5 +1,5 @@
-﻿## Interface: 70300
-## X-Min-Interface: 60000
+﻿## Interface: 80000
+## X-Min-Interface: 80000
 ## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Garrison Invasions|r
 ## Title-koKR:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0주둔지 침공|r
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0要塞入侵|r

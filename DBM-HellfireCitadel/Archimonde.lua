@@ -194,17 +194,17 @@ local legionTargets = {}
 local felburstTargets = {}
 local playerName = UnitName("player")
 local playerBanished = false
-local UnitDebuff, UnitDetailedThreatSituation, UnitClass, UnitIsUnit = UnitDebuff, UnitDetailedThreatSituation, UnitClass, UnitIsUnit
+local UnitDetailedThreatSituation, UnitClass, UnitIsUnit = UnitDetailedThreatSituation, UnitClass, UnitIsUnit
 local NetherBanish, shackledDebuff, felburstDebuff, markOfLegionDebuff = DBM:GetSpellInfo(186961), DBM:GetSpellInfo(184964), DBM:GetSpellInfo(183634), DBM:GetSpellInfo(187050)
 local netherFilter, markOfLegionFilter
 do
 	netherFilter = function(uId)
-		if UnitDebuff(uId, NetherBanish) then
+		if DBM:UnitDebuff(uId, NetherBanish) then
 			return true
 		end
 	end
 	markOfLegionFilter = function(uId)
-		if UnitDebuff(uId, markOfLegionDebuff) then
+		if DBM:UnitDebuff(uId, markOfLegionDebuff) then
 			return true
 		end
 	end
@@ -227,7 +227,7 @@ do
 			if i == 9 then break end--It's a wipe, plus can't do more than 8 of these with icons
 			local name = felburstTargets[i]
 			local uId = DBM:GetRaidUnitId(name)
-			if uId and UnitDebuff(uId, felburstDebuff) then
+			if uId and DBM:UnitDebuff(uId, felburstDebuff) then
 				total = total + 1
 				addLine(name, i)
 			end
@@ -235,7 +235,7 @@ do
 		for i = 1, #shacklesTargets do
 			local name = shacklesTargets[i]
 			local uId = DBM:GetRaidUnitId(name)
-			if uId and UnitDebuff(uId, shackledDebuff) then
+			if uId and DBM:UnitDebuff(uId, shackledDebuff) then
 				total = total + 1
 				addLine(name, i)
 			end
@@ -255,7 +255,7 @@ local function updateRangeFrame(self)
 		DBM.RangeCheck:Show(6)
 	elseif self.vb.netherPortal then
 		--Blue post says 8, but pretty sure it's 10. The visual was bigger than 8
-		if UnitDebuff("player", NetherBanish) then
+		if DBM:UnitDebuff("player", NetherBanish) then
 			DBM.RangeCheck:Show(10)
 		else
 			DBM.RangeCheck:Show(10, netherFilter)
@@ -263,7 +263,7 @@ local function updateRangeFrame(self)
 	elseif (self.vb.darkConduit or self.vb.phase < 2) and self:IsRanged() then--Fel burst in phase 1, dark conduit in phase 3 mythic
 		DBM.RangeCheck:Show(8)
 	elseif self.vb.markOfLegionRemaining > 0 then
-		if UnitDebuff("player", markOfLegionDebuff) then
+		if DBM:UnitDebuff("player", markOfLegionDebuff) then
 			DBM.RangeCheck:Show(10, nil, nil, 4, true)
 		else
 			DBM.RangeCheck:Show(10, markOfLegionFilter)
@@ -296,7 +296,7 @@ end
 local function showMarkOfLegion(self, spellName)
 	warnMarkOfLegion:Show(self.vb.markOfLegionCast, table.concat(legionTargets, "<, >"))
 	if localMarkBehavior == "NoAssignment" then return end
-	local playerHasMark = UnitDebuff("player", spellName)
+	local playerHasMark = DBM:UnitDebuff("player", spellName)
 	for i = 1, #legionTargets do
 		local name = legionTargets[i]
 		if not name then break end
@@ -438,7 +438,7 @@ local function showMarkOfLegion(self, spellName)
 		local marks = #legionTargets or 4
 		for i = 1, DBM:GetNumRealGroupMembers() do
 			local unitID = 'raid'..i
-			if not UnitDebuff(unitID, spellName) then
+			if not DBM:UnitDebuff(unitID, spellName) then
 				soakers = soakers + 1
 			end
 			if UnitIsUnit("player", unitID) then
@@ -682,7 +682,6 @@ end
 
 --/run DBM:GetModByName("1438"):OnCombatStart(0)
 function mod:OnCombatStart(delay)
-	NetherBanish, shackledDebuff, felburstDebuff, markOfLegionDebuff = DBM:GetSpellInfo(186961), DBM:GetSpellInfo(184964), DBM:GetSpellInfo(183634), DBM:GetSpellInfo(187050)
 	self.vb.phase = 1
 	self.vb.demonicCount = 0
 	self.vb.demonicFeedback = false
@@ -919,7 +918,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnFelBurst:Show()
 		else
-			if self:CheckNearby(30, args.destName) and not UnitDebuff("player", args.spellName) and not self:IsTank() then--Range subject to adjustment
+			if self:CheckNearby(30, args.destName) and not DBM:UnitDebuff("player", args.spellName) and not self:IsTank() then--Range subject to adjustment
 				specWarnFelBurstNear:CombinedShow(0.3, args.destName)--Combined show to prevent spam in a spread, if a spread happens targets are all together and requires even MORE people to soak.
 				specWarnFelBurstNear:CancelVoice()--Avoid spam
 				specWarnFelBurstNear:ScheduleVoice(0.3, "gathershare")
@@ -1079,7 +1078,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:Schedule(0.5, showMarkOfLegion, self, args.spellName)
 		end
 		local uId = DBM:GetRaidUnitId(args.destName)
-		local _, _, _, _, _, duration, expires, _, _ = UnitDebuff(uId, args.spellName)
+		local _, _, _, _, duration, expires, _, _ = DBM:UnitDebuff(uId, args.spellName)
 		if expires then
 			if args:IsPlayer() then
 				local remaining = expires-GetTime()
@@ -1111,7 +1110,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnDoomFireStack:Cancel()--Just a little anti spam
 		warnDoomFireStack:Schedule(2, args.destName, amount)
 		yellDoomFireFades:Cancel()
-		local _, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", args.spellName)
+		local _, _, _, _, duration, expires, _, _ = DBM:UnitDebuff("player", args.spellName)
 		if expires then
 			if args:IsPlayer() then
 				local remaining = expires-GetTime()
@@ -1219,7 +1218,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 187621 then
 		local unitGUID = UnitGUID(uId)
 		--timerShadowBlastCD ommited because it's used near instantly on spawn.

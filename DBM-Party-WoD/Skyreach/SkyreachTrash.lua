@@ -20,11 +20,10 @@ local isTrivial = mod:IsTrivial(110)
 
 mod.vb.debuffCount = 0
 local Debuff = DBM:GetSpellInfo(160288)
-local UnitDebuff = UnitDebuff
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		return UnitDebuff(uId, Debuff)
+		return DBM:UnitDebuff(uId, Debuff)
 	end
 end
 
@@ -34,7 +33,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 160303 or spellId == 160288 then
 		self.vb.debuffCount = self.vb.debuffCount + 1
 		if self.Options.RangeFrame then
-			if UnitDebuff("player", Debuff) then--You have debuff, show everyone
+			if DBM:UnitDebuff("player", Debuff) then--You have debuff, show everyone
 				DBM.RangeCheck:Show(3, nil)
 			else--You do not have debuff, only show players who do
 				DBM.RangeCheck:Show(3, debuffFilter)
@@ -56,8 +55,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			if self.vb.debuffCount == 0 then
 				DBM.RangeCheck:Hide()
 			else
-				Debuff = DBM:GetSpellInfo(160288)
-				if UnitDebuff("player", Debuff) then--You have debuff, show everyone
+				if DBM:UnitDebuff("player", Debuff) then--You have debuff, show everyone
 					DBM.RangeCheck:Show(3, nil)
 				else--You do not have debuff, only show players who do
 					DBM.RangeCheck:Show(3, debuffFilter)

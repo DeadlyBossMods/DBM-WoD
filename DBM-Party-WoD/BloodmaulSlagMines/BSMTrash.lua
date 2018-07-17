@@ -24,21 +24,12 @@ local specWarnSlaversRage				= mod:NewSpecialWarningDispel(151965, "RemoveEnrage
 
 local isTrivial = mod:IsTrivial(110)
 
-local UnitExists, UnitGUID, UnitAffectingCombat = UnitExists, UnitGUID, UnitAffectingCombat
-local function validWarning(GUID)
-	for uId in DBM:GetGroupMembers() do
-		local target = uId.."target"
-		if UnitExists(target) and UnitGUID(target) == GUID and UnitAffectingCombat(target) then return true end
-	end
-	return false
-end
-
 function mod:SPELL_AURA_APPLIED(args)
 	if not self.Options.Enabled or self:IsDifficulty("normal5") or isTrivial then return end
 	local spellId = args.spellId
 	if spellId == 164597 and not args:IsDestTypePlayer() then
 		specWarnStoneBulwark:Show(args.destName)
-	elseif spellId == 151548 and not args:IsDestTypePlayer() and validWarning(args.sourceGUID) then--Antispam
+	elseif spellId == 151548 and not args:IsDestTypePlayer() and self:IsValidWarning(args.sourceGUID) then--Antispam
 		specWarnBloodRage:Show(args.destName)
 	elseif spellId == 151697 then
 		specWarnSubjugate:Show(args.destName)
@@ -54,9 +45,9 @@ function mod:SPELL_CAST_START(args)
 		specWarnCinderSplash:Show()
 	elseif spellId == 151447 then
 		specWarnCrush:Show()
-	elseif spellId == 151545 and validWarning(args.sourceGUID) then--Antispam
+	elseif spellId == 151545 and self:IsValidWarning(args.sourceGUID) then--Antispam
 		specWarnRoar:Show(args.sourceName)
-	elseif spellId == 151558 and validWarning(args.sourceGUID) then
+	elseif spellId == 151558 and self:IsValidWarning(args.sourceGUID) then
 		specWarnLavaBurst:Show(args.sourceName)
 	elseif spellId == 151581 then
 		specWarnSuppressionField:Show(args.sourceName)

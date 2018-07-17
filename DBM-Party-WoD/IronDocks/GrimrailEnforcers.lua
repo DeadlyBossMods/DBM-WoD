@@ -68,7 +68,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if unitid then
-			local _, _, _, _, _, duration, expires, _, _ = UnitBuff(unitid, args.spellName)
+			local _, _, _, _, duration, expires = DBM:UnitBuff(unitid, args.spellName)
 			if expires then
 				timerSanguineSphere:Start(expires-GetTime(), args.destName)
 			end
@@ -96,7 +96,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 164956 and self:AntiSpam(5, 2) then
 		specWarnLavaSwipe:Show()
 		if self:IsHeroic() then

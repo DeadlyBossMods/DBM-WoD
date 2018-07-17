@@ -74,7 +74,7 @@ local seedDebuff = DBM:GetSpellInfo(156921)
 local DebuffFilter
 do
 	DebuffFilter = function(uId)
-		return UnitDebuff(uId, seedDebuff)
+		return DBM:UnitDebuff(uId, seedDebuff)
 	end
 end
 
@@ -101,7 +101,6 @@ function mod:ChaosWaveTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	seedDebuff = DBM:GetSpellInfo(156921)
 	self.vb.seedCount = 0
 	self.vb.phase2 = false
 	timerRainOfFireCD:Start(15-delay)
@@ -132,7 +131,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnSeedOfMelevolence:Play("runout")
 		end
 		if self.Options.RangeFrame then
-			if UnitDebuff("player", seedDebuff) then--You have debuff, show everyone
+			if DBM:UnitDebuff("player", seedDebuff) then--You have debuff, show everyone
 				DBM.RangeCheck:Show(10, nil)
 			else--You do not have debuff, only show players who do
 				DBM.RangeCheck:Show(10, DebuffFilter)
@@ -208,7 +207,7 @@ function mod:SPELL_CAST_SUCCESS(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 156919 then--Demonology Transformation
 		self.vb.phase2 = true
 		timerDrainLifeCD:Cancel()

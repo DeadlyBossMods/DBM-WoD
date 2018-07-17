@@ -81,12 +81,11 @@ local polEnergyRate = 28
 local arcaneDebuff, arcaneTwisted = DBM:GetSpellInfo(163372), DBM:GetSpellInfo(163297)
 local PhemName1, PhemName2, PhemName3, PhemName4= DBM:GetSpellInfo(157943), DBM:GetSpellInfo(163321), DBM:GetSpellInfo(158057), DBM:GetSpellInfo(158200)
 local PolName1, PolName2, PolName3, PolName4 = DBM:GetSpellInfo(158134), DBM:GetSpellInfo(163336), DBM:GetSpellInfo(158093), DBM:GetSpellInfo(158385)
-local UnitDebuff, UnitBuff = UnitDebuff, UnitBuff
 local arcaneVTimers = {8.5, 6, 45, 8, 16.5, 8.5, 5.5, 39, 130, 10, 56.5, 8, 6}
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, arcaneDebuff) then
+		if DBM:UnitDebuff(uId, arcaneDebuff) then
 			return true
 		end
 	end
@@ -114,7 +113,7 @@ do
 		if DBM:GetUnitCreatureId("boss1") == 78237 then
 			addLine(UnitName("boss1"), bossPower)
 			if bossPower < 33 then--Whirlwind
-				if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
+				if DBM:UnitBuff("boss1", arcaneTwisted) then--Empowered attack
 					addLine("|cFF9932CD"..PhemName1.."|r", PhemName2)
 				else
 					addLine(PhemName1, "")
@@ -127,7 +126,7 @@ do
 		elseif DBM:GetUnitCreatureId("boss2") == 78237 then
 			addLine(UnitName("boss2"), bossPower2)
 			if bossPower2 < 33 then--Whirlwind
-				if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
+				if DBM:UnitBuff("boss2", arcaneTwisted) then--Empowered attack
 					addLine("|cFF9932CD"..PhemName1.."|r", PhemName2)
 				else
 					addLine(PhemName1, "")
@@ -142,7 +141,7 @@ do
 		if DBM:GetUnitCreatureId("boss1") == 78238 then
 			if bossPower < 33 then--Shield Charge
 				addLine(UnitName("boss1"), bossPower)
-				if UnitBuff("boss1", arcaneTwisted) then--Empowered attack
+				if DBM:UnitBuff("boss1", arcaneTwisted) then--Empowered attack
 					addLine("|cFF9932CD"..PolName1.."|r", PolName2)
 				else
 					addLine(PolName1, "")
@@ -155,7 +154,7 @@ do
 		elseif DBM:GetUnitCreatureId("boss2") == 78238 then
 			addLine(UnitName("boss2"), bossPower2)
 			if bossPower2 < 33 then--Shield Charge
-				if UnitBuff("boss2", arcaneTwisted) then--Empowered attack
+				if DBM:UnitBuff("boss2", arcaneTwisted) then--Empowered attack
 					addLine("|cFF9932CD"..PolName1.."|r", PolName2)
 				else
 					addLine(PolName1, "")
@@ -171,9 +170,6 @@ do
 end
 
 function mod:OnCombatStart(delay)
-	arcaneDebuff, arcaneTwisted = DBM:GetSpellInfo(163372), DBM:GetSpellInfo(163297)
-	PhemName1, PhemName2, PhemName3, PhemName4 = DBM:GetSpellInfo(157943), DBM:GetSpellInfo(163321), DBM:GetSpellInfo(158057), DBM:GetSpellInfo(158200)
-	PolName1, PolName2, PolName3, PolName4 = DBM:GetSpellInfo(158134), DBM:GetSpellInfo(163336), DBM:GetSpellInfo(158093), DBM:GetSpellInfo(158385)
 	self.vb.EnfeebleCount = 0
 	self.vb.QuakeCount = 0
 	self.vb.WWCount = 0
@@ -277,7 +273,7 @@ function mod:SPELL_CAST_START(args)
 		--Hide range frame if arcane debuff not active, else switch 
 		if self.Options.RangeFrame then
 			if self.vb.arcaneDebuff > 0 then
-				if UnitDebuff("player", arcaneDebuff) then
+				if DBM:UnitDebuff("player", arcaneDebuff) then
 					DBM.RangeCheck:Show(8, nil)
 				else
 					DBM.RangeCheck:Show(8, debuffFilter)
@@ -312,7 +308,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnArcaneVolatility:Play("runout")
 		end
 		if self.Options.RangeFrame then
-			if UnitDebuff("player", arcaneDebuff) then
+			if DBM:UnitDebuff("player", arcaneDebuff) then
 				DBM.RangeCheck:Show(8, nil)
 			else
 				DBM.RangeCheck:Show(8, debuffFilter)
@@ -346,7 +342,7 @@ function mod:SPELL_AURA_REFRESH(args)
 			specWarnArcaneVolatility:Play("runout")
 		end
 		if self.Options.RangeFrame then
-			if UnitDebuff("player", arcaneDebuff) then
+			if DBM:UnitDebuff("player", arcaneDebuff) then
 				DBM.RangeCheck:Show(8, nil)
 			else
 				DBM.RangeCheck:Show(8, debuffFilter)
@@ -379,13 +375,13 @@ function mod:SPELL_CAST_SUCCESS(args)
 		countdownPol:Start(polEnergyRate)
 		voicePol:Play("scatter")
 		voicePol:Schedule(polEnergyRate-6.5, "158134")
-		if self.Options.RangeFrame and not UnitDebuff("player", arcaneDebuff) then--Show range 3 for everyone, unless have arcane debuff, then you already have range 8 showing everyone that's more important
+		if self.Options.RangeFrame and not DBM:UnitDebuff("player", arcaneDebuff) then--Show range 3 for everyone, unless have arcane debuff, then you already have range 8 showing everyone that's more important
 			DBM.RangeCheck:Show(3, nil)
 		end
 	end
 end
 
-function mod:UNIT_SPELLCAST_START(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_START(uId, _, spellId)
 	if spellId == 158093 then
 		local _, _, _, _, startTime, endTime = UnitCastingInfo(uId)
 		local time = ((endTime or 0) - (startTime or 0)) / 1000

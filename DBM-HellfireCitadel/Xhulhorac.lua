@@ -118,10 +118,9 @@ local AddsSeen = {}
 
 local debuffFilter
 local debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:GetSpellInfo(186134)
-local UnitDebuff = UnitDebuff
 do
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, debuffName) then
+		if DBM:UnitDebuff(uId, debuffName) then
 			return true
 		end
 	end
@@ -130,7 +129,7 @@ end
 local function updateRangeFrame(self)
 	if not self.Options.RangeFrame then return end
 	if self.vb.EmpFelChainCount > 0 then
-		if UnitDebuff("Player", debuffName) then
+		if DBM:UnitDebuff("Player", debuffName) then
 			DBM.RangeCheck:Show(5)
 		else
 			DBM.RangeCheck:Show(5, debuffFilter)
@@ -200,7 +199,6 @@ function mod:EmpoweredFelChains(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:GetSpellInfo(186134)
 	self.vb.EmpFelChainCount = 0
 	self.vb.phase = 1
 	self.vb.impCount = 0
@@ -232,7 +230,7 @@ function mod:SPELL_CAST_START(args)
 					return
 				else
 					--Not Tanking
-					if self.vb.phase >= 3 and playerTanking == 1 and not UnitDebuff("player", vanguardTank) then--Vanguard Tank
+					if self.vb.phase >= 3 and playerTanking == 1 and not DBM:UnitDebuff("player", vanguardTank) then--Vanguard Tank
 						--You're the Vanguard tank and do NOT have aggro for this strike or void debuff, taunt NOW
 						local targetName = UnitName(bossUnitID.."target") or DBM_CORE_UNKNOWN
 						if self:AntiSpam(3, targetName) then
@@ -253,7 +251,7 @@ function mod:SPELL_CAST_START(args)
 					return
 				else
 					--Not Tanking
-					if self.vb.phase >= 3 and playerTanking == 2 and not UnitDebuff("player", voidwalkerTank) then--VoidWalker Tank
+					if self.vb.phase >= 3 and playerTanking == 2 and not DBM:UnitDebuff("player", voidwalkerTank) then--VoidWalker Tank
 						--You're the void walker tank and do NOT have aggro for this strike or fel debuff, taunt NOW
 						local targetName = UnitName(bossUnitID.."target") or DBM_CORE_UNKNOWN
 						if self:AntiSpam(3, targetName) then
@@ -503,7 +501,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 187003 then--Activate Fel Portal
 		warnFelPortal:Play("phasechange")
 		warnFelPortal:Show()

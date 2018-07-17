@@ -106,11 +106,10 @@ mod.vb.interruptBehavior = "Count3Resume"
 local soulsSeen = {}
 local playerInConstruct = false
 local exertSpellName, debuffName = DBM:GetSpellInfo(183331), DBM:GetSpellInfo(184124)
-local UnitDebuff = UnitDebuff
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, debuffName) then
+		if DBM:UnitDebuff(uId, debuffName) then
 			return true
 		end
 	end
@@ -119,7 +118,7 @@ end
 local function updateRangeFrame(self)
 	if not self.Options.RangeFrame then return end
 	if self.vb.ManariTargets > 0 then
-		if UnitDebuff("player", debuffName) then
+		if DBM:UnitDebuff("player", debuffName) then
 			DBM.RangeCheck:Show(10)
 		else
 			DBM.RangeCheck:Show(10, debuffFilter)
@@ -169,7 +168,6 @@ function mod:ChargeTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	exertSpellName, debuffName = DBM:GetSpellInfo(183331), DBM:GetSpellInfo(184124)
 	self.vb.interruptBehavior = "Count3Resume"
 	self.vb.ReverberatingBlow = 0
 	self.vb.ManariTargets = 0

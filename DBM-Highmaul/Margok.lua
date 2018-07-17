@@ -159,7 +159,7 @@ local jumpDistance1 = {
 local jumpDistance2 = {
 	[1] = 200, [2] = 150, [3] = 113, [4] = 85, [5] = 63, [6] = 48, [7] =36, [8] = 27, [9] = 21, [10] = 16, [11] = 12, [12] = 9, [13] = 7,--or 5
 }
-local UnitDebuff, UnitDetailedThreatSituation, select = UnitDebuff, UnitDetailedThreatSituation, select
+local UnitDetailedThreatSituation, select = UnitDetailedThreatSituation, select
 local playerName = UnitName("player")
 local chogallName, inter1, inter2 = EJ_GetEncounterInfo(167), DBM:EJ_GetSectionInfo(9891), DBM:EJ_GetSectionInfo(9893)
 local fixateDebuff, gazeDebuff = DBM:GetSpellInfo(157763), DBM:GetSpellInfo(165595)
@@ -169,22 +169,22 @@ local brandedDebuff1, brandedDebuff2, brandedDebuff3, brandedDebuff4 = DBM:GetSp
 local debuffFilterMark, debuffFilterBranded, debuffFilterFixate, debuffFilterGaze
 do
 	debuffFilterMark = function(uId)
-		if UnitDebuff(uId, chaosDebuff1) or UnitDebuff(uId, chaosDebuff2) or UnitDebuff(uId, chaosDebuff3) or UnitDebuff(uId, chaosDebuff4) then
+		if DBM:UnitDebuff(uId, chaosDebuff1, chaosDebuff2, chaosDebuff3. chaosDebuff4) then
 			return true
 		end
 	end
 	debuffFilterBranded = function(uId)
-		if UnitDebuff(uId, brandedDebuff1) or UnitDebuff(uId, brandedDebuff2) or UnitDebuff(uId, brandedDebuff3) or UnitDebuff(uId, brandedDebuff4) then
+		if DBM:UnitDebuff(uId, brandedDebuff1, brandedDebuff2, brandedDebuff3, brandedDebuff4) then
 			return true
 		end
 	end
 	debuffFilterFixate = function(uId)
-		if UnitDebuff(uId, fixateDebuff) then
+		if DBM:UnitDebuff(uId, fixateDebuff) then
 			return true
 		end
 	end
 	debuffFilterGaze = function(uId)
-		if UnitDebuff(uId, gazeDebuff) then
+		if DBM:UnitDebuff(uId, gazeDebuff) then
 			return true
 		end
 	end
@@ -193,7 +193,7 @@ end
 local function updateRangeFrame(self, markPreCast)
 	if not self.Options.RangeFrame then return end
 	if self:IsMythic() and self.vb.phase == 4 then
-		if UnitDebuff("player", gazeDebuff) then--Player has gaze
+		if DBM:UnitDebuff("player", gazeDebuff) then--Player has gaze
 			DBM.RangeCheck:Show(8, nil)
 		else
 			DBM.RangeCheck:Show(8, debuffFilterGaze)
@@ -227,7 +227,7 @@ local function updateRangeFrame(self, markPreCast)
 		elseif self.vb.RepNovaActive then--Replicating Nova Active
 			DBM.RangeCheck:Show(5, nil)
 		elseif self.vb.isTransition then
-			if UnitDebuff("player", fixateDebuff) then
+			if DBM:UnitDebuff("player", fixateDebuff) then
 				DBM.RangeCheck:Show(5, nil)
 			else
 				DBM.RangeCheck:Show(5, debuffFilterFixate)
@@ -274,9 +274,6 @@ local function NightTwisted(self)
 end
 
 function mod:OnCombatStart(delay)
-	fixateDebuff, gazeDebuff = DBM:GetSpellInfo(157763), DBM:GetSpellInfo(165595)
-	chaosDebuff1, chaosDebuff2, chaosDebuff3, chaosDebuff4 = DBM:GetSpellInfo(158605), DBM:GetSpellInfo(164176), DBM:GetSpellInfo(164178), DBM:GetSpellInfo(164191)
-	brandedDebuff1, brandedDebuff2, brandedDebuff3, brandedDebuff4 = DBM:GetSpellInfo(156225), DBM:GetSpellInfo(164004), DBM:GetSpellInfo(164005), DBM:GetSpellInfo(164006)
 	self.vb.markActive = false
 	self.vb.noTaunt = false
 	self.vb.playerHasMark = false
@@ -584,7 +581,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		local name = args.destName
 		local uId = DBM:GetRaidUnitId(name)
 		if not uId then return end
-		local _, _, _, currentStack = UnitDebuff(uId, DBM:GetSpellInfo(spellId))
+		local _, _, currentStack = DBM:UnitDebuff(uId, DBM:GetSpellInfo(spellId))
 		local fortified = (self:IsMythic() and self.vb.phase >= 3) or spellId == 164005--Phase 3 uses replication ID, so need hack for mythic fortified/replication phase.
 		if not currentStack then
 			print("currentStack is nil, report to dbm authors. Branded warning disabled.")--Should never happen but added just in case.
@@ -687,7 +684,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.lastMarkedTank = args.destName
 		local uId = DBM:GetRaidUnitId(args.destName)
 		if not uId then return end
-		local _, _, _, _, _, duration, expires, _, _ = UnitDebuff(uId, args.spellName)
+		local _, _, _, _, duration, expires = DBM:UnitDebuff(uId, args.spellName)
 		if expires then
 		timerMarkOfChaos:Start(expires-GetTime(), args.destName)
 		end
@@ -829,7 +826,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 164751 or spellId == 164810 then--Teleport to Fortification/Teleport to Replication.
 		self.vb.isTransition = true
 		timerArcaneWrathCD:Stop()

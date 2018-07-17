@@ -75,7 +75,7 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 --Not in combat log, that or it was filtered by transcriptor bug
-function mod:UNIT_SPELLCAST_START(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_START(uId, _, spellId)
 	if spellId == 187664 and self:AntiSpam() then
 		timerBreathCD:Start()
 	end

@@ -118,7 +118,7 @@ local axeDebuff = DBM:GetSpellInfo(184369)
 local axeFilter
 do
 	axeFilter = function(uId)
-		if UnitDebuff(uId, axeDebuff) then
+		if DBM:UnitDebuff(uId, axeDebuff) then
 			return true
 		end
 	end
@@ -127,7 +127,7 @@ end
 local function updateRangeFrame(self, show)
 	if not self.Options.RangeFrame then return end
 	if show then
-		if UnitDebuff("player", axeDebuff) then
+		if DBM:UnitDebuff("player", axeDebuff) then
 			DBM.RangeCheck:Show(10)
 		else
 			DBM.RangeCheck:Show(10, axeFilter)
@@ -152,7 +152,6 @@ function mod:CannonTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	axeDebuff = DBM:GetSpellInfo(184369)
 	self.vb.vehicleCount = 0
 	self.vb.felcasterCount = 0
 	self.vb.berserkerCount = 0
@@ -361,7 +360,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 184913 and self:AntiSpam(20, 2) then--Haste (boss leaving)
 		self:SendSync("BossLeaving")
 	elseif spellId == 184350 and self:AntiSpam(3, 3) then--Actual axe cast.
