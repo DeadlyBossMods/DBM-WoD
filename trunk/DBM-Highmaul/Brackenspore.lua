@@ -156,7 +156,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnRot:Show(amount)
 				specWarnRot:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
-				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+				if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnRotOther:Show(args.destName)
 					specWarnRotOther:Play("changemt")
 				else
@@ -186,7 +186,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 163141 then
 		specWarnMindFungus:Show()
 		timerMindFungusCD:Start()

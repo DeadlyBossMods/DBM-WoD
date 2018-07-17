@@ -116,7 +116,6 @@ end--]]
 --]]
 
 function mod:OnCombatStart(delay)
-	markofNecroDebuff = DBM:GetSpellInfo(184449)
 	self.vb.DiaPushed = false
 	self.vb.diaDead = false
 	self.vb.jubeiGone = false
@@ -180,7 +179,7 @@ function mod:SPELL_CAST_START(args)
 		if not self.vb.DiaPushed then--Don't start cd timer for her final reap she casts at 30%
 			timerReapCD:Start()
 		end
-		if UnitDebuff("player", markofNecroDebuff) and self:AntiSpam(5, 5) then
+		if DBM:UnitDebuff("player", markofNecroDebuff) and self:AntiSpam(5, 5) then
 			specWarnReap:Show()
 			yellReap:Yell()
 			countdownReap:Start()
@@ -358,7 +357,7 @@ function mod:RAID_BOSS_EMOTE(msg, npc)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 187183 then--Mark of the Necromancer (30% version that marks half of enemies, Dia)
 		self.vb.DiaPushed = true
 		timerReapCD:Stop()

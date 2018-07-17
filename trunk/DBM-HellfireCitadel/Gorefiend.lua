@@ -126,7 +126,6 @@ local function sharedFateDelay(self)
 end
 
 function mod:OnCombatStart(delay)
-	digestDebuff, gorefiendCorruption = DBM:GetSpellInfo(181295), DBM:GetSpellInfo(179867)
 	self.vb.rootedFate = nil
 	self.vb.shadowOfDeathCount = 0
 	self.vb.sharedFateCount = 0
@@ -292,7 +291,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnBurning:Show(amount)
 				specWarnBurning:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
-				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+				if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnBurningOther:Show(args.destName)
 					specWarnBurningOther:Play("tauntboss")
 				end
@@ -344,7 +343,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 180016 and self:AntiSpam(2, 1) then--Crushing Darkness
 		warnCrushingDarkness:Show()
 		timerCrushingDarkness:Start()

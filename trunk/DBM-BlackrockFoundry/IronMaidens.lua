@@ -141,7 +141,7 @@ mod.vb.boatMissionActive = false
 mod.vb.lastBoatPower = 0
 local preyDebuff, bloodcallingDebuff = DBM:GetSpellInfo(170395), DBM:GetSpellInfo(170405)
 
-local UnitPosition, UnitIsConnected, UnitDebuff, GetTime =  UnitPosition, UnitIsConnected, UnitDebuff, GetTime
+local UnitPosition, UnitIsConnected, GetTime =  UnitPosition, UnitIsConnected, GetTime
 local playerOnBoat = false
 
 local function isPlayerOnBoat()
@@ -190,7 +190,7 @@ end
 function mod:BladeDashTarget(targetname, uId)
 	if self:IsMythic() and self:AntiSpam(5, 3) then
 		if targetname == UnitName("player") then
-			if UnitDebuff("player", preyDebuff) and self.Options.filterBladeDash3 then return end
+			if DBM:UnitDebuff("player", preyDebuff) and self.Options.filterBladeDash3 then return end
 			specWarnBladeDash:Show()
 			specWarnBladeDash:Play("targetyou")
 		elseif self:CheckNearby(8, targetname) then
@@ -203,7 +203,6 @@ function mod:BladeDashTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	preyDebuff, bloodcallingDebuff = DBM:GetSpellInfo(170395), DBM:GetSpellInfo(170405)
 	self.vb.phase = 1
 	self.vb.ship = 0
 	self.vb.alphaOmega = 1
@@ -385,7 +384,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 			if args:IsPlayer() then
 				yellBloodRitual:Yell()
-				if UnitDebuff("player", bloodcallingDebuff) and self.Options.filterBloodRitual3 then return end
+				if DBM:UnitDebuff("player", bloodcallingDebuff) and self.Options.filterBloodRitual3 then return end
 				specWarnBloodRitual:Show()
 				specWarnBloodRitual:Play("targetyou")
 			else
@@ -468,7 +467,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 158849 then
 		timerWarmingUp:Start()
 		countdownWarmingUp:Start()
@@ -565,7 +564,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, targetname)
 	if msg:find(L.EarlyBladeDash) then
 		if self:IsMythic() and self:AntiSpam(5, 3) then
 			if targetname == UnitName("player") then
-				if UnitDebuff("player", preyDebuff) and self.Options.filterBladeDash3 then return end
+				if DBM:UnitDebuff("player", preyDebuff) and self.Options.filterBladeDash3 then return end
 				specWarnBladeDash:Show()
 			elseif self:CheckNearby(8, targetname) then
 				specWarnBladeDashOther:Show(targetname)

@@ -109,7 +109,7 @@ local AddsSeen = {}
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, corruption) or UnitDebuff(uId, phantasmalFelBomb) or UnitDebuff(uId, realFelBomb) then
+		if DBM:UnitDebuff(uId, corruption, phantasmalFelBomb, realFelBomb) then
 			return true
 		end
 	end
@@ -119,7 +119,7 @@ local function updateRangeFrame(self)
 	if not self.Options.RangeFrame then return end
 	--Both spells have same 15 yard range so this makes it easy
 	--Player has either debuff, show everyone
-	if UnitDebuff("player", corruption) or UnitDebuff("player", phantasmalFelBomb) or UnitDebuff("player", realFelBomb) then
+	if DBM:UnitDebuff("player", corruption, phantasmalFelBomb, realFelBomb) then
 		DBM.RangeCheck:Show(15)
 	else--Show players with either debuff near you.
 		DBM.RangeCheck:Show(15, debuffFilter)
@@ -163,7 +163,6 @@ local function showChakram(self)
 end
 
 function mod:OnCombatStart(delay)
-	darkBindings, realFelBomb, phantasmalFelBomb, phantWinds, corruption = DBM:GetSpellInfo(185510), DBM:GetSpellInfo(181753), DBM:GetSpellInfo(179219), DBM:GetSpellInfo(181957), DBM:GetSpellInfo(181824)
 	self.vb.escapeCount = 0
 	self.vb.focusedBlast = 0
 	self.vb.savedChakram = nil
@@ -212,7 +211,7 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 181912 then
 		self.vb.focusedBlast = self.vb.focusedBlast + 1
 		specWarnFocusedBlast:Show(self.vb.focusedBlast)
-		if not UnitDebuff("player", corruption) and not UnitDebuff("player", realFelBomb) and not UnitDebuff("player", phantasmalFelBomb) and not UnitDebuff("player", darkBindings) then--Filter debuffs that kill other players
+		if not DBM:UnitDebuff("player", corruption, phantasmalFelBomb, realFelBomb) and not DBM:UnitDebuff("player", darkBindings) then--Filter debuffs that kill other players
 			specWarnFocusedBlast:Play("gather")
 		end
 		timerFocusedBlast:Start()
@@ -556,7 +555,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 182582 or spellId == 184630 then--Fel Incineration
 		if self:IsNormal() then
 			timerFelLaserCD:Start(23)

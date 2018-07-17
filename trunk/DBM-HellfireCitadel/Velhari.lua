@@ -111,16 +111,15 @@ local AncientSovereign = DBM:EJ_GetSectionInfo(11170)
 local TyrantVelhari = EJ_GetEncounterInfo(1394)
 
 local debuffFilter, debuffFilter2
-local UnitDebuff = UnitDebuff
 local debuffName = DBM:GetSpellInfo(180526)
 do
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, debuffName) then
+		if DBM:UnitDebuff(uId, debuffName) then
 			return true
 		end
 	end
 	debuffFilter2 = function(uId)
-		if not UnitDebuff(uId, debuffName) then
+		if not DBM:UnitDebuff(uId, debuffName) then
 			return true
 		end
 	end
@@ -145,7 +144,6 @@ function mod:AnnTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	debuffName = DBM:GetSpellInfo(180526)
 	self.vb.touchofHarmCount = 0
 	self.vb.edictCount = 0
 	self.vb.annihilationCount = 0
@@ -294,7 +292,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 180526 then
 		warnFontofCorruption:CombinedShow(0.3, args.destName)
 		if args:IsPlayer() then
-			local _, _, _, _, _, duration, expires, _, _ = UnitDebuff("player", args.spellName)--Find out what our specific seed timer is
+			local _, _, _, _, duration, expires = DBM:UnitDebuff("player", args.spellName)--Find out what our specific seed timer is
 			if expires then
 				local remaining = expires-GetTime()
 				countdownFontofCorruption:Start(remaining)
@@ -325,7 +323,7 @@ function mod:SPELL_AURA_APPLIED_DOSE(args)
 			if args:IsPlayer() then
 				specWarnSealofDecay:Show(amount)
 			else
-				local _, _, _, _, _, duration, expires = UnitDebuff("player", args.spellName)
+				local _, _, _, _, duration, expires = DBM:UnitDebuff("player", args.spellName)
 				local debuffTime = 0
 				if expires then
 					debuffTime = expires - GetTime()
@@ -393,7 +391,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc, _, _, target)
 	end
 end
 
-function mod:UNIT_SPELLCAST_START(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_START(uId, _, spellId)
 	if spellId == 180025 then
 		if self.vb.interruptCount == 2 then self.vb.interruptCount = 0 end
 		self.vb.interruptCount = self.vb.interruptCount + 1

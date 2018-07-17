@@ -38,7 +38,6 @@ function mod:SPELL_CAST_START(args)
 	if not self.Options.Enabled then return end
 	local spellId = args.spellId
 	if spellId == 156446 then
-		volcanicBomb = DBM:GetSpellInfo(156413)
 		specWarnBlastWave:Show(volcanicBomb)
 	elseif spellId == 163194 then
 		specWarnFinalFlame:Show()
@@ -70,7 +69,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnBurning:Show(amount)
 				specWarnBurningOther:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
-				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+				if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnBurningOther:Show(args.destName)
 					specWarnBurningOther:Play("tauntboss")
 				end
@@ -86,7 +85,6 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 159750 then--Mythic version (Blast Waves)
 		DBM:HideBlizzardEvents(1)--Blizzards frame completely covers dbms warnings here and stays on screen forever, so disable the stupid thing.
 		blastCount = 0
-		volcanicBomb = DBM:GetSpellInfo(156413)
 		specWarnBlastWave:Show(volcanicBomb)
 	end
 end
@@ -118,7 +116,7 @@ end
 "<109.00 22:11:25> [CLEU] SPELL_MISSED#Creature-0-3137-1205-5634-77504-000014A9AF#Slag Behemoth#Player-55-036B2A5B#Ikatus#159757#Blast Waves#IMMUNE#false", -- [1720]
 --]]
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if (spellId == 159751 or spellId == 159755) and self:AntiSpam(1.5, 1) then--Sub casts don't show in combat log. Block players who do not pass latency check from sending sync since have to set threshold so low
 		blastCount = blastCount + 1
 		warnBlastWaves:Show(blastCount)

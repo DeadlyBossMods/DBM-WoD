@@ -89,11 +89,10 @@ local unstableOrbsTimers = {3, 18, 24, 24, 24}--Nerfed considerbly, useful now.
 local poundingTimers = {32.6, 54, 24}
 
 local debuffFilter
-local UnitDebuff = UnitDebuff
 local debuffName, reactiveName, burningName, quickfuseName, reinforcedName, volatileName = DBM:GetSpellInfo(182280), DBM:GetSpellInfo(186676), DBM:GetSpellInfo(186667), DBM:GetSpellInfo(186660), DBM:GetSpellInfo(188294), DBM:GetSpellInfo(182523)
 do
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, debuffName) then
+		if DBM:UnitDebuff(uId, debuffName) then
 			return true
 		end
 	end
@@ -145,7 +144,7 @@ end
 local function updateRangeFrame(self)
 	if not self.Options.RangeFrame or not self:IsInCombat() then return end
 	if (self:IsMelee() or not self.vb.groundPhase) and self.vb.artilleryActive > 0 then--Artillery
-		if UnitDebuff("player", debuffName) then
+		if DBM:UnitDebuff("player", debuffName) then
 			DBM.RangeCheck:Show(30, nil)
 		else
 			DBM.RangeCheck:Show(30, debuffFilter)
@@ -158,7 +157,6 @@ local function updateRangeFrame(self)
 end
 
 function mod:OnCombatStart(delay)
-	debuffName, reactiveName, burningName, quickfuseName, reinforcedName, volatileName = DBM:GetSpellInfo(182280), DBM:GetSpellInfo(186676), DBM:GetSpellInfo(186667), DBM:GetSpellInfo(186660), DBM:GetSpellInfo(188294), DBM:GetSpellInfo(182523)
 	self.vb.artilleryActive = 0--Only one that should reset on pull
 	self.vb.volatileCount = 0
 	self.vb.quickfuseCount = 0
@@ -388,7 +386,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 185250 and self:AntiSpam(2, 3) then--Unstable Orb Cast
 		self.vb.unstableOrbCount = self.vb.unstableOrbCount + 1
 		local cooldown = unstableOrbsTimers[self.vb.unstableOrbCount+1]

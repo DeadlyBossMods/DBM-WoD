@@ -77,7 +77,6 @@ local AddsSeen = {}
 local HowlByGUID = {}--Not syncable, but keeps separate count for each add cleanly
 
 function mod:OnCombatStart(delay)
-	felCorruption = DBM:GetSpellInfo(182159)
 	table.wipe(HowlByGUID)
 	self.vb.berserkerCount = 0
 	self.vb.deathThrowsCount = 0

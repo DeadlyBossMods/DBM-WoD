@@ -123,18 +123,18 @@ local activePrimalGUIDS = {}
 local activePrimal = 0 -- health report variable. no sync
 local prevHealth = 100
 local yellVolatileFire2 = mod:NewFadesYell(176121, nil, true, false)
-local UnitDebuff, UnitHealth, UnitHealthMax, UnitPower, UnitGUID, GetTime, mceil = UnitDebuff, UnitHealth, UnitHealthMax, UnitPower, UnitGUID, GetTime, math.ceil
+local UnitHealth, UnitHealthMax, UnitPower, UnitGUID, GetTime, mceil = UnitHealth, UnitHealthMax, UnitPower, UnitGUID, GetTime, math.ceil
 
 local BombFilter, VolatileFilter, FixateFilter
 do
 	BombFilter = function(uId)
-		return UnitDebuff(uId, bombDebuff)
+		return DBM:UnitDebuff(uId, bombDebuff)
 	end
 	VolatileFilter = function(uId)
-		return UnitDebuff(uId, volatileFireDebuff)
+		return DBM:UnitDebuff(uId, volatileFireDebuff)
 	end
 	FixateFilter = function(uId)
-		return UnitDebuff(uId, fixateDebuff)
+		return DBM:UnitDebuff(uId, fixateDebuff)
 	end
 end
 
@@ -175,7 +175,7 @@ do
 		addLine(heatName, UnitPower("boss1", 10))--Heart of the mountain always boss1
 		--Show fixate debuffs second
 		for uId in DBM:GetGroupMembers() do
-			if UnitDebuff(uId, fixateDebuff) then
+			if DBM:UnitDebuff(uId, fixateDebuff) then
 				addLine(UnitName(uId), "")
 			end
 		end
@@ -225,13 +225,13 @@ end
 --Much better and smarter range checker.
 local function updateRangeFrame(self)
 	if not self.Options.RangeFrame then return end
-	if UnitDebuff("player", volatileFireDebuff) then--Volatile fire first
+	if DBM:UnitDebuff("player", volatileFireDebuff) then--Volatile fire first
 		DBM.RangeCheck:Show(8)--Player has volatile fire, show everyone in 8 yards
 	else
 		playerVolatileCount = 0--Just in case it gets off count somehow, it shouldn't, but setting to 0 when UnitDebuff is false for volatileFireDebuff
-		if UnitDebuff("player", bombDebuff) then--Bomb 2nd priority
+		if DBM:UnitDebuff("player", bombDebuff) then--Bomb 2nd priority
 			DBM.RangeCheck:Show(8)--Player has bomb, show everyone in 8 yards
-		elseif UnitDebuff("player", fixateDebuff) then--Fixate 3rd priority
+		elseif DBM:UnitDebuff("player", fixateDebuff) then--Fixate 3rd priority
 			DBM.RangeCheck:Show(5)--Player has fixate, show everyone in 5 yards.
 		else--No personal debuff, show range frame with other debuffs near us
 			if self.vb.phase == 1 then--Only bombs in phase 1
@@ -315,7 +315,6 @@ function mod:CustomHealthUpdate()
 end
 
 function mod:OnCombatStart(delay)
-	bombDebuff, volatileFireDebuff, fixateDebuff, heatName = DBM:GetSpellInfo(155192), DBM:GetSpellInfo(176121), DBM:GetSpellInfo(155196), DBM:GetSpellInfo(155242)
 	table.wipe(activeSlagGUIDS)
 	table.wipe(activePrimalGUIDS)
 	prevHealth = 100
@@ -394,7 +393,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if args:IsSpellID(155192, 174716, 159558) then
 		local uId = DBM:GetRaidUnitId(args.destName)
-		local _, _, _, _, _, duration, expires = UnitDebuff(uId, args.spellName)
+		local _, _, _, _, duration, expires = DBM:UnitDebuff(uId, args.spellName)
 		local debuffTime = expires - GetTime()
 		if self:CheckTankDistance(args.sourceGUID, 40) and self.vb.phase == 1 then--Filter Works very poorly, probably because mob not a BOSS id. usually see ALL warnings and all HUDs :\
 			warnBomb:CombinedShow(1, args.destName)
@@ -471,7 +470,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnHeat:Show(amount)
 				specWarnHeat:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
-				if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+				if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 					specWarnHeatOther:Show(args.destName)
 					specWarnHeatOther:Play("tauntboss")
 				else
@@ -490,7 +489,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnVolatileFire:CombinedShow(1, args.destName)
 		self.vb.volatileActive = self.vb.volatileActive + 1
 		local uId = DBM:GetRaidUnitId(args.destName)
-		local _, _, _, _, _, duration, expires, _, _ = UnitDebuff(uId, args.spellName)
+		local _, _, _, _, duration, expires = DBM:UnitDebuff(uId, args.spellName)
 		if expires then
 			local debuffTime = expires - GetTime()
 			if args:IsPlayer() then
@@ -566,7 +565,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			--https://www.warcraftlogs.com/reports/YjKftazDw3nbAqmC#view=events&pins=2%24Off%24%23244F4B%24expression%24ability.id+%3D+176121
 			updateRangeFrame(self)
 		end
-	elseif spellId == 155196 and not UnitDebuff(args.destName, fixateDebuff) then
+	elseif spellId == 155196 and not DBM:UnitDebuff(args.destName, fixateDebuff) then
 		if self.Options.SetIconOnFixate then
 			self:SetIcon(args.destName, 0)
 		end

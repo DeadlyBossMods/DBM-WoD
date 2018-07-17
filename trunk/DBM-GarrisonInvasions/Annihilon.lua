@@ -70,7 +70,7 @@ function mod:SPELL_AURA_REMOVED(args)
 end
 
 
-function mod:UNIT_SPELLCAST_START(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_START(uId, _, spellId)
 	if spellId == 180939 and self:AntiSpam(3, 1) then
 		self:SendSync("VoidBomb", UnitGUID(uId))
 	elseif spellId == 180932 and self:AntiSpam(3, 2) then

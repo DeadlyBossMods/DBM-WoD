@@ -130,21 +130,20 @@ local doomSpikeTargets = {}
 local AddsSeen = {}
 local playerName = UnitName("player")
 local doomName, guldanName, doomSpikeName, gaze1, gaze2 = DBM:GetSpellInfo(181099), DBM:GetSpellInfo(186362), DBM:GetSpellInfo(181119), DBM:GetSpellInfo(181597), DBM:GetSpellInfo(182006)
-local UnitDebuff = UnitDebuff
 local doomFilter, guldanFilter, doomSpikeFilter
 do
 	doomFilter = function(uId)
-		if UnitDebuff(uId, doomName) then
+		if DBM:UnitDebuff(uId, doomName) then
 			return true
 		end
 	end
 	guldanFilter = function(uId)
-		if UnitDebuff(uId, guldanName) then
+		if DBM:UnitDebuff(uId, guldanName) then
 			return true
 		end
 	end
 	doomSpikeFilter = function(uId)
-		if UnitDebuff(uId, guldanName) then
+		if DBM:UnitDebuff(uId, guldanName) then
 			return true
 		end
 	end
@@ -153,19 +152,19 @@ end
 local function updateRangeFrame(self)
 	if not self.Options.RangeFrame then return end
 	if self:IsTank() and #doomSpikeTargets > 0 then
-		if UnitDebuff("Player", doomSpikeName) then
+		if DBM:UnitDebuff("Player", doomSpikeName) then
 			DBM.RangeCheck:Show(30)
 		else
 			DBM.RangeCheck:Show(30, doomSpikeFilter)
 		end
 	elseif self.vb.DoomTargetCount > 0 then
-		if UnitDebuff("Player", doomName) then
+		if DBM:UnitDebuff("Player", doomName) then
 			DBM.RangeCheck:Show(20)
 		else
 			DBM.RangeCheck:Show(20, doomFilter)
 		end
 	elseif #guldanTargets > 0 then
-		if UnitDebuff("Player", guldanName) then
+		if DBM:UnitDebuff("Player", guldanName) then
 			DBM.RangeCheck:Show(15)
 		else
 			DBM.RangeCheck:Show(15, guldanFilter)
@@ -205,7 +204,7 @@ do
 			local name = gazeTargets[i]
 			local uId = DBM:GetRaidUnitId(name)
 			if not uId then break end
-			if UnitDebuff(uId, gaze1) or UnitDebuff(uId, gaze2) then
+			if DBM:UnitDebuff(uId, gaze1, gaze2) then
 				total = total + 1
 				addLine("|cFF9932CD"..name.."|r", i)
 			end
@@ -215,7 +214,7 @@ do
 			local name = guldanTargets[i]
 			local uId = DBM:GetRaidUnitId(name)
 			if not uId then break end
-			local _, _, _, currentStack = UnitDebuff(uId, guldanName)
+			local _, _, currentStack = DBM:UnitDebuff(uId, guldanName)
 			if currentStack then
 				total2 = total2 + 1
 				addLine(name, currentStack)
@@ -358,7 +357,6 @@ local function updateAllTimers(self, delay)
 end
 
 function mod:OnCombatStart(delay)
-	doomName, guldanName, doomSpikeName, gaze1, gaze2 = DBM:GetSpellInfo(181099), DBM:GetSpellInfo(186362), DBM:GetSpellInfo(181119), DBM:GetSpellInfo(181597), DBM:GetSpellInfo(182006)
 	table.wipe(doomTargets)
 	table.wipe(gazeTargets)
 	table.wipe(AddsSeen)
@@ -501,7 +499,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnCurseofLegion:Show()
 			specWarnCurseofLegion:Play("targetyou")
-			local _, _, _, _, _, _, expires = UnitDebuff("Player", args.spellName)
+			local _, _, _, _, _, expires = DBM:UnitDebuff("Player", args.spellName)
 			local debuffTime = expires - GetTime()
 			yellCurseofLegion:Schedule(debuffTime - 1, 1)
 			yellCurseofLegion:Schedule(debuffTime - 2, 2)
@@ -557,7 +555,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnGaze:Show()
 			specWarnGaze:Play("targetyou")
 		else
-			if not UnitDebuff("player", args.spellName) then
+			if not DBM:UnitDebuff("player", args.spellName) then
 				specWarnGaze:ScheduleVoice(0.3, "gathershare")
 			end
 		end
@@ -568,7 +566,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		local amount = args.amount or 1
 		if amount % 3 == 0 or amount > 6 then
 			warnDoomSpike:Show(args.destName, amount)
-			if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") and self:AntiSpam(3, 6) then
+			if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") and self:AntiSpam(3, 6) then
 				specWarnDoomSpikeOther:Show(args.destName)
 			end
 		end
@@ -778,7 +776,7 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, npc)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 181735 then--0.1 seconds faster than combat log event for 10 yard cast.
 		specWarnFelSeeker:Show()
 		timerFelSeekerCD:Start()

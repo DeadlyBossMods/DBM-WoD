@@ -302,7 +302,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				if args:IsPlayer() then
 					specWarnSearingFangs:Show(amount)
 				else
-					if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+					if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 						specWarnSearingFangsOther:Show(args.destName)
 					else
 						warnSearingFangs:Show(args.destName, amount)
@@ -317,7 +317,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if amount >= 3 and args:IsPlayer() then
 			specWarnCrushArmor:Show(amount)
 		elseif amount >= 2 and not args:IsPlayer() then--Swap at 2 WHEN POSSIBLE but 50/50 you have to go to 3.
-			if not UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
+			if not DBM:UnitDebuff("player", args.spellName) and not UnitIsDeadOrGhost("player") then
 				specWarnCrushArmorOther:Show(args.destName)
 				specWarnCrushArmorOther:Play("tauntboss")
 			else
@@ -465,7 +465,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, _, _, spellId)
+function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	if spellId == 155221 then--IronCrusher Tantrum
 		self.vb.tantrumCount = self.vb.tantrumCount + 1
 		specWarnTantrum:Show(self.vb.tantrumCount)

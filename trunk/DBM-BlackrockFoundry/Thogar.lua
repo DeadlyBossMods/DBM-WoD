@@ -68,7 +68,6 @@ mod:AddDropdownOption("InfoFrameSpeed", {"Immediately", "Delayed"}, "Delayed", "
 mod.vb.trainCount = 0
 mod.vb.infoCount = 0
 local GetTime, UnitPosition = GetTime, UnitPosition
-local UnitDebuff = UnitDebuff
 local MovingTrain, Cannon = DBM:GetSpellInfo(176312), DBM:GetSpellInfo(62357)
 local Reinforcements, ManOArms, Deforester = DBM:EJ_GetSectionInfo(9537), DBM:EJ_GetSectionInfo(9549), DBM:EJ_GetSectionInfo(10329)
 local fakeYellTime = 0
@@ -559,7 +558,6 @@ function mod:GrenadeTarget(targetname, uId)
 end
 
 function mod:OnCombatStart(delay)
-	MovingTrain, Cannon = DBM:GetSpellInfo(176312), DBM:GetSpellInfo(62357)
 	fakeYellTime = 0
 	bombFrom = nil
 	self.vb.trainCount = 0
@@ -630,7 +628,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnEnkindle:Show(amount)
 				specWarnEnkindle:Play("stackhigh")
 			else--Taunt as soon as stacks are clear, regardless of stack count.
-				local _, _, _, _, _, duration, expires = UnitDebuff("player", args.spellName)
+				local _, _, _, _, duration, expires = DBM:UnitDebuff("player", args.spellName)
 				local debuffTime = 0
 				if expires then
 					debuffTime = expires - GetTime()

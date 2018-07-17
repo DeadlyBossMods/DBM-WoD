@@ -35,11 +35,10 @@ local timerMarkCD				= mod:NewNextTimer(20, 163447, nil, nil, nil, 3)
 mod:AddRangeFrameOption(8, 163447)
 
 local debuffCheck = DBM:GetSpellInfo(163447)
-local UnitDebuff = UnitDebuff
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		return UnitDebuff(uId, debuffCheck)
+		return DBM:UnitDebuff(uId, debuffCheck)
 	end
 end
 
@@ -57,7 +56,7 @@ function mod:FreezingSnareTarget(targetname, uId)
 end
   
 function mod:OnCombatStart(delay)
-	debuffCheck = DBM:GetSpellInfo(163447)
+
 end
 
 function mod:OnCombatEnd()
@@ -77,7 +76,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnMark:Play("runout")
 		end
 		if self.Options.RangeFrame then
-			if UnitDebuff("player", debuffCheck) then--You have debuff, show everyone
+			if DBM:UnitDebuff("player", debuffCheck) then--You have debuff, show everyone
 				DBM.RangeCheck:Show(8, nil)
 			else--You do not have debuff, only show players who do
 				DBM.RangeCheck:Show(8, debuffFilter)

@@ -67,13 +67,12 @@ mod.vb.foulCrush = 0
 mod.vb.swatCount = 0
 mod.vb.enraged = false
 local debuffName = DBM:GetSpellInfo(181306)
-local UnitDebuff = UnitDebuff
 local playerName = UnitName("player")
 
 local debuffFilter
 do
 	debuffFilter = function(uId)
-		if UnitDebuff(uId, debuffName) then
+		if DBM:UnitDebuff(uId, debuffName) then
 			return true
 		end
 	end
@@ -82,7 +81,7 @@ end
 local function updateRangeCheck(self, force)
 	if not self.Options.RangeFrame then return end
 	if self.vb.explodingTank then
-		if UnitDebuff("player", debuffName) then
+		if DBM:UnitDebuff("player", debuffName) then
 			DBM.RangeCheck:Show(30)
 		elseif not self:CheckNearby(31, self.vb.explodingTank) and self.vb.poundActive then--far enough from tank and pound is active, switch back to 4
 			DBM.RangeCheck:Show(4)
@@ -108,7 +107,6 @@ local function trippleBurstCheck(self, target, first)
 end
 
 function mod:OnCombatStart(delay)
-	debuffName = DBM:GetSpellInfo(181306)
 	self.vb.explodingTank = nil
 	self.vb.poundActive = false
 	self.vb.poundCount = 0
