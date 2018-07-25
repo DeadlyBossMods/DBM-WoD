@@ -92,7 +92,7 @@ function mod:SPELL_CAST_START(args)
 		timerDisruptingRoarCD:Start()
 		DBM:GetBossUnitId(args.sourceName)
 		specWarnDisruptingRoar:Play("stopcast")
-		local _, _, _, _, startTime, endTime = UnitCastingInfo(DBM:GetBossUnitId(args.sourceName))
+		local _, _, _, startTime, endTime = UnitCastingInfo(DBM:GetBossUnitId(args.sourceName))
 		local time = ((endTime or 0) - (startTime or 0)) / 1000
 		if time then
 			timerDisruptingRoar:Start(time)
