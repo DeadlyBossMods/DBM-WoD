@@ -526,7 +526,7 @@ function mod:BombTarget(targetname, uId, bossuId)
 	if targetname == UnitName("player") then
 		specWarnDelayedSiegeBomb:Show()
 		specWarnDelayedSiegeBomb:Play("bombrun")
-		local _, _, _, _, startTime, endTime = UnitCastingInfo(bossuId)
+		local _, _, _, startTime, endTime = UnitCastingInfo(bossuId)
 		local time = ((endTime or 0) - (startTime or 0)) / 1000
 		if time then
 			specWarnDelayedSiegeBombMove:Schedule(time - 0.5, 1)
