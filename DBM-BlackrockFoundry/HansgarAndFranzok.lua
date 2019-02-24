@@ -90,12 +90,14 @@ function mod:SPELL_CAST_START(args)
 	if args:IsSpellID(160838, 160845, 160847, 160848) then
 		specWarnDisruptingRoar:Show()
 		timerDisruptingRoarCD:Start()
-		DBM:GetBossUnitId(args.sourceName)
 		specWarnDisruptingRoar:Play("stopcast")
-		local _, _, _, startTime, endTime = UnitCastingInfo(DBM:GetBossUnitId(args.sourceName))
-		local time = ((endTime or 0) - (startTime or 0)) / 1000
-		if time then
-			timerDisruptingRoar:Start(time)
+		local uId = DBM:GetUnitIdFromGUID(args.sourceGUID)
+		if uId then
+			local _, _, _, startTime, endTime = UnitCastingInfo(uId)
+			local time = ((endTime or 0) - (startTime or 0)) / 1000
+			if time then
+				timerDisruptingRoar:Start(time)
+			end
 		end
 	elseif spellId == 153470 then
 		warnSkullcracker:Show()
