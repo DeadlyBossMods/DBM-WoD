@@ -1,0 +1,10 @@
+package-as: DBM-WoD
+enable-nolib-creation: no
+
+move-folders:
+    DBM-WoD/DBM-BlackrockFoundry: DBM-BlackrockFoundry
+    DBM-WoD/DBM-Draenor: DBM-Draenor
+    DBM-WoD/DBM-GarrisonInvasions: DBM-GarrisonInvasions
+    DBM-WoD/DBM-HellfireCitadel: DBM-HellfireCitadel
+    DBM-WoD/DBM-Highmaul: DBM-Highmaul
+   
