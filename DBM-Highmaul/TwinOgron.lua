@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(1148, "DBM-Highmaul", nil, 477)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(string.sub("@file-date-integer@", 1, -5))
+mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(78238, 78237)--Pol 78238, Phemos 78237
 mod:SetEncounterID(1719)
 mod:SetZone()

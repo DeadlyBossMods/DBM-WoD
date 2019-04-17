@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod(1452, "DBM-Draenor", nil, 557)--Not yet in journal, needs journalID in whatever build they add his ID in
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(string.sub("@file-date-integer@", 1, -5))
+mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(94015)
 mod:SetEncounterID(1801)
 mod:SetReCombatTime(20)

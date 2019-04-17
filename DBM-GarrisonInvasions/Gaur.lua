@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Gaur", "DBM-GarrisonInvasions")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(string.sub("@file-date-integer@", 1, -5))
+mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(90943)
 mod:SetZone()
 
