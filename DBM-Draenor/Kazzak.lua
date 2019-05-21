@@ -25,7 +25,7 @@ local yellMark						= mod:NewYell(187668)
 local timerDoomD					= mod:NewCDTimer(51, 187466, nil, nil, nil, 3)
 local timerBreathCD					= mod:NewCDTimer(22, 187664, nil, nil, nil, 5)
 
---mod:AddReadyCheckOption(37462, false)--Unknown quest flag
+--mod:AddReadyCheckOption(37462, false, 100)--Unknown quest flag
 mod:AddRangeFrameOption(8, 187668)
 
 function mod:OnCombatStart(delay, yellTriggered)
