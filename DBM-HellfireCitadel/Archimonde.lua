@@ -108,7 +108,7 @@ local timerLightCD					= mod:NewNextTimer(10, 183963, nil, nil, nil, 5)
 local timerShadowBlastCD			= mod:NewCDTimer(7.3, 183864, nil, "Tank", nil, 5)
 --Phase 2: Hand of the Legion
 mod:AddTimerLine(SCENARIO_STAGE:format(2))
-local timerShackledTormentCD		= mod:NewCDCountTimer(31.5, 184931, nil, nil, nil, 3, nil, nil, nil, not mod:IsTank() 3, 3)
+local timerShackledTormentCD		= mod:NewCDCountTimer(31.5, 184931, nil, nil, nil, 3, nil, nil, nil, not mod:IsTank() and 3, 3)
 local timerWroughtChaosCD			= mod:NewCDTimer(51.7, 184265, nil, nil, nil, 3, nil, DBM_CORE_DEADLY_ICON)
 --Phase 2.5
 local timerFelborneOverfiendCD		= mod:NewNextCountTimer(44.3, "ej11603", nil, nil, nil, 1, 186662)
