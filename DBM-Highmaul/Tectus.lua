@@ -99,7 +99,7 @@ function mod:CustomHealthUpdate()
 	end
 	for guid, health in pairs(moteH) do
 		if not moteGUID[guid] then
-			local newhealth = self:GetBossHPByGUID(guid) or health
+			local newhealth = self:GetBossHP(guid) or health
 			if newhealth >= 1 then
 				self.vb.healthPhase = 3
 				moteC = moteC + 1
