@@ -159,7 +159,7 @@ function mod:OnCombatEnd()
 	if self.Options.HudMapOnStrike or self.Options.HudMapEdict2 then
 		DBMHudMap:Disable()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

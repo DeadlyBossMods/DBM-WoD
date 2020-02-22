@@ -59,7 +59,7 @@ L:SetTimerLocalization({
 	SoDDPS2		= "下一次死亡之影 (%s)",
 	SoDTank2	= "下一次死亡之影 (%s)",
 	SoDHealer2	= "下一次死亡之影 (%s)"
-}) 
+})
 
 L:SetOptionLocalization({
 	SoDDPS2			= "计时条：下一次针对DPS的$spell:179864",

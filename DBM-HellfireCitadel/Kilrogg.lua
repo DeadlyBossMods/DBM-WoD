@@ -93,7 +93,7 @@ function mod:OnCombatEnd()
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

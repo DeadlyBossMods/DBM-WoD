@@ -179,7 +179,7 @@ function mod:OnCombatEnd()
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
-end 
+end
 
 --(ability.id = 186684 or ability.id = 186666 or ability.id = 186660 or ability.id = 188293 or ability.id = 182523) and type = "cast"
 function mod:SPELL_CAST_SUCCESS(args)

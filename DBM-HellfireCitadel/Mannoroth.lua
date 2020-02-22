@@ -380,7 +380,7 @@ function mod:OnCombatEnd()
 	if self.Options.HudMapOnGaze2 then
 		DBMHudMap:Disable()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
@@ -604,7 +604,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
- 
+
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 181099 then

@@ -662,7 +662,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			self.vb.playerHasMark = true
-			if spellId == 164176 then 
+			if spellId == 164176 then
 				--Displacement you cannot run out on cast start (you get ported back on cast finish). Only warn after cast finish.
 				if self:IsMythic() and self.vb.phase == 2 then--Mythic phase 2 uses displacement spellid but it's also fortified
 					specWarnMarkOfChaosFortification:Show()--So show fortified warning, not displacement.

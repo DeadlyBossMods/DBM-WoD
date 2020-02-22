@@ -23,13 +23,13 @@
 ## X-WoWI-ID: 24535
 ## Version: @project-version@
 
+localization.br.lua
 localization.en.lua
 localization.kr.lua
 localization.de.lua
 localization.es.lua
 localization.ru.lua
 localization.tw.lua
-localization.br.lua
 localization.cn.lua
 Drov.lua
 Tarlna.lua

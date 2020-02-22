@@ -64,8 +64,6 @@ local tectusN = EJ_GetEncounterInfo(1195)
 local shardN = DBM:EJ_GetSectionInfo(10063)
 local moteN = DBM:EJ_GetSectionInfo(10064)
 local moteH = {}
-local tectusGUID
-local shardGUID = {}
 local ltectusH, lshardC, lshardT, lmoteC, lmoteT = 1, 1, 1, 1, 1 -- not need to sync.
 
 function mod:CustomHealthUpdate()
@@ -78,19 +76,16 @@ function mod:CustomHealthUpdate()
 			local cid = self:GetCIDFromGUID(guid)
 			if cid == 78948 then
 				tectusH = UnitHealth(unitID) / UnitHealthMax(unitID) * 100
-				tectusGUID = guid
 				ltectusH = tectusH
 			elseif cid == 80551 then
 				shardC = shardC + 1
 				shardT = shardT + (UnitHealth(unitID) / UnitHealthMax(unitID) * 100)
-				shardGUID[guid] = true
 				lshardC = shardC
 				lshardT = shardT
 			elseif cid == 80557 then
 				local health = UnitHealth(unitID) / UnitHealthMax(unitID) * 100
 				moteC = moteC + 1
 				moteT = moteT + health
-				moteGUID[guid] = true
 				lmoteC = moteC
 				lmoteT = moteT
 				moteH[guid] = health

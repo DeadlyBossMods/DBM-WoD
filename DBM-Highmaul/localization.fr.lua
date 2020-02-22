@@ -62,7 +62,7 @@ L:SetOptionLocalization({
 L:SetMiscLocalization({
 	supressionTarget1	= "Je vous écraserai !",
 	supressionTarget2	= "Silence !",
-	supressionTarget3	= "Taisez-vous !", 
+	supressionTarget3	= "Taisez-vous !",
 	supressionTarget4	= "Je vous réduirai en pièces !"
 })
 

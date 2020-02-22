@@ -170,7 +170,7 @@ function mod:OnCombatEnd()
 	if self.Options.HudMapOnAxe then
 		DBMHudMap:Disable()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
@@ -309,11 +309,11 @@ end
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 93858 then--Gorebound Berserker
-		
+
 	elseif cid == 93931 then--Gorebound Felcaster
 		self.vb.felCastersAlive = self.vb.felCastersAlive - 1
 	elseif cid == 93881 then--Contract Engineer
-		
+
 	end
 end
 

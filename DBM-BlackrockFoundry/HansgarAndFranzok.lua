@@ -45,7 +45,6 @@ mod.vb.stamperDodgeCount = 0
 mod.vb.bossUp = "NoBody"
 mod.vb.firstJump = false
 mod.vb.jumpCount = 0
-local cachedGUID = nil
 
 function mod:JumpTarget(targetname, uId)
 	if not targetname then return end
@@ -125,7 +124,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 			specWarnStampers:Play("watchstep")
 		elseif self.vb.phase == 4 then--Second belt 25% (75 Energy) (Fire plates, then stampers)
 			specWarnSearingPlates:Show()
-			specWarnSearingPlates:Play("watchstep")	
+			specWarnSearingPlates:Play("watchstep")
 		end
 	elseif spellId == 156546 or spellId == 156542 then
 		specWarnCripplingSupplex:Schedule(6)--warn 3 seconds before, stun removed in 6.1
@@ -134,7 +133,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		self.vb.firstJump = false--So reset firstjump
 		self.vb.jumpCount = 0
 		DBM:Debug("157926: Jump Activation")
-		cachedGUID = UnitGUID(uId)
 		timerJumpSlamCD:Start()
 	elseif spellId == 157922 then--First jump must use 157922
 		local temptarget = UnitName(uId.."target") or "nil"

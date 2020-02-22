@@ -144,7 +144,7 @@ function mod:OnCombatEnd()
 		hudEnabled = false
 		DBMHudMap:Disable()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

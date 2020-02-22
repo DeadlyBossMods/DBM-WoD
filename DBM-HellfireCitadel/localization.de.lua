@@ -94,7 +94,7 @@ L:SetOptionLocalization({
 	SeedsBehavior	= "Auswahl der Positionierungsschreie für Saat der Zerstörung (nur als Schlachtzugsleiter)",
 	Iconed			= "Stern, Kreis, Diamant, Dreieck, Mond (für Strategien mit Weltmarkierungen)",
 	Numbered		= "1, 2, 3, 4, 5 (für Strategien mit nummerierten Positionen)",
-	DirectionLine	= "Links, Mitte Links, Mitte, Mitte Rechts, Rechts (typisch für geradlinige Formationen)", 
+	DirectionLine	= "Links, Mitte Links, Mitte, Mitte Rechts, Rechts (typisch für geradlinige Formationen)",
 	FreeForAll		= "Nur Standardschrei verwenden (ohne Positionszuweisung)"
 })
 

@@ -11,7 +11,7 @@ L = DBM:GetModLocalization(1161)
 L:SetOptionLocalization({
 	MythicSoakBehavior	= "Patrón de agrupamiento para Tajo infernal",
 	ThreeGroup			= "3 grupos, 1 acumulación",
-	TwoGroup			= "2 grupos, 2 acumulaciones" 
+	TwoGroup			= "2 grupos, 2 acumulaciones"
 })
 
 ----------------

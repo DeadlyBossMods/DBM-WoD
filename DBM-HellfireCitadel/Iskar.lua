@@ -198,7 +198,7 @@ function mod:OnCombatEnd()
 	if self.Options.HudMapOnChakram then
 		DBMHudMap:Disable()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

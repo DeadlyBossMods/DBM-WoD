@@ -174,7 +174,7 @@ function mod:OnCombatEnd()
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
@@ -392,7 +392,7 @@ function mod:OnSync(msg)
 				timerShadowofDeathCDTank:Start(60, "1x"..DBM_CORE_TANK_ICON)
 			elseif count == 3 then--Healer 2x (1 timer)
 				timerShadowofDeathCDHealer:Start(45, "2x"..DBM_CORE_HEALER_ICON)
-			end	
+			end
 		else
 			if count == 1 or count == 4 then--DPS 3x (2 timers)
 				local numPlayers = 1

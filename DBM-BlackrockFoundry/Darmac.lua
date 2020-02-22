@@ -412,7 +412,7 @@ function mod:UNIT_TARGETABLE_CHANGED(uId)
 		DBM:Debug("UNIT_TARGETABLE_CHANGED, Boss Dismounting", 2)
 		updateBeastTimers(self, true, nil, true)
 	end
-end	
+end
 
 
 function mod:UNIT_DIED(args)

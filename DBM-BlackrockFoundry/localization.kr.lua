@@ -11,7 +11,7 @@ L = DBM:GetModLocalization(1161)
 L:SetOptionLocalization({
 	MythicSoakBehavior	= "신화 난이도에서 지옥불 가르기 조 알림 방식 선택",
 	ThreeGroup			= "3개 파티가 1 중첩씩",
-	TwoGroup			= "2개 파티가 2 중첩씩" 
+	TwoGroup			= "2개 파티가 2 중첩씩"
 })
 
 ---------------------------
@@ -24,7 +24,6 @@ L:SetOptionLocalization({
 	Smart				= "우두머리 중첩에 따라 알림",
 	Fixed				= "무조건 5/3 중첩에 맞춰서 알림(중첩이 맞지 않더라도)"
 })
-
 
 ---------------------------
 -- The Blast Furnace --

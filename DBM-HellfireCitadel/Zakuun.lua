@@ -226,7 +226,7 @@ function mod:OnCombatEnd()
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
@@ -376,7 +376,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		warnWake(self)
 		if self.vb.Enraged or self.vb.CavitationCount == 1 then--Only casts two between phases, unless enraged
 			timerCavitationCD:Start(nil, self.vb.CavitationCount+1)
-		end	
+		end
 	end
 end
 
@@ -398,5 +398,5 @@ function mod:OnSync(msg)
 		self:Unschedule(delayModCheck)
 		self.vb.yellType = "FreeForAll"
 		DBM:AddMsg(L.DBMConfigMsg:format(msg))
-	end	
+	end
 end

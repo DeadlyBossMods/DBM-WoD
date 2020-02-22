@@ -211,7 +211,7 @@ function mod:OnCombatEnd()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
-end 
+end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId
@@ -420,7 +420,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			if args:IsPlayer() then
 				specWarnEmpoweredFelChains:Show()
 				yellFelChains:Yell()
-			end	
+			end
 		end
 		updateRangeFrame(self)
 	elseif spellId == 187204 then

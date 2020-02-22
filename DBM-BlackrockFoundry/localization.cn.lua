@@ -11,7 +11,7 @@ L = DBM:GetModLocalization(1161)
 L:SetOptionLocalization({
 	MythicSoakBehavior	= "特殊警报：吸收伤害的分组方式 (史诗模式)",
 	ThreeGroup			= "3组1层换",
-	TwoGroup			= "2组2层换" 
+	TwoGroup			= "2组2层换"
 })
 
 ---------------------------
@@ -58,7 +58,7 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization(1155)
 
 --------------
--- Flamebender Ka'graz -- 
+-- Flamebender Ka'graz --
 --------------
 L = DBM:GetModLocalization(1123)
 
