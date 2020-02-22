@@ -244,7 +244,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.PulverizeRadar = false
 		self.vb.PulverizeCount = self.vb.PulverizeCount + 1
 		warnPulverize:Show(self.vb.PulverizeCount)
-		--Hide range frame if arcane debuff not active, else switch 
+		--Hide range frame if arcane debuff not active, else switch
 		if self.Options.RangeFrame then
 			if self.vb.arcaneDebuff > 0 then
 				if DBM:UnitDebuff("player", arcaneDebuff) then
