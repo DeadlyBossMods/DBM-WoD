@@ -23,22 +23,12 @@ L:SetMiscLocalization({
 })
 
 ---------------------------
--- Iron Reaver --
----------------------------
-L = DBM:GetModLocalization(1425)
-
----------------------------
 -- Hellfire High Council --
 ---------------------------
 L = DBM:GetModLocalization(1432)
 
-------------------
--- Kormrok --
-------------------
-L = DBM:GetModLocalization(1392)
-
-L:SetMiscLocalization({
-	ExRTNotice	= "%s 向你指派了ExRT的位置。你的位置: 橙色:%s, 绿色:%s, 紫色:%s"
+L:SetWarningLocalization({
+	reapDelayed	= "Reap after Visage ends"--Translate
 })
 
 --------------

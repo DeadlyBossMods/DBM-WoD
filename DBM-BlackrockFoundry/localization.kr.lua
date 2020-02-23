@@ -52,38 +52,6 @@ L:SetMiscLocalization({
 	bombNeeded		= "폭탄 %d개 남음"
 })
 
-------------------
--- Hans'gar And Franzok --
-------------------
-L = DBM:GetModLocalization(1155)
-
-L:SetTimerLocalization({
-	timerStamperDodge	= DBM_CORE_AUTO_TIMER_TEXTS.nextcount:format("압축기 회피")
-})
-
-L:SetOptionLocalization({
-	timerStamperDodge	= "다음 압축기 회피 바 보기"
-})
-
---------------
--- Flamebender Ka'graz --
---------------
-L = DBM:GetModLocalization(1123)
-
---------------------
---Kromog, Legend of the Mountain --
---------------------
-L = DBM:GetModLocalization(1162)
-
-L:SetMiscLocalization({
-	ExRTNotice	= "ExRT 애드온으로부터 위치 받음 (%s|1이;가; 보냄). 당신의 위치: %s"
-})
-
---------------------------
--- Beastlord Darmac --
---------------------------
-L = DBM:GetModLocalization(1122)
-
 --------------------------
 -- Operator Thogar --
 --------------------------

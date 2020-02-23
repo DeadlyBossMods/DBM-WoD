@@ -52,30 +52,6 @@ L:SetMiscLocalization({
 	bombNeeded		= "%d个炸弹"
 })
 
-------------------
--- Hans'gar And Franzok --
-------------------
-L = DBM:GetModLocalization(1155)
-
---------------
--- Flamebender Ka'graz --
---------------
-L = DBM:GetModLocalization(1123)
-
---------------------
---Kromog, Legend of the Mountain --
---------------------
-L = DBM:GetModLocalization(1162)
-
-L:SetMiscLocalization({
-	ExRTNotice	= "%s 向你指派了ExRT的符文的站立位置。你的位置: %s"
- })
-
---------------------------
--- Beastlord Darmac --
---------------------------
-L = DBM:GetModLocalization(1122)
-
 --------------------------
 -- Operator Thogar --
 --------------------------

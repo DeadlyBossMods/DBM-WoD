@@ -52,30 +52,6 @@ L:SetMiscLocalization({
 	bombNeeded		= "%d bomba(s)"
 })
 
-------------------------
--- Hans'gar y Franzok --
-------------------------
-L = DBM:GetModLocalization(1155)
-
---------------------------
--- Dominallamas Ka'graz --
---------------------------
-L = DBM:GetModLocalization(1123)
-
------------
---Kromog --
------------
-L = DBM:GetModLocalization(1162)
-
-L:SetMiscLocalization({
-	ExRTNotice	= "%s está compartiendo su configuración de posiciones de Exorsus Raid Tools para las runas. Tu posición es: %s."
-})
-
----------------------------------
--- Señor de las bestias Darmac --
----------------------------------
-L = DBM:GetModLocalization(1122)
-
 --------------------------
 -- Operador Thogar --
 --------------------------
