@@ -210,7 +210,7 @@ function mod:OnCombatStart(delay)
 	timerRapidFireCD:Start(15.5-delay, 1)
 	timerShipCD:Start(59.5-delay, 1)
 	self:RegisterShortTermEvents(
-		"UNIT_HEALTH_FREQUENT boss1 boss2 boss3"
+		"UNIT_HEALTH boss1 boss2 boss3"
 	)
 	DBM:AddMsg("Warning: This mod is completely and utterly broken with no proper way to detect boat phase ending or player location, both of which timers/other features HEAVILY replied upon")
 end
@@ -581,7 +581,7 @@ function mod:RAID_BOSS_WHISPER(msg)
 	end
 end
 
-function mod:UNIT_HEALTH_FREQUENT(uId)
+function mod:UNIT_HEALTH(uId)
 	local hp = UnitHealth(uId) / UnitHealthMax(uId)
 	if hp < 0.20 and self.vb.phase ~= 2 then
 		timerShipCD:Stop()
