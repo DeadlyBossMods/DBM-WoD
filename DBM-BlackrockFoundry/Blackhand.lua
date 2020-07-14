@@ -100,7 +100,6 @@ local UnitName, UnitClass, UnitPowerMax = UnitName, UnitClass, UnitPowerMax
 local markTargets = {}
 local slagTargets = {}
 local mortarsWarned = {}
-local DBMHudMap = DBMHudMap
 local tankFilter
 local yellMFD2 = mod:NewYell(156096, L.customMFDSay, true, false)
 local yellSlag2 = mod:NewYell(157000, L.customSlagSay, true, false)

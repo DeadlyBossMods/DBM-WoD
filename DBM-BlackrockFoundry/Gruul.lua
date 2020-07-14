@@ -62,7 +62,6 @@ do
 		end
 	end
 end
-local DBMHudMap = DBMHudMap
 local hudEnabled = false--Only to avoid calling self.Options.HudMapOnShatter 20x in under a second when shatter goes out (20x SPELL_AURA_APPLIED events)
 --Tables used for better sync/recover. Slice count synced, then user preference "just works"
 local mythicSoakOrder3Group = {
