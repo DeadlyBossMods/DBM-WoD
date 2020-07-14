@@ -378,7 +378,7 @@ function mod:OnCombatEnd()
 		DBM.RangeCheck:Hide()
 	end
 	if self.Options.HudMapOnGaze2 then
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 end
 
@@ -550,7 +550,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if self.Options.HudMapOnGaze2 then
-			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 8, 8, nil, nil, nil, 0.5, nil, true):Appear():SetLabel(args.destName)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 8, 8, nil, nil, nil, 0.5, nil, true):Appear():SetLabel(args.destName)
 		end
 	elseif spellId == 181119 then
 		local amount = args.amount or 1
@@ -640,7 +640,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif spellId == 181597 or spellId == 182006 then
 		if self.Options.HudMapOnGaze2 then
-			DBMHudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
+			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
 		end
 		if self.Options.SetIconOnGaze and not self:IsLFR() then
 			self:SetIcon(args.destName, 0)

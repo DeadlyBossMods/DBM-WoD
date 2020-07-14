@@ -102,7 +102,7 @@ local function sharedFateDelay(self)
 	if self.vb.rootedFate then
 		local marker1
 		if self.Options.HudMapOnSharedFate and not playerDown and (playerHasFate or not self.Options.ShowOnlyPlayer) then
-			marker1 = DBMHudMap:RegisterRangeMarkerOnPartyMember(179909, "party", self.vb.rootedFate, 0.6, 10, nil, nil, nil, 0.5):Appear():SetLabel(self.vb.rootedFate, nil, nil, nil, nil, nil, 0.8, nil, -17, 11, nil)
+			marker1 = DBM.HudMap:RegisterRangeMarkerOnPartyMember(179909, "party", self.vb.rootedFate, 0.6, 10, nil, nil, nil, 0.5):Appear():SetLabel(self.vb.rootedFate, nil, nil, nil, nil, nil, 0.8, nil, -17, 11, nil)
 		end
 		for i = 1, #sharedFateTargets do
 			local name = sharedFateTargets[i]
@@ -111,7 +111,7 @@ local function sharedFateDelay(self)
 				specWarnSharedFate:Play("linegather")
 			end
 			if marker1 and name and DBM:GetRaidUnitId(name) then
-				local marker2 = DBMHudMap:RegisterRangeMarkerOnPartyMember(179908, "party", name, 0.4, 10, nil, nil, nil, 0.5):Appear():SetLabel(name, nil, nil, nil, nil, nil, 0.8, nil, -16, 9, nil)
+				local marker2 = DBM.HudMap:RegisterRangeMarkerOnPartyMember(179908, "party", name, 0.4, 10, nil, nil, nil, 0.5):Appear():SetLabel(name, nil, nil, nil, nil, nil, 0.8, nil, -16, 9, nil)
 				if name == playerName or self.vb.rootedFate == playerName then--Green line since player is in link
 					marker1:EdgeTo(marker2, nil, 10, 0, 1, 0, 0.5)
 				else--Yellow Line since player is not in link
@@ -169,7 +169,7 @@ function mod:OnCombatEnd()
 		DBM.RangeCheck:Hide()
 	end
 	if self.Options.HudMapOnSharedFate then
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
@@ -303,8 +303,8 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 		self.vb.rootedFate = nil
 		if self.Options.HudMapOnSharedFate then
-			DBMHudMap:FreeEncounterMarkerByTarget(179909, args.destName)
-			--fDBMHudMap:ClearAllEdges()
+			DBM.HudMap:FreeEncounterMarkerByTarget(179909, args.destName)
+			--fDBM.HudMap:ClearAllEdges()
 		end
 		if self.Options.SetIconOnFate then
 			self:SetIcon(args.destName, 0)
@@ -314,7 +314,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			playerHasFate = false
 		end
 		if self.Options.HudMapOnSharedFate then
-			DBMHudMap:FreeEncounterMarkerByTarget(179908, args.destName)
+			DBM.HudMap:FreeEncounterMarkerByTarget(179908, args.destName)
 		end
 	elseif spellId == 181295 then
 		if args:IsPlayer() then

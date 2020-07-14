@@ -168,7 +168,7 @@ function mod:OnCombatEnd()
 		DBM.RangeCheck:Hide()
 	end
 	if self.Options.HudMapOnAxe then
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 end
 
@@ -289,7 +289,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			updateRangeFrame(self, true)
 		end
 		if self.Options.HudMapOnAxe then
-			DBMHudMap:RegisterRangeMarkerOnPartyMember(184369, "highlight", args.destName, 5, 7, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(184369, "highlight", args.destName, 5, 7, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
 		end
 	elseif spellId == 180076 then
 		warnSiphon:Show(args.destName)
@@ -301,7 +301,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 184369 then
 		if self.Options.HudMapOnAxe then
-			DBMHudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
+			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
 		end
 	end
 end
@@ -355,7 +355,7 @@ function mod:OnSync(msg)
 			DBM.RangeCheck:Hide()
 		end
 		if self.Options.HudMapOnAxe then
-			DBMHudMap:Disable()
+			DBM.HudMap:Disable()
 		end
 	elseif msg == "Felcaster" then
 		self.vb.felcasterCount = self.vb.felcasterCount + 1

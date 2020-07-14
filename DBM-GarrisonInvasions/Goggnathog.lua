@@ -58,7 +58,7 @@ end
 
 function mod:OnCombatEnd()
 	if self.Options.HudMapOnUnleashed then
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
@@ -89,7 +89,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnUnleashedEnergy:Play("runout")
 		end
 		if self.Options.HudMapOnUnleashed then
-			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 30, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 30, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
 		end
 		updateRangeFrame(self)
 	elseif spellId == 180816 and not args:IsDestTypePlayer() and self:AntiSpam(3, 1) then
@@ -108,7 +108,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if spellId == 180908 then
 		self.vb.debuffCount = self.vb.debuffCount - 1
 		if self.Options.HudMapOnUnleashed then
-			DBMHudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
+			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
 		end
 		updateRangeFrame(self)
 	end

@@ -133,7 +133,7 @@ function mod:AnnTarget(targetname, uId)
 		warnAnnihilationStrike:Show(self.vb.annihilationCount, targetname)
 	end
 	if self.Options.HudMapOnStrike then
-		DBMHudMap:RegisterRangeMarkerOnPartyMember(180260, "highlight", targetname, 3, 4, 1, 0, 0, 0.5, nil, true, 2):Pulse(0.5, 0.5)
+		DBM.HudMap:RegisterRangeMarkerOnPartyMember(180260, "highlight", targetname, 3, 4, 1, 0, 0, 0.5, nil, true, 2):Pulse(0.5, 0.5)
 	end
 end
 
@@ -157,7 +157,7 @@ function mod:OnCombatEnd()
 		DBM.RangeCheck:Hide()
 	end
 	if self.Options.HudMapOnStrike or self.Options.HudMapEdict2 then
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 end
 
@@ -258,7 +258,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnEdictofCondemnationOther:ScheduleVoice(5, "gather")
 		end
 		if self.Options.HudMapEdict2 then
-			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 9, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 9, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
 		end
 	elseif args:IsSpellID(180166, 185237) then--Casts
 		self.vb.touchofHarmCount = self.vb.touchofHarmCount + 1
@@ -327,7 +327,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if spellId == 182459 or spellId == 185241 then
 		--For icon option, or something.
 		if self.Options.HudMapEdict2 then
-			DBMHudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
+			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
 		end
 	elseif spellId == 180526 then
 		if args:IsPlayer() then

@@ -342,7 +342,7 @@ function mod:OnCombatEnd()
 		DBM.RangeCheck:Hide()
 	end
 	if self.Options.HudMapOnBomb then
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
@@ -384,7 +384,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self:CheckTankDistance(args.sourceGUID, 40) and self.vb.phase == 1 then--Filter Works very poorly, probably because mob not a BOSS id. usually see ALL warnings and all HUDs :\
 			warnBomb:CombinedShow(1, args.destName)
 			if self.Options.HudMapOnBomb then
-				DBMHudMap:RegisterRangeMarkerOnPartyMember(155192, "highlight", args.destName, 5, debuffTime+0.5, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(155192, "highlight", args.destName, 5, debuffTime+0.5, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
 			end
 		end
 		if args:IsPlayer() then
@@ -542,7 +542,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if args:IsSpellID(155192, 174716, 159558) then
 		if self.Options.HudMapOnBomb then
-			DBMHudMap:FreeEncounterMarkerByTarget(155192, args.destName)
+			DBM.HudMap:FreeEncounterMarkerByTarget(155192, args.destName)
 		end
 		if args:IsPlayer() then
 			timerBomb:Stop()

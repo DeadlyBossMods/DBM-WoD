@@ -142,7 +142,7 @@ function mod:OnCombatEnd()
 	end
 	if hudEnabled then
 		hudEnabled = false
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 end
 
@@ -228,7 +228,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnPetrifyingSlam:Play("scatter")
 		end
 		if hudEnabled then
-			DBMHudMap:RegisterRangeMarkerOnPartyMember(spellId, "timer", args.destName, 8, 10, 0, 1, 0, 0.6, nil, nil, 4):Appear():RegisterForAlerts():Rotate(360, 9.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "timer", args.destName, 8, 10, 0, 1, 0, 0.6, nil, nil, 4):Appear():RegisterForAlerts():Rotate(360, 9.5)
 		end
 	elseif spellId == 155539 then
 		self.vb.rampage = true
@@ -256,7 +256,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			DBM.RangeCheck:Hide()
 		end
 		if hudEnabled then
-			DBMHudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
+			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
 		end
 	elseif spellId == 155539 then
 		specWarnRampageEnded:Show()

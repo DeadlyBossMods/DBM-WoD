@@ -157,7 +157,7 @@ function mod:SuperheatedTarget(targetname, uId)
 	end
 	if self.Options.HudMapOnBreath then
 		--Static marker, breath doesn't move once a target is picked. it's aimed at static location player WAS
-		DBMHudMap:RegisterStaticMarkerOnPartyMember(154989, "highlight", targetname, 5, 6.5, 1, 0, 0, 0.5, nil, 1):Pulse(0.5, 0.5)
+		DBM.HudMap:RegisterStaticMarkerOnPartyMember(154989, "highlight", targetname, 5, 6.5, 1, 0, 0, 0.5, nil, 1):Pulse(0.5, 0.5)
 	end
 end
 
@@ -169,7 +169,7 @@ function mod:BreathTarget(targetname, uId)
 	end
 	if self.Options.HudMapOnBreath then
 		--Static marker, breath doesn't move once a target is picked. it's aimed at static location player WAS
-		DBMHudMap:RegisterStaticMarkerOnPartyMember(154989, "highlight", targetname, 5, 6.5, 1, 0, 0, 0.5, nil, 1):Pulse(0.5, 0.5)
+		DBM.HudMap:RegisterStaticMarkerOnPartyMember(154989, "highlight", targetname, 5, 6.5, 1, 0, 0, 0.5, nil, 1):Pulse(0.5, 0.5)
 	end
 end
 
@@ -204,7 +204,7 @@ function mod:OnCombatEnd()
 		DBM.RangeCheck:Hide()
 	end
 	if self.Options.HudMapOnBreath then
-		DBMHudMap:Disable()
+		DBM.HudMap:Disable()
 	end
 end
 
