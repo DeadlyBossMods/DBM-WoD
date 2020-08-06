@@ -166,7 +166,7 @@ local function delayModCheck(self)
 	if IsInRaid() and not IsPartyLFG() then--Future proof in case solo/not in a raid
 		for i = 1, GetNumGroupMembers() do
 			local uId = "raid"..i
-			if UnitIsGroupLeader(uId, LE_PARTY_CATEGORY_HOME) then
+			if UnitIsGroupLeader(uId, 1) then
 				if self:CheckBigWigs(DBM:GetUnitFullName(uId)) then
 					leaderHasBW = true
 				end
