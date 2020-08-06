@@ -4,7 +4,6 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(76814)--76794 Cinder Wolf, 80590 Aknor Steelbringer
 mod:SetEncounterID(1689)
-mod:SetZone()
 mod:SetUsedIcons(6, 5, 4, 3)
 mod.respawnTime = 29.5
 

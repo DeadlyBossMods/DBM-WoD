@@ -4,7 +4,6 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(78491)
 mod:SetEncounterID(1720)
-mod:SetZone()
 --Has no audio files
 
 mod:RegisterCombat("combat")

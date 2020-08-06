@@ -4,7 +4,6 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(77428, 78623)
 mod:SetEncounterID(1705)
-mod:SetZone()
 mod:SetUsedIcons(1, 2, 3)
 mod:SetBossHPInfoToHighest()--For mythic chogal
 --Could not find south path on internet

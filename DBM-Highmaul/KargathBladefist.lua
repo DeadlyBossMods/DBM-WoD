@@ -4,7 +4,6 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(78714)
 mod:SetEncounterID(1721)
-mod:SetZone()
 --mod:SetUsedIcons(7)
 --mod:SetModelSound("sound\\creature\\kargath\\VO_60_HMR_KARGATH_INTRO1.ogg", "sound\\creature\\kargath\\VO_60_HMR_KARGATH_SPELL2.ogg")
 
