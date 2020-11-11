@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod(1452, "DBM-Draenor", nil, 557)--Not yet in journal, needs journalID in whatever build they add his ID in
+local mod	= DBM:NewMod(1452, "DBM-Draenor", 1, 557)--Not yet in journal, needs journalID in whatever build they add his ID in
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("@file-date-integer@")

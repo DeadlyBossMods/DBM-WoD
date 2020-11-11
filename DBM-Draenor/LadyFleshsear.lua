@@ -1,4 +1,4 @@
-local mod	= DBM:NewMod("LadyFleshsear", "DBM-GarrisonInvasions")
+local mod	= DBM:NewMod("LadyFleshsear", "DBM-Draenor", 2)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("@file-date-integer@")
