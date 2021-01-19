@@ -259,7 +259,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 180148 then
 		warnHungerforLife:CombinedShow(0.5, args.destName)
-		if args:IsPlayer() and self:AntiSpam(5, 2) and not self:IsTrivial(110) then
+		if args:IsPlayer() and self:AntiSpam(5, 2) and not self:IsTrivial() then
 			specWarnHungerforLife:Show()
 			specWarnHungerforLife:Play("justrun")
 		end

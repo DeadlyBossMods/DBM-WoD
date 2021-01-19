@@ -61,7 +61,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnEmberInWind:Show()
 		end
-	elseif spellId == 175594 and not self:IsTrivial(110) then
+	elseif spellId == 175594 and not self:IsTrivial() then
 		local amount = args.amount or 1
 		if (amount >= 8) and (amount % 3 == 0) then
 			if args:IsPlayer() then
