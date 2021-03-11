@@ -205,7 +205,7 @@ function mod:SPELL_CAST_START(args)
 		self.vb.focusedBlast = self.vb.focusedBlast + 1
 		specWarnFocusedBlast:Show(self.vb.focusedBlast)
 		if not DBM:UnitDebuff("player", corruption, phantasmalFelBomb, realFelBomb) and not DBM:UnitDebuff("player", darkBindings) then--Filter debuffs that kill other players
-			specWarnFocusedBlast:Play("gather")
+			specWarnFocusedBlast:Play("gathershare")
 		end
 		timerFocusedBlast:Start()
 	elseif spellId == 181827 or spellId == 187998 then--Both versions of it. I assume the 5 second version is probably LFR/Normal
