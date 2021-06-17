@@ -43,7 +43,7 @@ local warnFelConduit					= mod:NewCastAnnounce(181827, 3, nil, nil, "-Healer")
 --Boss
 local specWarnEyeofAnzu					= mod:NewSpecialWarningYou(179202)
 local specWarnThrowAnzu					= mod:NewSpecialWarning("specWarnThrowAnzu", nil, nil, nil, 1, 5)
-local specWarnFocusedBlast				= mod:NewSpecialWarningCount(181912, nil, nil, nil, 2)
+local specWarnFocusedBlast				= mod:NewSpecialWarningCount(181912, nil, nil, nil, 2, 2)
 local specWarnPhantasmalWinds			= mod:NewSpecialWarningYou(181957, nil, nil, nil, 3, 2)
 local specWarnFelChakram				= mod:NewSpecialWarningMoveAway(182178, nil, nil, nil, 1, 2)
 local yellFelChakram					= mod:NewYell(182178)
