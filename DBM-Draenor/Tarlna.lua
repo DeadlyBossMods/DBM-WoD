@@ -5,6 +5,7 @@ mod:SetRevision("@file-date-integer@")
 mod:SetCreatureID(81535)
 mod:SetEncounterID(1770)
 mod:SetReCombatTime(20)
+mod:EnableWBEngageSync()--Enable syncing engage in outdoors
 
 mod:RegisterCombat("combat")--no yell
 
