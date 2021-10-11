@@ -759,8 +759,8 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 			if (count == 1 or count == 18 or count == 21 or count == 34) and not adjusted then
 				specWarnManOArms:Show()
 				if self.Options.SetIconOnAdds then
-					self:ScanForMobs(80791, 0, 8, 2, 0.2, 15)--Man At Arms scanner marking 8 down
-					self:ScanForMobs(77487, 1, 1, 2, 0.2, 15)--Fire Mender scanner marking 1 up
+					self:ScanForMobs(80791, 0, 8, 2, nil, 15)--Man At Arms scanner marking 8 down
+					self:ScanForMobs(77487, 1, 1, 2, nil, 15)--Fire Mender scanner marking 1 up
 				end
 			end
 		else
@@ -810,8 +810,8 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 			if (count == 7 or count == 17 or count == 23 or count == 28) and not adjusted then--I'm sure they spawn again sometime later, find that data
 				specWarnManOArms:Show()
 				if self.Options.SetIconOnAdds then
-					self:ScanForMobs(80791, 0, 8, 2, 0.2, 15)--Man At Arms scanner marking 8 down
-					self:ScanForMobs(77487, 1, 1, 2, 0.2, 15)--Fire Mender scanner marking 1 up
+					self:ScanForMobs(80791, 0, 8, 2, nil, 15)--Man At Arms scanner marking 8 down
+					self:ScanForMobs(77487, 1, 1, 2, nil, 15)--Fire Mender scanner marking 1 up
 				end
 			end
 		end
