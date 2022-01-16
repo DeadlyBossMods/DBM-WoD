@@ -405,7 +405,7 @@ local function updateInfoFrame()
 			addLine(TrainTable[train]["speciali"], "")
 		end
 	else
-		addLine(DBM_CORE_L.UNKNOWN, "")
+		addLine(DBM_COMMON_L.UNKNOWN, "")
 	end
 	return lines, sortedLines
 end
@@ -537,7 +537,7 @@ end
 
 function mod:GrenadeTarget(targetname, uId)
 	if not targetname then
-		warnProtoGrenade:Show(DBM_CORE_L.UNKNOWN)
+		warnProtoGrenade:Show(DBM_COMMON_L.UNKNOWN)
 		return
 	end
 	if targetname == UnitName("player") then

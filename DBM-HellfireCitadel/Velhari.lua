@@ -120,7 +120,7 @@ end
 
 function mod:AnnTarget(targetname, uId)
 	if not targetname then
-		warnAnnihilationStrike:Show(self.vb.annihilationCount, DBM_CORE_L.UNKNOWN)
+		warnAnnihilationStrike:Show(self.vb.annihilationCount, DBM_COMMON_L.UNKNOWN)
 		return
 	end
 	if targetname == UnitName("player") then

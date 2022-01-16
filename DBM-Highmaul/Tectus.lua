@@ -112,7 +112,7 @@ function mod:CustomHealthUpdate()
 	elseif self.vb.healthPhase == 3 then
 		return ("(%d%%, %s)"):format((moteT > 0 and moteT or lmoteT) / (moteC > 0 and moteC or lmoteC), moteN)
 	end
-	return DBM_CORE_L.UNKNOWN
+	return DBM_COMMON_L.UNKNOWN
 end
 
 function mod:OnCombatStart(delay)

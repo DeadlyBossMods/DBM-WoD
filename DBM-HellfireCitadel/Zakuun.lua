@@ -101,7 +101,7 @@ local iconedAssignments = {RAID_TARGET_1, RAID_TARGET_2, RAID_TARGET_3, RAID_TAR
 local iconedVoiceAssignments = {"mm1", "mm2", "mm3", "mm4", "mm5"}
 local numberedAssignments = {1, 2, 3, 4, 5}
 local numberedVoiceAssignments = {"\\count\\1", "\\count\\2", "\\count\\3", "\\count\\4", "\\count\\5"}
-local DirectionLineAssignments = {DBM_CORE_L.LEFT, DBM_CORE_L.MIDDLE..DBM_CORE_L.LEFT, DBM_CORE_L.MIDDLE, DBM_CORE_L.MIDDLE..DBM_CORE_L.RIGHT, DBM_CORE_L.RIGHT}
+local DirectionLineAssignments = {DBM_COMMON_L.LEFT, DBM_COMMON_L.MIDDLE..DBM_COMMON_L.LEFT, DBM_COMMON_L.MIDDLE, DBM_COMMON_L.MIDDLE..DBM_COMMON_L.RIGHT, DBM_COMMON_L.RIGHT}
 local DirectionVoiceAssignments = {"left", "centerleft", "center", "centerright", "right"}
 local function warnSeeds(self)
 	--Sort alphabetical to match bigwigs, and since combat log order may diff person to person

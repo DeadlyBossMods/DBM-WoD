@@ -126,7 +126,7 @@ end
 --if this isn't accurate, or isn't as fast as listing to RAID_BOSS_WHISPER sync i'll switch to a RAID_BOSS_WHISPER transcriptor listener
 function mod:ChargeTarget(targetname, uId)
 	if not targetname then
-		specWarnFelCharge:Show(DBM_CORE_L.UNKNOWN)
+		specWarnFelCharge:Show(DBM_COMMON_L.UNKNOWN)
 		specWarnFelCharge:Play("chargemove")
 		return
 	end

@@ -297,7 +297,7 @@ function mod:CustomHealthUpdate()
 		end
 		return ("%d%%"):format(health)
 	end
-	return DBM_CORE_L.UNKNOWN
+	return DBM_COMMON_L.UNKNOWN
 end
 
 function mod:OnCombatStart(delay)

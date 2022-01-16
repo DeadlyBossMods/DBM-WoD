@@ -225,7 +225,7 @@ function mod:SPELL_CAST_START(args)
 					--Not Tanking
 					if self.vb.phase >= 3 and playerTanking == 1 and not DBM:UnitDebuff("player", vanguardTank) then--Vanguard Tank
 						--You're the Vanguard tank and do NOT have aggro for this strike or void debuff, taunt NOW
-						local targetName = UnitName(bossUnitID.."target") or DBM_CORE_L.UNKNOWN
+						local targetName = UnitName(bossUnitID.."target") or DBM_COMMON_L.UNKNOWN
 						if self:AntiSpam(3, targetName) then
 							specWarnPhasing:Show(targetName)
 							specWarnPhasing:Play("tauntboss")
@@ -246,7 +246,7 @@ function mod:SPELL_CAST_START(args)
 					--Not Tanking
 					if self.vb.phase >= 3 and playerTanking == 2 and not DBM:UnitDebuff("player", voidwalkerTank) then--VoidWalker Tank
 						--You're the void walker tank and do NOT have aggro for this strike or fel debuff, taunt NOW
-						local targetName = UnitName(bossUnitID.."target") or DBM_CORE_L.UNKNOWN
+						local targetName = UnitName(bossUnitID.."target") or DBM_COMMON_L.UNKNOWN
 						if self:AntiSpam(3, targetName) then
 							specWarnPhasing:Show(targetName)
 							specWarnPhasing:Play("tauntboss")

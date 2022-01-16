@@ -295,7 +295,7 @@ local function showMarkOfLegion(self, spellName)
 			if localMarkBehavior == "LocSmallBack" then
 				number, position = 3, RANGED
 			end
-			local message = position.."-"..DBM_CORE_L.LEFT
+			local message = position.."-"..DBM_COMMON_L.LEFT
 			if localMarkBehavior == "Numbered" then
 				message = self:IconNumToString(number)
 			end
@@ -327,7 +327,7 @@ local function showMarkOfLegion(self, spellName)
 			if localMarkBehavior == "LocSmallBack" then
 				number, position = 4, RANGED
 			end
-			local message = position.."-"..DBM_CORE_L.RIGHT
+			local message = position.."-"..DBM_COMMON_L.RIGHT
 			if localMarkBehavior == "Numbered" then
 				message = self:IconNumToString(number)
 			end
@@ -359,7 +359,7 @@ local function showMarkOfLegion(self, spellName)
 			if localMarkBehavior == "LocSmallBack" then
 				number, position = 1, MELEE
 			end
-			local message = position.."-"..DBM_CORE_L.LEFT
+			local message = position.."-"..DBM_COMMON_L.LEFT
 			if localMarkBehavior == "Numbered" then
 				message = self:IconNumToString(number)
 			end
@@ -391,7 +391,7 @@ local function showMarkOfLegion(self, spellName)
 			if localMarkBehavior == "LocSmallBack" then
 				number, position = 2, MELEE
 			end
-			local message = position.."-"..DBM_CORE_L.RIGHT
+			local message = position.."-"..DBM_COMMON_L.RIGHT
 			if localMarkBehavior == "Numbered" then
 				message = self:IconNumToString(number)
 			end
@@ -433,19 +433,19 @@ local function showMarkOfLegion(self, spellName)
 				DBM:Debug(soakers..", "..marks, 2)
 				local soak = math.ceil(soakers/marks)
 				if (soak == 1) then
-					specWarnMarkOfLegionSoak:Show(MELEE.." "..DBM_CORE_L.LEFT)
+					specWarnMarkOfLegionSoak:Show(MELEE.." "..DBM_COMMON_L.LEFT)
 					specWarnMarkOfLegionSoak:Play("frontleft")
 				end
 				if (soak == 2) then
-					specWarnMarkOfLegionSoak:Show(MELEE.." "..DBM_CORE_L.RIGHT)
+					specWarnMarkOfLegionSoak:Show(MELEE.." "..DBM_COMMON_L.RIGHT)
 					specWarnMarkOfLegionSoak:Play("frontright")
 				end
 				if (soak == 3) then
-					specWarnMarkOfLegionSoak:Show(RANGED.." "..DBM_CORE_L.LEFT)
+					specWarnMarkOfLegionSoak:Show(RANGED.." "..DBM_COMMON_L.LEFT)
 					specWarnMarkOfLegionSoak:Play("backleft")
 				end
 				if (soak == 4) then
-					specWarnMarkOfLegionSoak:Show(RANGED.." "..DBM_CORE_L.RIGHT)
+					specWarnMarkOfLegionSoak:Show(RANGED.." "..DBM_COMMON_L.RIGHT)
 					specWarnMarkOfLegionSoak:Play("backright")
 				end
             end
