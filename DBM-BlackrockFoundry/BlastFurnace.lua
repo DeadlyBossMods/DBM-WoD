@@ -79,10 +79,10 @@ local timerBellowsOperator		= mod:NewCDCountTimer(59, "ej9650", nil, nil, nil, 1
 mod:AddTimerLine(SCENARIO_STAGE:format(2))
 local timerVolatileFireCD		= mod:NewCDTimer(20, 176121, nil, false, nil, 3)--Very useful, but off by default since it can be spammy if > 2 adds up at once.
 local timerVolatileFire			= mod:NewBuffFadesTimer(8, 176121, nil, nil, nil, 5, nil, nil, nil, 1, 4)
-local timerShieldsDown			= mod:NewBuffActiveTimer(30, 158345, nil, "Dps", nil, 6, nil, DBM_CORE_L.DAMAGE_ICON)
+local timerShieldsDown			= mod:NewBuffActiveTimer(30, 158345, nil, "Dps", nil, 6, nil, DBM_COMMON_L.DAMAGE_ICON)
 local timerSlagElemental		= mod:NewNextCountTimer(55, "ej9657", nil, "-Tank", nil, 1, 155196)--Definitely 55 seconds, although current detection method may make it appear 1-2 seconds if slag has to run across room before casting first fixate
 local timerFireCaller			= mod:NewNextCountTimer(45, "ej9659", nil, "Tank", nil, 1, 156937, nil, nil, 3, 4)
-local timerSecurityGuard		= mod:NewNextCountTimer(40, "ej9648", nil, "Tank", nil, 1, 160379, DBM_CORE_L.TANK_ICON, nil, 2, 4)
+local timerSecurityGuard		= mod:NewNextCountTimer(40, "ej9648", nil, "Tank", nil, 1, 160379, DBM_COMMON_L.TANK_ICON, nil, 2, 4)
 
 local berserkTimer				= mod:NewBerserkTimer(780)
 
