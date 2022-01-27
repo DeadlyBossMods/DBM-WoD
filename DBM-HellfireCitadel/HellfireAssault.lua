@@ -37,16 +37,16 @@ local warnCannon					= mod:NewTargetAnnounce(190748, 2)
 
 --Felfire-Imbued Siege Vehicles
 ----Felfire Crusher
-local warnFelfireCrusher			= mod:NewCountAnnounce("ej11439", 2, 160240, nil, nil, nil, nil, 2)
+local warnFelfireCrusher			= mod:NewCountAnnounce("ej11439", 2, 160240, nil, nil, nil, nil, 12)
 ----Felfire Flamebelcher
-local warnFelfireFlamebelcher		= mod:NewCountAnnounce("ej11437", 2, 160240, nil, nil, nil, nil, 2)
+local warnFelfireFlamebelcher		= mod:NewCountAnnounce("ej11437", 2, 160240, nil, nil, nil, nil, 12)
 ----Felfire Artillery
-local warnFelfireArtillery			= mod:NewCountAnnounce("ej11435", 3, 160240, nil, nil, nil, nil, 2)
+local warnFelfireArtillery			= mod:NewCountAnnounce("ej11435", 3, 160240, nil, nil, nil, nil, 12)
 ----Felfire Demolisher (Heroic, Mythic)
-local warnFelfireDemolisher			= mod:NewCountAnnounce("ej11429", 4, 160240, nil, nil, nil, nil, 2)--Heroic & Mythic only
+local warnFelfireDemolisher			= mod:NewCountAnnounce("ej11429", 4, 160240, nil, nil, nil, nil, 12)--Heroic & Mythic only
 local warnNova						= mod:NewSpellAnnounce(180945, 3)
 ----Felfire Transporter (Mythic)
-local warnFelfireTransporter		= mod:NewCountAnnounce("ej11712", 4, 160240, nil, nil, nil, nil, 2)--Mythic Only
+local warnFelfireTransporter		= mod:NewCountAnnounce("ej11712", 4, 160240, nil, nil, nil, nil, 12)--Mythic Only
 ----Things
 
 --Siegemaster Mar'tak
@@ -70,7 +70,7 @@ local yellCannon					= mod:NewYell(190748)
 local specWarnCannonNear			= mod:NewSpecialWarningClose(190748, nil, nil, nil, 1, 2)
 
 --Felfire-Imbued Siege Vehicles
-local specWarnDemolisher			= mod:NewSpecialWarningSwitch("ej11429", "Dps", nil, nil, 1, 5)--Heroic & Mythic only. Does massive aoe damage, has to be killed asap
+local specWarnDemolisher			= mod:NewSpecialWarningSwitch("ej11429", "Dps", nil, nil, 1, 12)--Heroic & Mythic only. Does massive aoe damage, has to be killed asap
 
 --Siegemaster Mar'tak
 local timerHowlingAxeCD				= mod:NewCDTimer(8.47, 184369, nil, nil, nil, 3)
@@ -218,23 +218,23 @@ function mod:SPELL_AURA_APPLIED(args)
 		local cid = self:GetCIDFromGUID(args.destGUID)
 		if cid == 90432 then--Felfire Flamebelcher
 			warnFelfireFlamebelcher:Show(Count)
-			warnFelfireFlamebelcher:Play("ej11437")
+			warnFelfireFlamebelcher:Play("flamebelcher")
 		elseif cid == 90410 then--Felfire Crusher
 			warnFelfireCrusher:Show(Count)
-			warnFelfireCrusher:Play("ej11439")
+			warnFelfireCrusher:Play("crusher")
 		elseif cid == 90485 then--Felfire Artillery
 			warnFelfireArtillery:Show(Count)
-			warnFelfireArtillery:Play("ej11435")
+			warnFelfireArtillery:Play("artillery")
 		elseif cid == 91103 then--Felfire Demolisher
 			if self.Options.SpecWarnej11429switch then
 				specWarnDemolisher:Show()
 			else
 				warnFelfireDemolisher:Show(Count)
 			end
-			warnFelfireDemolisher:Play("ej11429")
+			warnFelfireDemolisher:Play("demolisher")
 		elseif cid == 93435 then--Felfire Transporter
 			warnFelfireTransporter:Show(Count)
-			warnFelfireTransporter:Play("ej11712")
+			warnFelfireTransporter:Play("transporter")
 		end
 		if self:IsMythic() then
 			--Confusing way to do it but it's best way to do it for dual timer support

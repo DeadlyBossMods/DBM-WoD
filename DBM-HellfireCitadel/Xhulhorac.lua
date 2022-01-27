@@ -62,7 +62,7 @@ local yellFelChains					= mod:NewYell(186490)
 --Void Phase
 ----Boss
 local specWarnVoidStrike			= mod:NewSpecialWarningSpell(186292, "Tank")
-local specWarnVoidSurge				= mod:NewSpecialWarningYou(186333, nil, nil, nil, 1, 5)
+local specWarnVoidSurge				= mod:NewSpecialWarningYou(186333, nil, nil, nil, 1, 12)
 local yellVoidSurge					= mod:NewYell(186333)
 local specWarnVoids					= mod:NewSpecialWarningCount("ej11714", "Ranged")
 ----Adds
@@ -404,7 +404,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnVoidSurge:Show()
 			yellVoidSurge:Yell()
-			specWarnVoidSurge:Play("186333")
+			specWarnVoidSurge:Play("runintofire")
 		end
 	elseif spellId == 186500 and self.Options.ChainsBehavior ~= "Cast" then--Chains! (show warning if type is applied or both)
 		warnFelChains:CombinedShow(0.3, args.destName)

@@ -26,7 +26,7 @@ local warnRegulators			= mod:NewAnnounce("warnRegulators", 2, 156918)
 local warnBlastFrequency		= mod:NewAnnounce("warnBlastFrequency", 1, 155209, "Healer")
 local warnBomb					= mod:NewTargetAnnounce(155192, 4, nil, false, 2)
 local warnDropBombs				= mod:NewSpellAnnounce(174726, 1, nil, "-Tank", 2)
-local warnEngineer				= mod:NewCountAnnounce("ej9649", 2, 155179, nil, nil, nil, 2)
+local warnEngineer				= mod:NewCountAnnounce("ej9649", 2, 155179, nil, nil, nil, 12)
 local warnRupture				= mod:NewTargetAnnounce(156932, 3)
 local warnInfuriated			= mod:NewTargetAnnounce(155170, 3, nil, "Tank")
 --Phase 2
@@ -34,9 +34,9 @@ local warnPhase2				= mod:NewPhaseAnnounce(2, 2, nil, nil, nil, nil, nil, 2)
 local warnElementalists			= mod:NewAddsLeftAnnounce("ej9655", 2, 91751)
 local warnFixate				= mod:NewTargetAnnounce(155196, 4)
 local warnVolatileFire			= mod:NewTargetAnnounce(176121, 4, nil, false, 2)--Spam. disable by default.
-local warnFireCaller			= mod:NewCountAnnounce("ej9659", 3, 156937, "Tank", nil, nil, 2)
-local warnSecurityGuard			= mod:NewCountAnnounce("ej9648", 2, 160379, "Tank", nil, nil, 2)
-local warnSlagElemental			= mod:NewCountAnnounce("ej9657", 2, 155179, nil, nil, nil, 2)
+local warnFireCaller			= mod:NewCountAnnounce("ej9659", 3, 156937, "Tank", nil, nil, 12)
+local warnSecurityGuard			= mod:NewCountAnnounce("ej9648", 2, 160379, "Tank", nil, nil, 12)
+local warnSlagElemental			= mod:NewCountAnnounce("ej9657", 2, 155179, nil, nil, nil, 12)
 --Phase 3
 local warnPhase3				= mod:NewPhaseAnnounce(3, 2, nil, nil, nil, nil, nil, 2)
 local warnMelt					= mod:NewTargetAnnounce(155225, 4)--Every 10 sec.
@@ -178,7 +178,7 @@ local function Engineers(self)
 	self.vb.engineer = self.vb.engineer + 1
 	local count = self.vb.engineer
 	warnEngineer:Show(count)
-	warnEngineer:Play("ej9649")
+	warnEngineer:Play("engineercoming")
 	if count < 12 then
 		warnEngineer:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
 	end
@@ -195,7 +195,7 @@ local function SecurityGuard(self)
 	self.vb.securityGuard = self.vb.securityGuard + 1
 	local count = self.vb.securityGuard
 	warnSecurityGuard:Show(count)
-	warnSecurityGuard:Play("ej9648")
+	warnSecurityGuard:Play("securityguardcoming")
 	if count < 12 then
 		warnSecurityGuard:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
 	end
@@ -237,7 +237,7 @@ local function FireCaller(self)
 	self.vb.fireCaller = self.vb.fireCaller + 1
 	local count = self.vb.fireCaller
 	warnFireCaller:Show(count)
-	warnFireCaller:Play("ej9659")
+	warnFireCaller:Play("firecallercoming")
 	if count < 12 then
 		warnFireCaller:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
 	end
@@ -417,7 +417,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				timerSlagElemental:Start(nil, count+1)
 			end
 			warnSlagElemental:Show(count)
-			warnSlagElemental:Play("ej9657")
+			warnSlagElemental:Play("slagelementalcoming")
 			if count < 12 then
 				warnSlagElemental:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
 			end

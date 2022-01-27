@@ -34,7 +34,7 @@ local warnSeedofDestruction				= mod:NewTargetCountAnnounce(181508, 4)
 local specWarnWakeofDestruction			= mod:NewSpecialWarningSpell(181499, nil, nil, nil, 2, 2)--Triggered by 3 different things
 --Armed
 local specWarnDisarmedEnd				= mod:NewSpecialWarningEnd(179667)
-local specWarnSoulCleave				= mod:NewSpecialWarningCount(179406, "Melee", nil, nil, 1, 5)
+local specWarnSoulCleave				= mod:NewSpecialWarningCount(179406, "Melee", nil, nil, 1, 12)
 local specWarnDisembodiedYou			= mod:NewSpecialWarningYou(179407)
 local specWarnDisembodied				= mod:NewSpecialWarningTaunt(179407)
 local specWarnBefouled					= mod:NewSpecialWarningMoveAway(179711)--Aoe damage was disabled on ptr, bug?
@@ -232,7 +232,7 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 179406 then
 		self.vb.SoulCleaveCount = self.vb.SoulCleaveCount + 1
 		specWarnSoulCleave:Show(self.vb.SoulCleaveCount)
-		specWarnSoulCleave:Play("179406")
+		specWarnSoulCleave:Play("soulcleave")
 		if self.vb.Enraged or self.vb.SoulCleaveCount == 1 then--Only casts two between phases, unless enraged
 			timerSoulCleaveCD:Start(nil, self.vb.SoulCleaveCount+1)
 		end

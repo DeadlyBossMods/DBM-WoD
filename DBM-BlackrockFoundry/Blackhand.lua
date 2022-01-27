@@ -37,14 +37,14 @@ local specWarnDemolition			= mod:NewSpecialWarningCount(156425, nil, nil, nil, 2
 local specWarnMassiveDemolition		= mod:NewSpecialWarningCount(156479, false, nil, nil, 2)
 local specWarnMarkedforDeath		= mod:NewSpecialWarningYou(156096, nil, nil, nil, 3, 2)
 local specWarnMFDPosition			= mod:NewSpecialWarning("specWarnMFDPosition", nil, false, nil, 1)--Mythic Position Assignment. No option, connected to specWarnMarkedforDeath
-local specWarnMarkedforDeathOther	= mod:NewSpecialWarningTargetCount(156096, false, nil, nil, 1, 2)
+local specWarnMarkedforDeathOther	= mod:NewSpecialWarningTargetCount(156096, false, nil, nil, 1, 12)
 local yellMarkedforDeath			= mod:NewYell(156096)
 local specWarnThrowSlagBombs		= mod:NewSpecialWarningCount(156030, nil, nil, nil, 2, 2)--This spell is not gtfo.
 local specWarnShatteringSmash		= mod:NewSpecialWarningCount(155992, "Melee", nil, nil, nil, 2)
 local specWarnMoltenSlag			= mod:NewSpecialWarningMove(156401)
 --Stage Two: Storage Warehouse
 local specWarnSiegemaker			= mod:NewSpecialWarningCount("ej9571", false)--Kiter switch. off by default.
-local specWarnSiegemakerPlatingFades= mod:NewSpecialWarningFades(156667, "Ranged", nil, 2)--Plating removed, NOW dps switch
+local specWarnSiegemakerPlatingFades= mod:NewSpecialWarningFades(156667, "Ranged", nil, 2, 1, 12)--Plating removed, NOW dps switch
 local specWarnFixate				= mod:NewSpecialWarningRun(156653, nil, nil, nil, 4)
 local yellFixate					= mod:NewYell(156653)
 local specWarnMortarSoon			= mod:NewSpecialWarningSoon(156530, "Ranged")--Mortar prefers the furthest targets from siege engine. It's ranged job to bait it to a wall
@@ -133,7 +133,7 @@ local function warnMarked(self)
 	table.wipe(markTargets)
 	--Begin Check Marked function
 	if not DBM:UnitDebuff("player", mfdDebuff) then
-		specWarnMarkedforDeathOther:Play("156096")
+		specWarnMarkedforDeathOther:Play("markedfordeath")
 	end
 	--Sort by raidid since combat log order may diff person to person
 	--Order changed from left middle right to left right middle to match BW to prevent conflict in dual mod raids.
@@ -474,7 +474,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif spellId == 156667 then
 		specWarnSiegemakerPlatingFades:Show()
-		specWarnSiegemakerPlatingFades:Play("ej9571")
+		specWarnSiegemakerPlatingFades:Play("attacktank")
 	end
 end
 

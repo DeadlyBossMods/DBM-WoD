@@ -37,7 +37,7 @@ local specWarnCrystallineBarrage	= mod:NewSpecialWarningMove(162370, nil, nil, n
 --Night-Twisted NPCs
 local specWarnRavingAssault			= mod:NewSpecialWarningDodge(163312, "Melee", nil, nil, nil, 2)
 local specWarnEarthenFlechettes		= mod:NewSpecialWarningDodge(162968, "Melee", nil, nil, nil, 2)
-local specWarnGiftOfEarth			= mod:NewSpecialWarningCount(162894, "Melee", nil, nil, nil, 2)
+local specWarnGiftOfEarth			= mod:NewSpecialWarningCount(162894, "Melee", nil, nil, nil, 12)
 
 local timerEarthwarperCD			= mod:NewNextTimer(40, "ej10061", nil, nil, nil, 1, 162894)--Both of these get delayed by upheavel
 local timerBerserkerCD				= mod:NewNextTimer(40, "ej10062", nil, "Tank", nil, 1, 163312)--Both of these get delayed by upheavel
@@ -157,7 +157,7 @@ function mod:SPELL_CAST_START(args)
 		earthDuders[GUID] = earthDuders[GUID] + 1
 		specWarnGiftOfEarth:Show(earthDuders[GUID])
 		timerGiftOfEarthCD:Start(GUID)
-		specWarnGiftOfEarth:Play("162894")
+		specWarnGiftOfEarth:Play("giftofearth")
 	elseif spellId == 163312 then
 		specWarnRavingAssault:Show()
 		specWarnRavingAssault:Play("chargemove")
