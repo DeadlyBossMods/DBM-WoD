@@ -99,7 +99,7 @@ L:SetOptionLocalization({
 })
 
 L:SetMiscLocalization({
-	shipMessage	= "готовится занять позицию у главного орудия дредноута!"
+	shipMessage	= "готовится занять позицию у главного орудия дредноута!",
 	EarlyBladeDash	= "Слишком медленно!"
 })
 
