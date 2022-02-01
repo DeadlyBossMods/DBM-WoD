@@ -180,7 +180,7 @@ local function Engineers(self)
 	warnEngineer:Show(count)
 	warnEngineer:Play("engineercoming")
 	if count < 12 then
-		warnEngineer:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
+		warnEngineer:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack2.."\\count\\"..count..".ogg")
 	end
 	if self:IsDifficulty("mythic", "normal") then
 		timerEngineer:Start(35, count+1)
@@ -197,7 +197,7 @@ local function SecurityGuard(self)
 	warnSecurityGuard:Show(count)
 	warnSecurityGuard:Play("securityguardcoming")
 	if count < 12 then
-		warnSecurityGuard:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
+		warnSecurityGuard:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack2.."\\count\\"..count..".ogg")
 	end
 	if self.vb.phase == 1 then
 		timerSecurityGuard:Start(30.5, count+1)
@@ -239,7 +239,7 @@ local function FireCaller(self)
 	warnFireCaller:Show(count)
 	warnFireCaller:Play("firecallercoming")
 	if count < 12 then
-		warnFireCaller:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
+		warnFireCaller:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack2.."\\count\\"..count..".ogg")
 	end
 	timerVolatileFireCD:Start(7)--6-8
 	timerFireCaller:Start(45, count+1)
@@ -419,7 +419,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			warnSlagElemental:Show(count)
 			warnSlagElemental:Play("slagelementalcoming")
 			if count < 12 then
-				warnSlagElemental:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack.."\\count\\"..count..".ogg")
+				warnSlagElemental:ScheduleVoice(1.5, nil, "Interface\\AddOns\\DBM-VP"..DBM.Options.ChosenVoicePack2.."\\count\\"..count..".ogg")
 			end
 		end
 		warnFixate:CombinedShow(1, args.destName)
