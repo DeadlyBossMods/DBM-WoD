@@ -37,17 +37,17 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	--General
-	preCombat			= "К оружию! К вашим постам!",
-	preCombat2			= "Воздух стал грязным...",
-	rylakSpawn			= "Суматоха битвы привлекает рилаков!",
-	terrifiedWorker		= "Испуганный рабочий попался на глаза!",
-	sneakySpy			= "среди хаоса пробрался шпион!",
-	buildingAttack		= "находится под атакой!",
+	preCombat			= "К оружию! Занять посты!",
+	preCombat2			= "The air has taken a turn for the foul...",--Shadow Council doesn't follow format of others :\
+	rylakSpawn			= "Шум битвы привлекает рилака!",
+	terrifiedWorker		= "Испуганный работник находится вне укрытия!",
+	sneakySpy			= "воспользовался суматохой и проник на нашу территорию!",
+	buildingAttack		= "напали!",
 	--Ogre
-	GorianwarCaller		= "Горианский военный глашатай присоединяется к битве, чтобы поднять боевой дух!",
-	WildfireElemental	= "У главных ворот вызывают Элементаля Огненной Бури!",
+	GorianwarCaller		= "A Gorian Warcaller joins the battle to raise morale!",--Maybe combined "add" special warning most adds?
+	WildfireElemental	= "У главных ворот призывается Буйный элементаль огня!",
 	--Iron Horde
-	Assassin			= "Убийца охотится на ваших охранников!"
+	Assassin			= "Убийца охотится на ваших стражей!"
 })
 
 -----------------
