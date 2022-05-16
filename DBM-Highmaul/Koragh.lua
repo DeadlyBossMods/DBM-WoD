@@ -261,7 +261,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnMC:Play("findmc")
 		end
 		if self.Options.SetIconOnMC then
-			self:SetSortedIcon(1, args.destName, 8, nil, true)--TODO, find out number of targets and add
+			self:SetSortedIcon("roster", 1, args.destName, 8, nil, true)--TODO, find out number of targets and add
 		end
 		if self.Options.HudMapOnMC then
 			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 0, 1, 0, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
@@ -281,7 +281,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if self.Options.SetIconOnFel then
-			self:SetSortedIcon(1, args.destName, 1, 3)
+			self:SetSortedIcon("roster", 1, args.destName, 1, 3)
 		end
 	elseif spellId == 172917 and args:IsPlayer() then
 		specWarnExpelMagicFelMove:Show()

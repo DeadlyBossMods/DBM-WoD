@@ -178,7 +178,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if self.Options.SetIconOnCrystal and self.vb.healthPhase ~= 3 then
-			self:SetSortedIcon(1, args.destName, 1, 2)--Wait 3 seconds or until we have 2 targets, mobs sometimes stagger casts.
+			self:SetSortedIcon("roster", 1, args.destName, 1, 2)--Wait 3 seconds or until we have 2 targets, mobs sometimes stagger casts.
 		end
 	elseif spellId == 162658 then
 		local guid = args.destGUID

@@ -312,7 +312,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					self.vb.tankIcon = 2
 				end
 			else
-				self:SetSortedIcon(0.5, args.destName, 2, 3)--3 targets at once
+				self:SetSortedIcon("roster", 0.5, args.destName, 2, 3)--3 targets at once
 			end
 		end
 		if self.Options.HudMapOnArt then

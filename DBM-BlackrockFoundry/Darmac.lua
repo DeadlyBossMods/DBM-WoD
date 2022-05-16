@@ -254,7 +254,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 154960 then
 		warnPinDownTargets:CombinedShow(0.5, args.destName)
 		if self.Options.SetIconOnSpear then
-			self:SetSortedIcon(1, args.destName, 8, nil, true, nil, 2)
+			self:SetSortedIcon("roster", 1, args.destName, 8, nil, true, nil, 2)
 		end
 		if args:IsPlayer() then
 			yellPinDown:Yell()
@@ -267,7 +267,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnConflag:CombinedShow(2.3, args.destName)
 		end
 		if self.Options.SetIconOnConflag and not self:IsLFR() then
-			self:SetSortedIcon(2.3, args.destName, 1, 3, nil, nil, 1)
+			self:SetSortedIcon("roster", 2.3, args.destName, 1, 3, nil, nil, 1)
 		end
 	elseif spellId == 155030 then
 		local amount = args.amount or 1
