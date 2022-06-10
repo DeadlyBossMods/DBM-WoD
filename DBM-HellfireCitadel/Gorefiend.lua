@@ -60,7 +60,7 @@ local timerCrushingDarkness			= mod:NewCastTimer(6, 180017, nil, false)
 --local berserkTimer				= mod:NewBerserkTimer(360)
 
 mod:AddSetIconOption("SetIconOnFate", 179909)
-mod:AddSetIconOption("SetIconOnDoom", 179977, false)
+mod:AddSetIconOption("SetIconOnDoom", 179977, false, 6)
 mod:AddHudMapOption("HudMapOnSharedFate", 179909)--Smart hud, distinquishes rooted from non rooted by larger dot/font and lines/arrows
 mod:AddBoolOption("ShowOnlyPlayer", true)
 mod:AddRangeFrameOption(5, 182049)
