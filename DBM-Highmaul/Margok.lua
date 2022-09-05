@@ -25,7 +25,7 @@ mod:RegisterEventsInCombat(
 --TODO, see if target scanning works on dark star, or if that player gets an emote whisper or something. If can find dark star target, then need "nearby" warnings to move away from location
 --TODO, 3 tank strat makes the accelerated confusing. todo, check number of tanks on pull, if 3, require margok be current target for accelerated warning
 --All Phases
-local warnPhase									= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
+local warnPhase									= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, nil, 2)
 mod:AddBoolOption("warnBranded", true, "announce")
 local warnBranded								= mod:NewStackAnnounce(156225, 4, nil, nil, false)
 local warnBrandedDisplacement					= mod:NewStackAnnounce(164004, 4, nil, nil, false)
