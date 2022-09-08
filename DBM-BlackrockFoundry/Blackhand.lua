@@ -22,7 +22,7 @@ mod:RegisterEventsInCombat(
 
 --TODO, get damage ID for fire on ground created by Mortar
 --TODO, check position of highest threat tank in phase 2 and guess which siege engine is going to come out (and type for mythic)?
-local warnPhase						= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, nil, 2)
+local warnPhase						= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 --Stage One: The Blackrock Forge
 local warnMarkedforDeath			= mod:NewTargetCountAnnounce(156096, 4)--If not in combat log, find a RAID_BOSS_WHISPER event.
 local warnMassiveDemolition			= mod:NewCountAnnounce(156479, 3, nil, "Ranged", 2)--As a regular warning, not too spammy and perfectly reasonable for ranged to be on by default.

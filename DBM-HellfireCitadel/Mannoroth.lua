@@ -40,7 +40,7 @@ local warnFelStreak					= mod:NewSpellAnnounce(181190, 3, nil, "Melee")--Change 
 --Gul'dan
 local warnWrathofGuldan				= mod:NewTargetAnnounce(186362, 4)
 --Mannoroth
-local warnPhase						= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, nil, 2)
+local warnPhase						= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 local warnGaze						= mod:NewTargetAnnounce(181597, 3)
 local warnFelseeker					= mod:NewCountAnnounce(181735, 3)
 
