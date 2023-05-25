@@ -1,8 +1,6 @@
-package-as: DBM-Draenor
+package-as: DBM-Raids-WoD
 enable-nolib-creation: no
 
 move-folders:
-    DBM-Draenor/DBM-BlackrockFoundry: DBM-BlackrockFoundry
-    DBM-Draenor/DBM-Draenor: DBM-Draenor
-    DBM-Draenor/DBM-HellfireCitadel: DBM-HellfireCitadel
-    DBM-Draenor/DBM-Highmaul: DBM-Highmaul
+    DBM-Raids-WoD/DBM-Draenor: DBM-Draenor
+    DBM-Raids-WoD/DBM-Raids-WoD: DBM-Raids-WoD
