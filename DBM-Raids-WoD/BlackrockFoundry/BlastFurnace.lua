@@ -19,7 +19,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_PERIODIC_DAMAGE 156932 155223 155743",
 	"SPELL_ABSORBED 156932 155223 155743",
 	"UNIT_DIED",
-	"UNIT_POWER_FREQUENT boss1"
+	"UNIT_POWER_UPDATE boss1"
 )
 
 local warnRegulators			= mod:NewAnnounce("warnRegulators", 2, 156918)
@@ -657,7 +657,7 @@ end
 
 do
 	local totalTime = mod:IsMythic() and 24 or 29
-	function mod:UNIT_POWER_FREQUENT(uId, type)
+	function mod:UNIT_POWER_UPDATE(uId, type)
 		if type == "ALTERNATE" then
 			totalTime = self:IsMythic() and 24 or 29
 			local altPower = UnitPower(uId, 10)

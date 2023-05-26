@@ -167,12 +167,12 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		specWarnHungerDrive:Play("phasechange")
 		lastOre = 0
 		self:RegisterShortTermEvents(
-			"UNIT_POWER_FREQUENT boss1"
+			"UNIT_POWER_UPDATE boss1"
 		)
 	end
 end
 
-function mod:UNIT_POWER_FREQUENT()
+function mod:UNIT_POWER_UPDATE()
 	local ore = UnitPower("boss1")
 	if (self:AntiSpam(10) or ore == 100) and lastOre ~= ore then
 		lastOre = ore

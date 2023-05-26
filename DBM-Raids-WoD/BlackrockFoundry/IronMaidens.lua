@@ -24,7 +24,7 @@ mod:RegisterEventsInCombat(
 	"CHAT_MSG_MONSTER_YELL",
 	"CHAT_MSG_ADDON",
 	"UNIT_SPELLCAST_SUCCEEDED boss1 boss2 boss3",
-	"UNIT_POWER_FREQUENT boss1 boss2 boss3"
+	"UNIT_POWER_UPDATE boss1 boss2 boss3"
 )
 
 local Ship	= DBM:EJ_GetSectionInfo(10019)
@@ -591,7 +591,7 @@ function mod:UNIT_HEALTH(uId)
 	end
 end
 
-function mod:UNIT_POWER_FREQUENT(uId, type)
+function mod:UNIT_POWER_UPDATE(uId, type)
 	if type == "ALTERNATE" then
 		if self.vb.boatMissionActive then
 			local altPower = UnitPower(uId, 10)

@@ -118,7 +118,7 @@ function mod:OnCombatStart(delay)
 	else
 		timerInfernoSliceCD:Start(11-delay, 1)
 		self:RegisterShortTermEvents(
-			"UNIT_POWER_FREQUENT boss1"
+			"UNIT_POWER_UPDATE boss1"
 			)
 		if self:IsDifficulty("mythic", "heroic") then
 			berserkTimer:Start(-delay)

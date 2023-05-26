@@ -577,7 +577,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 			DBM.InfoFrame:Show(5, "enemypower", 1)
 		end
 		self:RegisterShortTermEvents(
-			"UNIT_POWER_FREQUENT boss2 boss3 boss4 boss5"
+			"UNIT_POWER_UPDATE boss2 boss3 boss4 boss5"
 		)
 	elseif spellId == 161348 then--Phase 3 Trigger
 		self:UnregisterShortTermEvents()
@@ -608,7 +608,7 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 	end
 end
 
-function mod:UNIT_POWER_FREQUENT(uId)
+function mod:UNIT_POWER_UPDATE(uId)
 	local power = UnitPower(uId)
 	local guid = UnitGUID(uId)
 	if power > 70 and not mortarsWarned[guid] then
