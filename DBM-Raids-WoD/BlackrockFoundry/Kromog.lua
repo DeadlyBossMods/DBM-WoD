@@ -102,8 +102,6 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 157054 then
 		specWarnThunderingBlows:Show()
-		--Hide rune arrow and hud at this point, if thundering is being cast, runes vanished
-		self:RuneOver()
 		--Starting timers for slam and rippling seem useless, 10-30 sec variation for first ones.
 		--after that they get back into their consistency
 	elseif spellId == 157592 then
@@ -188,7 +186,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		specWarnStoneBreath:Play("breathsoon")
 	elseif spellId == 157059 and args:IsPlayer() then
 		specWarnGraspingEarth:Play("safenow")
-		self:RuneOver()
 	elseif spellId == 156861 then
 		self.vb.frenzied = true
 		warnFrenzy:Show()
