@@ -352,7 +352,7 @@ end
 
 function mod:UNIT_SPELLCAST_START(uId, _, spellId)
 	if spellId == 158093 then
-		local _, _, _, _, startTime, endTime = UnitCastingInfo(uId)
+		local _, _, _, startTime, endTime = UnitCastingInfo(uId)
 		local time = ((endTime or 0) - (startTime or 0)) / 1000
 		if time then
 			timerInterruptingShout:Start(time)

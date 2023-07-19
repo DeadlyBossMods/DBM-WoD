@@ -417,7 +417,7 @@ function mod:SPELL_AURA_REMOVED(args)
 			self.vb.kickCount2 = 0
 		end
 		--Check if there is an interruptable cast in progress when barrier drops
-		local name, _, _, _, _, endTime = UnitCastingInfo("boss1")
+		local name, _, _, _, endTime = UnitCastingInfo("boss1")
 		if not name then return end
 		if name == exertSpellName and GetTime() - endTime > 0.5 then--It's still possible to interrupt it
 			if self.vb.kickCount2 == 0 then self.vb.kickCount2 = 1 end
