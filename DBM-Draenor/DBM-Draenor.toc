@@ -5,7 +5,7 @@
 ## Title-koKR:|cffffe00a<|r|cffff7d0aDBM Mod|r|cffffe00a>|r |cff10ff10드레노어|r
 ## Title-zhTW:|cffffe00a<|r|cffff7d0aDBM Mod|r|cffffe00a>|r |cff10ff10德拉諾|r
 ## Title-zhCN:|cffffe00a<|r|cffff7d0aDBM Mod|r|cffffe00a>|r |cff10ff10德拉诺|r
-## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM Mod|r|cffffe00a>|r |cff10ff10Мировые боссы (Дренор)|r
+## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM Мод|r|cffffe00a>|r |cff10ff10Мировые боссы (Дренор)|r
 ## Author: MysticalOS
 ## LoadOnDemand: 1
 ## RequiredDeps: DBM-Core
