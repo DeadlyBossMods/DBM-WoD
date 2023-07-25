@@ -1,7 +1,7 @@
 ## Interface: 100105
 ## X-Min-Interface: 80000
-## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Raids (WoD)|r
-## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cff69ccf0Рейды (Дренор)|r
+## Title:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cffff6010 (WoD)|r
+## Title-ruRU:|cffffe00a<|r|cffff7d0aDBM|r|cffffe00a>|r |cffff6010Рейды (Дренор)|r
 ## Author: MysticalOS
 ## LoadOnDemand: 1
 ## RequiredDeps: DBM-Core
