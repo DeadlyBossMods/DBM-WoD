@@ -65,10 +65,10 @@ local yellMarkOfChaosReplication				= mod:NewYell(164191)
 local specWarnForceNova							= mod:NewSpecialWarningSpell(157349, nil, nil, nil, 2, 12)
 local specWarnForceNovaRep						= mod:NewSpecialWarningMoveAway(164240, nil, nil, nil, 3, 2)
 
-local specWarnBranded							= mod:NewSpecialWarningStack(156225, nil, 5)--Debuff Name "Branded" for Arcane Wrath
-local specWarnBrandedDisplacement				= mod:NewSpecialWarningStack(164004, nil, 5)
-local specWarnBrandedFortification				= mod:NewSpecialWarningStack(164005, nil, 5)
-local specWarnBrandedReplication				= mod:NewSpecialWarningStack(164006, nil, 5)
+local specWarnBranded							= mod:NewSpecialWarningStack(156225, nil, 5, nil, nil, 1, 6)--Debuff Name "Branded" for Arcane Wrath
+local specWarnBrandedDisplacement				= mod:NewSpecialWarningStack(164004, nil, 5)--, nil, nil, 1, 6
+local specWarnBrandedFortification				= mod:NewSpecialWarningStack(164005, nil, 5, nil, nil, 1, 6)
+local specWarnBrandedReplication				= mod:NewSpecialWarningStack(164006, nil, 5, nil, nil, 1, 6)
 local yellBranded								= mod:NewYell(156225, L.BrandedYell)
 
 local specWarnBrandedDisplacementNear			= mod:NewSpecialWarningClose(164004)--Displacement version of branded makes player unable to move from raid, raid moves from player
@@ -93,7 +93,7 @@ local specWarnNetherEnergy						= mod:NewSpecialWarningCount(178468)
 local specWarnKickToTheFace						= mod:NewSpecialWarningYou(158563)
 local specWarnKickToTheFaceOther				= mod:NewSpecialWarningTaunt(158563)
 --Mythic
-local specWarnGaze								= mod:NewSpecialWarningStack(165595, nil, 1)
+local specWarnGaze								= mod:NewSpecialWarningStack(165595, nil, 1)--, nil, nil, 1, 6
 local yellGaze									= mod:NewYell(165595, L.GazeYell)
 local specWarnEnvelopingNight					= mod:NewSpecialWarningSpell(165876, nil, nil, nil, 2, 2)
 local specWarnGrowingDarkness					= mod:NewSpecialWarningMove(176533, nil, nil, nil, nil, 2)
