@@ -143,18 +143,18 @@ do
 		local regulatorCount = 0
 		--Show heat first
 		addLine(heatName, UnitPower("boss1", 10))--Heart of the mountain always boss1
-		--Show regulator progress second
-		for i = 2, 4 do--Boss order can be random. regulators being 3/4 not guaranteed. Had some pull 2/3, 3/4, etc. Must check all 2-4
-			if UnitExists("boss"..i) then
-				local cid = DBM:GetCIDFromGUID(UnitGUID("boss"..i))
-				if cid == 76808 then--Heat Regulator
-					regulatorCount = regulatorCount + 1
-					local bombsNeeded = mceil(UnitHealth("boss"..i)/100000)
-					addLine(L.Regulator:format(regulatorCount), L.bombNeeded:format(bombsNeeded))
-					if regulatorCount == 2 then break end
-				end
-			end
-		end
+		--Show regulator progress second (uses old health calculations, pre stat squish so values are wrong now
+		--for i = 2, 4 do--Boss order can be random. regulators being 3/4 not guaranteed. Had some pull 2/3, 3/4, etc. Must check all 2-4
+		--	if UnitExists("boss"..i) then
+		--		local cid = DBM:GetCIDFromGUID(UnitGUID("boss"..i))
+		--		if cid == 76808 then--Heat Regulator
+		--			regulatorCount = regulatorCount + 1
+		--			local bombsNeeded = mceil(UnitHealth("boss"..i)/100000)
+		--			addLine(L.Regulator:format(regulatorCount), L.bombNeeded:format(bombsNeeded))
+		--			if regulatorCount == 2 then break end
+		--		end
+		--	end
+		--end
 		return lines, sortedLines
 	end
 
