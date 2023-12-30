@@ -27,10 +27,10 @@ local warnInfernoSlice				= mod:NewCountAnnounce(155080, 4)
 local warnPetrifyingSlam			= mod:NewTargetAnnounce(155326, 4)--non mythic only. in mythic, applied to all, so target list only spam
 
 local specWarnInfernoSlice			= mod:NewSpecialWarningCount(155080, "Tank|Healer", nil, nil, nil, 2)
-local specWarnRampage				= mod:NewSpecialWarningSpell(155539, nil, nil, nil, 2)
-local specWarnRampageEnded			= mod:NewSpecialWarningEnd(155539)
+local specWarnRampage				= mod:NewSpecialWarningSpell(155539, nil, nil, nil, 2, 2)
+local specWarnRampageEnded			= mod:NewSpecialWarningEnd(155539, nil, nil, nil, 2, 2)
 local specWarnOverheadSmash			= mod:NewSpecialWarningCount(155301, nil, nil, nil, 2, 2)
-local specWarnCaveIn				= mod:NewSpecialWarningMove(173192)
+local specWarnCaveIn				= mod:NewSpecialWarningMove(173192, nil, nil, nil, 1, 2)
 local specWarnPetrifyingSlam		= mod:NewSpecialWarningMoveAway(155326, nil, nil, nil, 3, 2)
 
 local timerInfernoSliceCD			= mod:NewCDCountTimer(11, 155080, nil, nil, nil, 5, nil, nil, nil, 1, 3)--Variable do to energy bugs (gruul not gain power consistently)
@@ -232,6 +232,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.rampage = true
 		self.vb.smashCount = 0
 		specWarnRampage:Show()
+		specWarnRampage:Play("phasechange")
 		timerRampage:Start()
 		timerInfernoSliceCD:Stop()
 		self:UnregisterShortTermEvents()
@@ -258,6 +259,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif spellId == 155539 then
 		specWarnRampageEnded:Show()
+		specWarnRampageEnded:Play("phasechange")
 		timerRampageCD:Start()
 		self.vb.petrifyCount = 0
 		self.vb.smashCount = 0
