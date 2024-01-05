@@ -19,7 +19,7 @@ local specWarnSpy			= mod:NewSpecialWarning("specWarnSpy")
 local specWarnBuilding		= mod:NewSpecialWarning("specWarnBuilding")
 
 --Generic
---local timerCombatStart	= mod:NewCombatTimer(44)--rollplay for first pull
+--local timerCombatStart	= mod:NewRPTimer(44)--rollplay for first pull
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if not self.Options.Enabled then return end
