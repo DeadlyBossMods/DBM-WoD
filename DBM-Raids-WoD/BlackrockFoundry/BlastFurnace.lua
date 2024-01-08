@@ -90,8 +90,7 @@ mod:AddRangeFrameOption(8)
 mod:AddBoolOption("InfoFrame")
 mod:AddSetIconOption("SetIconOnFixate", 155196, false)
 mod:AddHudMapOption("HudMapOnBomb", 155192, false)
-mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
-mod:AddDropdownOption("VFYellType2", {"Countdown", "Apply"}, "Apply", "misc")--Countdown is a spammy nightmare on mythic (almost always 10 targets get debuff at same time), let guilds opt into this if they want it.
+mod:AddDropdownOption("VFYellType2", {"Countdown", "Apply"}, "Apply", "misc", nil, 176121)--Countdown is a spammy nightmare on mythic (almost always 10 targets get debuff at same time), let guilds opt into this if they want it.
 
 mod.vb.machinesDead = 0
 mod.vb.elementalistsRemaining = 4

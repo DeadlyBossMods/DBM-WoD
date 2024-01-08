@@ -127,8 +127,7 @@ mod:AddSetIconOption("SetIconOnInfiniteDarkness", 165102, false)
 mod:AddInfoFrameOption(176537)
 mod:AddHudMapOption("HudMapOnMarkOfChaos", 158605)
 mod:AddHudMapOption("HudMapOnBranded", 156225, false)
-mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
-mod:AddDropdownOption("GazeYellType", {"Countdown", "Stacks"}, "Countdown", "misc")
+mod:AddDropdownOption("GazeYellType", {"Countdown", "Stacks"}, "Countdown", "misc", nil, 165595)
 
 mod.vb.markActive = false
 mod.vb.noTaunt = false--Almost same as mark active, but during cast too

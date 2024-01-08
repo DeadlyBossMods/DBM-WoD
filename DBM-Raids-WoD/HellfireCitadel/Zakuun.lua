@@ -62,8 +62,7 @@ mod:AddInfoFrameOption(182008, false)
 mod:AddSetIconOption("SetIconOnSeeds", 181508, true)--Start at 8, descending. On by default, because it's quite imperative to know who/where seed targets are at all times.
 mod:AddSetIconOption("SetIconOnLatent", 182008, false)
 mod:AddHudMapOption("HudMapOnSeeds", 181508)
-mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
-mod:AddDropdownOption("SeedsBehavior", {"Iconed", "Numbered", "DirectionLine", "FreeForAll"}, "Iconed", "misc")--CrossPerception, CrossCardinal, ExCardinal
+mod:AddDropdownOption("SeedsBehavior", {"Iconed", "Numbered", "DirectionLine", "FreeForAll"}, "Iconed", "misc", nil, 181508)--CrossPerception, CrossCardinal, ExCardinal
 
 mod.vb.befouledTargets = 0
 mod.vb.FissureCount = 0

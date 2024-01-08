@@ -87,8 +87,7 @@ mod:AddRangeFrameOption(10, 184124)
 mod:AddHudMapOption("HudMapOnOrb", 180221)
 mod:AddHudMapOption("HudMapOnCharge", 182051)
 mod:AddSetIconOption("SetIconOnCharge", 182051, true)
-mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
-mod:AddDropdownOption("InterruptBehavior", {"Count3Resume", "Count3Reset", "Count4Resume", "Count4Reset"}, "Count3Resume", "misc")
+mod:AddDropdownOption("InterruptBehavior", {"Count3Resume", "Count3Reset", "Count4Resume", "Count4Reset"}, "Count3Resume", "misc", nil, 183331)
 
 mod.vb.ReverberatingBlow = 0
 mod.vb.felBurstCount = 0

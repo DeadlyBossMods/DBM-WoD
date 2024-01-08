@@ -98,8 +98,7 @@ local timerOverwhelmingChaosCD		= mod:NewNextCountTimer(10, 187204, nil, nil, 2,
 --Both, gives users ALL the information for everything so they can decide on their own. This will be default until I can see what becomes more popular. Maybe both will be what everyone ends up preferring.
 mod:AddRangeFrameOption(5, 189775)--Mythic
 mod:AddSetIconOption("SetIconOnImps", -11694, true, true)
-mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
-mod:AddDropdownOption("ChainsBehavior", {"Cast", "Applied", "Both"}, "Both", "misc")
+mod:AddDropdownOption("ChainsBehavior", {"Cast", "Applied", "Both"}, "Both", "misc", nil, 186490)
 
 mod.vb.EmpFelChainCount = 0
 mod.vb.phase = 1
