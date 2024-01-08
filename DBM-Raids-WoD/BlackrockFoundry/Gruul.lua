@@ -45,6 +45,7 @@ local berserkTimer					= mod:NewBerserkTimer(360)
 
 mod:AddRangeFrameOption(8, 155530)
 mod:AddHudMapOption("HudMapOnShatter", 155530, false)--Might be overwhelming. up to 8 targets on non mythic, and on mythic, 20 of them. So off by default
+mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
 mod:AddDropdownOption("MythicSoakBehavior", {"ThreeGroup", "TwoGroup"}, "ThreeGroup", "misc")
 
 mod.vb.smashCount = 0

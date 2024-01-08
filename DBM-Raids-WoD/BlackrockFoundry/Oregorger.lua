@@ -41,6 +41,7 @@ local timerExplosiveShardCD			= mod:NewCDTimer(12, 156390, nil, "MeleeDps", 3, 3
 local timerExplosiveShard			= mod:NewCastTimer(3.5, 156390, nil, "MeleeDps")
 local timerRetchedBlackrockCD		= mod:NewCDTimer(15.5, 156179, nil, "Ranged", 2, 3)
 
+mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
 mod:AddDropdownOption("InterruptBehavior", {"Smart", "Fixed"}, "Smart", "misc")
 
 mod.vb.torrentCount = 0

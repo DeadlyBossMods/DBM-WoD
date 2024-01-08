@@ -127,6 +127,7 @@ mod:AddSetIconOption("SetIconOnInfiniteDarkness", 165102, false)
 mod:AddInfoFrameOption(176537)
 mod:AddHudMapOption("HudMapOnMarkOfChaos", 158605)
 mod:AddHudMapOption("HudMapOnBranded", 156225, false)
+mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
 mod:AddDropdownOption("GazeYellType", {"Countdown", "Stacks"}, "Countdown", "misc")
 
 mod.vb.markActive = false

@@ -52,6 +52,7 @@ mod:AddTimerLine(ENCOUNTER_JOURNAL_SECTION_FLAG12)
 local timerSpecialCD				= mod:NewCDSpecialTimer(20)--Mythic Specials. Shared cd, which special he uses is random. 20-25 second variation, unless delayed by spores. then 20-25+10
 
 mod:AddRangeFrameOption(8, 160254, false)
+mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
 mod:AddDropdownOption("InterruptCounter", {"Two", "Three", "Four"}, "Two", "misc")
 
 mod.vb.sporesAlive = 0

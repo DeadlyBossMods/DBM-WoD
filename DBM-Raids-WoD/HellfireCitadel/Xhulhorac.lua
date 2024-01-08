@@ -27,7 +27,7 @@ mod:RegisterEventsInCombat(
 local warnFelPortal					= mod:NewSpellAnnounce(187003, 2, nil, nil, nil, nil, nil, 2)
 local warnFelSurge					= mod:NewTargetAnnounce(186407, 3)
 local warnFelStrike					= mod:NewSpellAnnounce(186271, 3, nil, "Tank")
-local warnImps						= mod:NewCountAnnounce("ej11694", 2, 112866, "Melee")
+local warnImps						= mod:NewCountAnnounce(-11694, 2, 112866, "Melee")
 ----Adds
 local warnFelChains					= mod:NewTargetAnnounce(186490, 3)
 local warnEmpoweredFelChains		= mod:NewTargetAnnounce(189775, 3)--Mythic
@@ -36,7 +36,7 @@ local warnEmpoweredFelChains		= mod:NewTargetAnnounce(189775, 3)--Mythic
 local warnVoidPortal				= mod:NewSpellAnnounce(187006, 2, nil, nil, nil, nil, nil, 2)
 local warnVoidSurge					= mod:NewTargetAnnounce(186333, 3)
 local warnVoidStrike				= mod:NewSpellAnnounce(186292, 3, nil, "Tank")
-local warnVoids						= mod:NewCountAnnounce("ej11714", 2, 697, "Ranged")
+local warnVoids						= mod:NewCountAnnounce(-11714, 2, 697, "Ranged")
 ----
 --End Phase
 local warnPhase3					= mod:NewPhaseAnnounce(3, 2, nil, nil, nil, nil, nil, 2)
@@ -74,7 +74,7 @@ local specWarnEmpBlackHole			= mod:NewSpecialWarningCount(189779, nil, nil, nil,
 ----Boss
 local timerFelStrikeCD				= mod:NewCDTimer(13, 186271, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)--15.8-17
 local timerFelSurgeCD				= mod:NewCDTimer(29, 186407, nil, "-Tank", 2, 3, nil, nil, nil, 1, 3)
-local timerImpCD					= mod:NewNextTimer(25, "ej11694", nil, nil, nil, 1, 112866, nil, nil, 3, 4)
+local timerImpCD					= mod:NewNextTimer(25, -11694, nil, nil, nil, 1, 112866, nil, nil, 3, 4)
 ----Big Add
 local timerFelBlazeFlurryCD			= mod:NewCDTimer(12.9, 186453, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerFelChainsCD				= mod:NewCDTimer(30, 186490, nil, "-Tank", nil, 3)--30-34. Often 34 but it can and will be 30 sometimes.
@@ -82,7 +82,7 @@ local timerFelChainsCD				= mod:NewCDTimer(30, 186490, nil, "-Tank", nil, 3)--30
 ----Boss
 local timerVoidStrikeCD				= mod:NewCDTimer(15, 186292, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerVoidSurgeCD				= mod:NewCDTimer(29, 186333, nil, "-Tank", 2, 3, nil, nil, nil, 2, 3)
-local timerVoidsCD					= mod:NewNextTimer(30, "ej11714", nil, "Ranged", nil, 1, 697)
+local timerVoidsCD					= mod:NewNextTimer(30, -11714, nil, "Ranged", nil, 1, 697)
 ----Big Add
 local timerWitheringGazeCD			= mod:NewCDTimer(22, 186783, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerBlackHoleCD				= mod:NewCDCountTimer(29.5, 186546, nil, "-Tank", 2, 5)
@@ -97,7 +97,8 @@ local timerOverwhelmingChaosCD		= mod:NewNextCountTimer(10, 187204, nil, nil, 2,
 --Applied gives all targets, this is the easier strat for most users, where they wait until everyone has it, then run in different directions.
 --Both, gives users ALL the information for everything so they can decide on their own. This will be default until I can see what becomes more popular. Maybe both will be what everyone ends up preferring.
 mod:AddRangeFrameOption(5, 189775)--Mythic
-mod:AddSetIconOption("SetIconOnImps", "ej11694", true, true)
+mod:AddSetIconOption("SetIconOnImps", -11694, true, true)
+mod:AddMiscLine(DBM_CORE_L.OPTION_CATEGORY_DROPDOWNS)
 mod:AddDropdownOption("ChainsBehavior", {"Cast", "Applied", "Both"}, "Both", "misc")
 
 mod.vb.EmpFelChainCount = 0
