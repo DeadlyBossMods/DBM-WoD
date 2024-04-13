@@ -101,7 +101,7 @@ function mod:SPELL_CAST_START(args)
 			self.vb.decayCounter = 0
 		end
 		self.vb.decayCounter = self.vb.decayCounter + 1
-		local guid = args.souceGUID
+		local guid = args.sourceGUID
 		if guid == UnitGUID("target") or guid == UnitGUID("focus") then
 			specWarnDecay:Show(args.sourceName, self.vb.decayCounter)
 			timerDecayCD:Start(args.sourceGUID)

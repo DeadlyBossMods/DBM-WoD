@@ -71,7 +71,7 @@ function mod:CustomHealthUpdate()
 	for i = 1, 5 do
 		local unitID = "boss"..i
 		local guid = UnitGUID(unitID)
-		if UnitExists(unitID) then
+		if guid and UnitExists(unitID) then
 			local cid = self:GetCIDFromGUID(guid)
 			if cid == 78948 then
 				tectusH = UnitHealth(unitID) / UnitHealthMax(unitID) * 100
@@ -142,7 +142,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnTectonicUpheaval:Show()
 		specWarnTectonicUpheaval:Play("aesoon")
 	elseif spellId == 162968 then
-		local guid = args.souceGUID
+		local guid = args.sourceGUID
 		specWarnEarthenFlechettes:Show()
 		timerEarthenFlechettesCD:Start(guid)
 		if guid == UnitGUID("target") or guid == UnitGUID("focus") then

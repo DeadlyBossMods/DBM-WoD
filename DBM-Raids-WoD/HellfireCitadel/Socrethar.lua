@@ -19,8 +19,8 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED",
 --	"SPELL_PERIODIC_DAMAGE",
 --	"SPELL_ABSORBED",
-	"RAID_BOSS_WHISPER",
-	"UNIT_SPELLCAST_SUCCEEDED boss1 boss2"
+	"RAID_BOSS_WHISPER"
+--	"UNIT_SPELLCAST_SUCCEEDED boss1 boss2"
 )
 
 --TODO, Prisons had no workable targetting of any kind during test. Study of logs and even videos showed no valid target scanning, debuff, whisper, nothing. As such, only aoe warning :\
