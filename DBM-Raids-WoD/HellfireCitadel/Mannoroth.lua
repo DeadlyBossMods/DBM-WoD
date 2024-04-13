@@ -549,7 +549,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 		end
 		if self.Options.HudMapOnGaze2 then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 8, 8, nil, nil, nil, 0.5, nil, true):Appear():SetLabel(args.destName)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 8, 8, nil, nil, nil, 0.5):Appear():SetLabel(args.destName)
 		end
 	elseif spellId == 181119 then
 		local amount = args.amount or 1

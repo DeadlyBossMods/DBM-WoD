@@ -352,7 +352,7 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 	for i = 1, 5 do
 		local unitID = "boss"..i
 		local unitGUID = UnitGUID(unitID)
-		if UnitExists(unitID) and not activeBossGUIDS[unitGUID] then
+		if unitGUID and UnitExists(unitID) and not activeBossGUIDS[unitGUID] then
 			activeBossGUIDS[unitGUID] = true
 			local cid = self:GetCIDFromGUID(unitGUID)
 			if cid == 76884 or cid == 76874 or cid == 76945 or cid == 76946 then

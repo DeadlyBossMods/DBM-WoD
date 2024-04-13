@@ -970,11 +970,11 @@ function mod:SPELL_AURA_APPLIED(args)
 				else--red lines for non player lines
 					--Create Points
 					if self.Options.NamesWroughtHud then
-						DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear():SetLabel(args.sourceName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
-						DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear():SetLabel(args.destName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
+						DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5):Appear():SetLabel(args.sourceName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
+						DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5):Appear():SetLabel(args.destName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
 					else
-						DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear()
-						DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear()
+						DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5):Appear()
+						DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5):Appear()
 					end
 					--Create Line
 					if self.Options.ExtendWroughtHud3 then

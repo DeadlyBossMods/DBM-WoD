@@ -276,7 +276,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				lastX, LastY = UnitPosition("player")
 				self:Schedule(7, returnPosition, self)
 				if self.Options.HudMapForFel then
-					DBM.HudMap:RegisterStaticMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 12, 0, 1, 0, 0.5, nil, nil, 4):Pulse(0.5, 0.5)
+					DBM.HudMap:RegisterStaticMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 12, 0, 1, 0, 0.5):Pulse(0.5, 0.5)
 				end
 			end
 		end

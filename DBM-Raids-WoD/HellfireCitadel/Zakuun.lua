@@ -139,15 +139,15 @@ local function warnSeeds(self)
 		end
 		if self.Options.HudMapOnSeeds then
 			if i == 1 then--Yellow to match Star
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "star", targetName, 3, 13, 1, 1, 1, 0.5, nil, true):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "star", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
 			elseif i == 2 then--Orange to match Circle
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "circle", targetName, 3, 13, 1, 1, 1, 0.5, nil, true):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "circle", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
 			elseif i == 3 then--Purple to match Diamond
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "diamond", targetName, 3, 13, 1, 1, 1, 0.5, nil, true):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "diamond", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
 			elseif i == 4 then--Green to match Triangle
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "triangle", targetName, 3, 13, 1, 1, 1, 0.5, nil, true):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "triangle", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
 			else--White to match  Moon
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "moon", targetName, 3, 13, 1, 1, 1, 0.5, nil, true):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "moon", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
 			end
 		end
 	end

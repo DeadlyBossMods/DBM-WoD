@@ -288,7 +288,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			updateRangeFrame(self, true)
 		end
 		if self.Options.HudMapOnAxe then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(184369, "highlight", args.destName, 5, 7, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(184369, "highlight", args.destName, 5, 7, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	elseif spellId == 180076 then
 		warnSiphon:Show(args.destName)

@@ -145,16 +145,16 @@ function mod:ChargeTarget(targetname, uId)
 	if self.Options.HudMapOnCharge then
 		local currentTank = self:GetCurrentTank(90296)
 		if currentTank then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "party", targetname, 0.35, 4, nil, nil, nil, 0.5, nil, false):Appear():SetLabel(targetname, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "party", targetname, 0.35, 4, nil, nil, nil, 0.5):Appear():SetLabel(targetname, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
 			if targetname == UnitName("player") then
 				DBM.HudMap:AddEdge(1, 1, 0, 0.5, 4, currentTank, targetname, nil, nil, nil, nil, 125)
 			else
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "party", UnitName("player"), 0.7, 4, nil, nil, nil, 1, nil, false):Appear()
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "party", UnitName("player"), 0.7, 4, nil, nil, nil, 1):Appear()
 				DBM.HudMap:AddEdge(1, 0, 0, 0.5, 4, currentTank, targetname, nil, nil, nil, nil, 125)
 			end
 		else--Old school
 			DBM:Debug("Tank Detection Failure in HudMapOnCharge", 2)
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "highlight", targetname, 5, 4, 1, 0, 0, 0.5, nil, true, 2):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "highlight", targetname, 5, 4, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	end
 	if self.Options.SetIconOnCharge then
@@ -383,7 +383,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			warnVolatileFelOrb:Show(args.destName)
 		end
 		if self.Options.HudMapOnOrb then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(180221, "highlight", args.destName, 5, 20, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(180221, "highlight", args.destName, 5, 20, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	elseif spellId == 190466 then
 		if args.sourceGUID == UnitGUID("player") then

@@ -132,7 +132,7 @@ function mod:AnnTarget(targetname, uId)
 		warnAnnihilationStrike:Show(self.vb.annihilationCount, targetname)
 	end
 	if self.Options.HudMapOnStrike then
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(180260, "highlight", targetname, 3, 4, 1, 0, 0, 0.5, nil, true, 2):Pulse(0.5, 0.5)
+		DBM.HudMap:RegisterRangeMarkerOnPartyMember(180260, "highlight", targetname, 3, 4, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
 	end
 end
 
@@ -257,7 +257,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnEdictofCondemnationOther:ScheduleVoice(5, "gather")
 		end
 		if self.Options.HudMapEdict2 then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 9, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 9, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	elseif args:IsSpellID(180166, 185237) then--Casts
 		self.vb.touchofHarmCount = self.vb.touchofHarmCount + 1

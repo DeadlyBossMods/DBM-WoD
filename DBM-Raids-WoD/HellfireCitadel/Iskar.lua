@@ -144,9 +144,9 @@ local function showChakram(self)
 	end
 	if ranged and melee and tank then
 		DBM:Debug("All Chakram found!", 2)
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", ranged, 0.65, 6, nil, nil, nil, 0.8, nil, false):Appear():SetLabel(ranged, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", melee, 0.65, 6, nil, nil, nil, 0.8, nil, false):Appear():SetLabel(melee, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", tank, 0.65, 6, nil, nil, nil, 0.8, nil, false):Appear():SetLabel(tank, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
+		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", ranged, 0.65, 6, nil, nil, nil, 0.8):Appear():SetLabel(ranged, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
+		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", melee, 0.65, 6, nil, nil, nil, 0.8):Appear():SetLabel(melee, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
+		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", tank, 0.65, 6, nil, nil, nil, 0.8):Appear():SetLabel(tank, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
 		if playerName == melee or playerName == ranged or playerName == tank then--Player in it, Yellow lines
 			DBM.HudMap:AddEdge(1, 1, 0, 0.5, 6, ranged, melee, nil, nil, nil, nil)
 			DBM.HudMap:AddEdge(1, 1, 0, 0.5, 6, melee, tank, nil, nil, nil, nil)

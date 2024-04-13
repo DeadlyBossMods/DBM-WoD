@@ -157,7 +157,7 @@ function mod:SPELL_CAST_START(args)
 			end
 		else
 			timerInfernoSliceCD:Start(nil, self.vb.sliceCount+1)
-			local countFormat = self.vb.sliceCount
+			local countFormat = tostring(self.vb.sliceCount)
 			if self.Options.MythicSoakBehavior == "ThreeGroup" then
 				if mythicSoakOrder3Group[self.vb.sliceCount] then
 					countFormat = self.vb.sliceCount.."-"..mythicSoakOrder3Group[self.vb.sliceCount]
