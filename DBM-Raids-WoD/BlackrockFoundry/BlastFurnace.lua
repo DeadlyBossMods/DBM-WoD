@@ -383,7 +383,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self:CheckTankDistance(args.sourceGUID, 40) and self.vb.phase == 1 then--Filter Works very poorly, probably because mob not a BOSS id. usually see ALL warnings and all HUDs :\
 			warnBomb:CombinedShow(1, args.destName)
 			if self.Options.HudMapOnBomb then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(155192, "highlight", args.destName, 5, debuffTime+0.5, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(155192, "highlight", args.destName, 5, debuffTime+0.5, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 			end
 		end
 		if args:IsPlayer() then
@@ -648,7 +648,7 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 		local unitID = "boss"..i
 		local unitGUID = UnitGUID(unitID)
 		local cid = self:GetCIDFromGUID(unitGUID)
-		if self.vb.phase == 2 and cid == 76815 and UnitExists(unitID) and not activePrimalGUIDS[unitGUID] then
+		if unitGUID and self.vb.phase == 2 and cid == 76815 and UnitExists(unitID) and not activePrimalGUIDS[unitGUID] then
 			activePrimal = activePrimal + 1
 			activePrimalGUIDS[unitGUID] = true
 		end

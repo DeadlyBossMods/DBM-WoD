@@ -25,7 +25,6 @@ local specWarnArcaneSurge		= mod:NewSpecialWarningInterrupt(180816, false, nil, 
 local specWarnArcaneSurgeDispel	= mod:NewSpecialWarningDispel(180816, "MagicDispeller", nil, nil, 1, 2)
 
 mod:AddRangeFrameOption(10, 180908)
-mod:AddHudMapOption("HudMapOnUnleashed", 180908)
 
 mod.vb.debuffCount = 0
 local debuffName = DBM:GetSpellInfo(180908)
@@ -56,9 +55,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.HudMapOnUnleashed then
-		DBM.HudMap:Disable()
-	end
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end
@@ -87,9 +83,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellUnleashedEnergy:Yell()
 			specWarnUnleashedEnergy:Play("runout")
 		end
-		if self.Options.HudMapOnUnleashed then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 30, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
-		end
 		updateRangeFrame(self)
 	elseif spellId == 180816 and not args:IsDestTypePlayer() and self:AntiSpam(3, 1) then
 		specWarnArcaneSurgeDispel:Show(args.destName)
@@ -106,9 +99,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 180908 then
 		self.vb.debuffCount = self.vb.debuffCount - 1
-		if self.Options.HudMapOnUnleashed then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
 		updateRangeFrame(self)
 	end
 end

@@ -9,7 +9,6 @@ mod:SetMinCombatTime(15)
 
 mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 180950",
-	"SPELL_AURA_REMOVED 180950",
 	"UNIT_SPELLCAST_START"
 )
 
@@ -20,8 +19,6 @@ local warnTwistMind		= mod:NewTargetAnnounce(180950, 4)
 local specWarnVoidBomb	= mod:NewSpecialWarningYou(180939, nil, nil, nil, 1, 2)
 local yellVoidBomb		= mod:NewYell(180939)
 local specWarnTwistMind	= mod:NewSpecialWarningSwitch(180950, "Dps", nil, nil, 1, 2)
-
-mod:AddHudMapOption("HudMapOnMC", 180950)
 
 function mod:VoidTarget(targetname, uId)
 	if not targetname then return end
@@ -39,12 +36,6 @@ function mod:BombTarget(targetname, uId)
 	end
 end
 
-function mod:OnCombatEnd()
-	if self.Options.HudMapOnMC then
-		DBM.HudMap:Disable()
-	end
-end
-
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 180950 then
@@ -53,21 +44,8 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnTwistMind:Show()
 			specWarnTwistMind:Play("findmc")
 		end
-		if self.Options.HudMapOnMC then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 30, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
-		end
 	end
 end
-
-function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
-	if spellId == 180950 then
-		if self.Options.HudMapOnMC then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
-	end
-end
-
 
 function mod:UNIT_SPELLCAST_START(uId, _, spellId)
 	if spellId == 180939 and self:AntiSpam(3, 1) then

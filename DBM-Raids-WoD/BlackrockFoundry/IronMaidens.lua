@@ -103,11 +103,11 @@ local timerPenetratingShotCD			= mod:NewCDCountTimer(28.8, 164271, nil, nil, nil
 local timerDeployTurretCD				= mod:NewCDCountTimer(20.2, 158599, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)--20.2-23.5
 ----Enforcer Sorka
 mod:AddTimerLine(Sorka)
-local timerBladeDashCD					= mod:NewCDCountTimer(20, 155794, nil, "Ranged|Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, mod:IsTank() and 3, 4)
+local timerBladeDashCD					= mod:NewCDCountTimer(20, 155794, nil, "Ranged|Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, mod:IsTank() and 3 or nil, 4)
 local timerConvulsiveShadowsCD			= mod:NewNextCountTimer(55.6, 156214, nil, nil, nil, 3)--Timer only enabled on mythic, On non mythic, it's just an unimportant dot. On mythic, MUCH more important because user has to run out of raid and get dispelled.
 ----Marak the Blooded
 mod:AddTimerLine(Marak)
-local timerBloodRitualCD				= mod:NewCDCountTimer(20, 158078, nil, nil, nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, mod:IsTank() and 2, 4)
+local timerBloodRitualCD				= mod:NewCDCountTimer(20, 158078, nil, nil, nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, mod:IsTank() and 2 or nil, 4)
 local timerHeartSeekerCD				= mod:NewCDCountTimer(70, 158010, nil, "Ranged", nil, 3)
 
 mod:AddSetIconOption("SetIconOnRapidFire", 156626, true)
@@ -357,7 +357,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if (noFilter or not playerOnBoat) then
 			if self.Options.HudMapOnBloodRitual then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 7, 1, 0, 0, 0.5, nil, true, 2):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 7, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
 			end
 			if args:IsPlayer() then
 				yellBloodRitual:Yell()
@@ -387,7 +387,7 @@ function mod:SPELL_AURA_APPLIED(args)
 					warnRapidFire:Show(self.vb.rapidfire, args.destName)
 				end
 				if self.Options.HudMapOnRapidFire then
-					DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 9, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+					DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 9, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 				end
 			end
 		end
@@ -564,7 +564,7 @@ function mod:CHAT_MSG_ADDON(prefix, msg, channel, targetName)
 				warnRapidFire:Show(self.vb.rapidfire, targetName)
 			end
 			if self.Options.HudMapOnRapidFire then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(156631, "highlight", targetName, 5, 12, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(156631, "highlight", targetName, 5, 12, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 			end
 		end
 	end

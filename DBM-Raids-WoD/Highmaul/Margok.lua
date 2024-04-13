@@ -159,7 +159,7 @@ local brandedDebuff1, brandedDebuff2, brandedDebuff3, brandedDebuff4 = DBM:GetSp
 local debuffFilterMark, debuffFilterBranded, debuffFilterFixate, debuffFilterGaze
 do
 	debuffFilterMark = function(uId)
-		if DBM:UnitDebuff(uId, chaosDebuff1, chaosDebuff2, chaosDebuff3. chaosDebuff4) then
+		if DBM:UnitDebuff(uId, chaosDebuff1, chaosDebuff2, chaosDebuff3, chaosDebuff4) then
 			return true
 		end
 	end
@@ -619,7 +619,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 			updateRangeFrame(self)--Update it here cause we don't need it before stacks get to relevant levels.
 			if self.Options.HudMapOnBranded then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 5, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+				DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 5, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 			end
 		end
 	elseif spellId == 158553 then
@@ -685,7 +685,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		updateRangeFrame(self)
 		if self.Options.HudMapOnMarkOfChaos then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 7, 1, 0, 0, 0.5, nil, true, 2):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 7, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	elseif spellId == 157801 and self:CheckDispelFilter() then
 		specWarnSlow:CombinedShow(1, args.destName)

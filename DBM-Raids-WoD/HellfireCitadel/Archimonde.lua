@@ -107,7 +107,7 @@ local timerLightCD					= mod:NewNextTimer(10, 183963, nil, nil, nil, 5)
 local timerShadowBlastCD			= mod:NewCDTimer(7.3, 183864, nil, "Tank", nil, 5)
 --Phase 2: Hand of the Legion
 mod:AddTimerLine(SCENARIO_STAGE:format(2))
-local timerShackledTormentCD		= mod:NewCDCountTimer(31.5, 184931, nil, nil, nil, 3, nil, nil, nil, not mod:IsTank() and 3, 3)
+local timerShackledTormentCD		= mod:NewCDCountTimer(31.5, 184931, nil, nil, nil, 3, nil, nil, nil, not mod:IsTank() and 3 or nil, 3)
 local timerWroughtChaosCD			= mod:NewCDTimer(51.7, 184265, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
 --Phase 2.5
 local timerFelborneOverfiendCD		= mod:NewNextCountTimer(44.3, "ej11603", nil, nil, nil, 1, 186662)
@@ -451,7 +451,7 @@ local function showMarkOfLegion(self, spellName)
             end
 		end
 		if self.Options.HudMapMarkofLegion2 then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(1870502, "party", playerName, 0.9, 12, nil, nil, nil, 1, nil, false):Appear()
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(1870502, "party", playerName, 0.9, 12, nil, nil, nil, 1):Appear()
 		end
 	end
 end
@@ -512,7 +512,7 @@ local function breakShackles(self, spellName)
 		end
 	end
 	if self.Options.HudMapOnShackledTorment2 and self:IsMythic() then
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(1849642, "party", playerName, 0.9, 30, nil, nil, nil, 1, nil, false):Appear()
+		DBM.HudMap:RegisterRangeMarkerOnPartyMember(1849642, "party", playerName, 0.9, 30, nil, nil, nil, 1):Appear()
 		for i = 1, #shacklesTargets do
 			local name = shacklesTargets[i]
 			if not name then break end
@@ -947,18 +947,18 @@ function mod:SPELL_AURA_APPLIED(args)
 					warnWroughtChaos:CombinedShow(0.1, self.vb.wroughtWarned, args.sourceName)
 					warnWroughtChaos:CombinedShow(0.1, self.vb.wroughtWarned, args.destName)
 					if UnitIsUnit("player", sourceUId) then
-						DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.7, time, nil, nil, nil, 1, nil, false):Appear()--Players own dot bigger (no label on player dot)
+						DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.7, time, nil, nil, nil, 1):Appear()--Players own dot bigger (no label on player dot)
 						if self.Options.NamesWroughtHud then
-							DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear():SetLabel(args.destName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
+							DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5):Appear():SetLabel(args.destName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
 						else
-							DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear()
+							DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.35, time, nil, nil, nil, 0.5):Appear()
 						end
 					else
-						DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.7, time, nil, nil, nil, 1, nil, false):Appear()--Players own dot bigger (no label on player dot)
+						DBM.HudMap:RegisterRangeMarkerOnPartyMember(185014, "party", args.destName, 0.7, time, nil, nil, nil, 1):Appear()--Players own dot bigger (no label on player dot)
 						if self.Options.NamesWroughtHud then
-							DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear():SetLabel(args.sourceName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
+							DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5):Appear():SetLabel(args.sourceName, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
 						else
-							DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5, nil, false):Appear()
+							DBM.HudMap:RegisterRangeMarkerOnPartyMember(186123, "party", args.sourceName, 0.35, time, nil, nil, nil, 0.5):Appear()
 						end
 					end
 					--create line

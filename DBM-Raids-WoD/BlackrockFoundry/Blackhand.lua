@@ -388,7 +388,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetSortedIcon("roster", 1.5, args.destName, 1, expectedMFDCount)
 		end
 		if self.Options.HudMapOnMFD then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 5, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 5, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	elseif spellId == 157000 then--Non Tank Version
 		if self:AntiSpam(5, 4) then
@@ -611,7 +611,7 @@ end
 function mod:UNIT_POWER_UPDATE(uId)
 	local power = UnitPower(uId)
 	local guid = UnitGUID(uId)
-	if power > 70 and not mortarsWarned[guid] then
+	if guid and power > 70 and not mortarsWarned[guid] then
 		specWarnMortarSoon:Show()
 		mortarsWarned[guid] = true
 	end

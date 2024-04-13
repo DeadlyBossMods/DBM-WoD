@@ -76,7 +76,7 @@ local function showFixate(self)
 	for name, time in pairs(fixateTagets) do
 		text[#text + 1] = name
 		if self.Options.HudMapOnFixate then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(154952, "highlight", name, 3, 10, 1, 1, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
+			DBM.HudMap:RegisterRangeMarkerOnPartyMember(154952, "highlight", name, 3, 10, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	end
 	warnFixate:Show(table.concat(text, "<, >"))
@@ -279,7 +279,7 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 		local unitGUID = UnitGUID(unitID)
 		if UnitExists(unitID) and not activeBossGUIDS[unitGUID] then
 			local cid = self:GetCIDFromGUID(unitGUID)
-			if cid == 76794 then--Cinder Wolf
+			if unitGUID and cid == 76794 then--Cinder Wolf
 				wolfIcon = wolfIcon + 1
 				activeBossGUIDS[unitGUID] = true
 				if self:CanSetIcon("SetIconOnAdds") then--Check if elected
