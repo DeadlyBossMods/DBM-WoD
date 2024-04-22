@@ -401,7 +401,7 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 183376 or spellId == 185830 then
 		local targetName, uId, bossuid = self:GetBossTarget(91349, true)
-		local tanking, status = UnitDetailedThreatSituation("player", bossuid)
+		local tanking, status = UnitDetailedThreatSituation("player", bossuid or "")
 		if tanking or (status == 3) then--Player is current target
 		else
 			if self:GetNumAliveTanks() >= 3 and not self:CheckNearby(21, targetName) then return end--You are not near current tank, you're probably 3rd tank on Doom Guards that never taunts massive blast

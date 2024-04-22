@@ -131,6 +131,7 @@ local function warnSeeds(self)
 				yellSeeds2:Yell(currentType[i], i, i)
 			end
 			if currentVoice and currentVoice[i] then
+				---@diagnostic disable-next-line: param-type-mismatch
 				specWarnSeedPosition:Play(currentVoice[i])
 			end
 		end

@@ -20,7 +20,7 @@ mod:RegisterEventsInCombat(
 
 local warnChainHurl					= mod:NewTargetAnnounce(159947, 3)--Warn for cast too?
 local warnOpenWounds				= mod:NewStackAnnounce(159178, 2, nil, "Tank|Healer")
-local warnPillar					= mod:NewSpellAnnounce("ej9394", 3, nil, 159202, nil, nil, nil, 2)
+local warnPillar					= mod:NewSpellAnnounce("ej9394", 3, 159202, nil, nil, nil, nil, 2)
 local warnOnTheHunt					= mod:NewTargetAnnounce(162497, 4)
 
 local specWarnChainHurl				= mod:NewSpecialWarningSpell(159947, nil, nil, nil, nil, 12)
