@@ -687,7 +687,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.HudMapOnMarkOfChaos then
 			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 7, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
 		end
-	elseif spellId == 157801 and self:CheckDispelFilter() then
+	elseif spellId == 157801 and self:CheckDispelFilter("magic") then
 		specWarnSlow:CombinedShow(1, args.destName)
 		if self:AntiSpam(3, 4) then
 			specWarnSlow:Play("dispelnow")

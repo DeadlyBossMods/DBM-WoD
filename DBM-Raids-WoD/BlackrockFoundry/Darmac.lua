@@ -263,7 +263,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			warnPinDownTargets:ScheduleVoice(0.5, "helpme")
 		end
 	elseif spellId == 154981 then
-		if self:CheckDispelFilter() then
+		if self:CheckDispelFilter("magic") then
 			specWarnConflag:CombinedShow(2.3, args.destName)
 		end
 		if self.Options.SetIconOnConflag and not self:IsLFR() then
