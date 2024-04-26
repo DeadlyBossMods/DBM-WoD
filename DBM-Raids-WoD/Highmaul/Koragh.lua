@@ -75,7 +75,7 @@ mod.vb.ballsCount = 0
 mod.vb.shieldCharging = false
 mod.vb.fireActive = false
 local lastX, LastY = nil, nil--Not in VB table because it player personal position
-local barName, arcaneDebuff = DBM:GetSpellInfo(156803), DBM:GetSpellInfo(162186)
+local arcaneDebuff = DBM:GetSpellName(162186)
 
 local function closeRange(self)
 	if self.Options.RangeFrame and not DBM:UnitDebuff("player", arcaneDebuff) then

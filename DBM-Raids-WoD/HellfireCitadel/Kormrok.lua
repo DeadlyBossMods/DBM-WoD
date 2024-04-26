@@ -62,7 +62,7 @@ mod.vb.explosiveBurst = 0
 mod.vb.foulCrush = 0
 mod.vb.swatCount = 0
 mod.vb.enraged = false
-local debuffName = DBM:GetSpellInfo(181306)
+local debuffName = DBM:GetSpellName(181306)
 local playerName = UnitName("player")
 
 local debuffFilter

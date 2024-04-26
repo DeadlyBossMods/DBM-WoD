@@ -26,7 +26,7 @@ local specWarnWildFlames			= mod:NewSpecialWarningMove(173827)
 
 mod:AddRangeFrameOption(8, 166200)
 
-local debuff = DBM:GetSpellInfo(166200)
+local debuff = DBM:GetSpellName(166200)
 local DebuffFilter
 do
 	DebuffFilter = function(uId)

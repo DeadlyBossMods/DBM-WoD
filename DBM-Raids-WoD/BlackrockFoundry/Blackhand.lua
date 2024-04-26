@@ -102,7 +102,7 @@ local mortarsWarned = {}
 local tankFilter
 local yellMFD2 = mod:NewYell(156096, L.customMFDSay, true, false)
 local yellSlag2 = mod:NewYell(157000, L.customSlagSay, true, false)
-local mfdDebuff, slagDebuff1, slagDebuff2 = DBM:GetSpellInfo(156096), DBM:GetSpellInfo(157000), DBM:GetSpellInfo(159179)
+local mfdDebuff, slagDebuff1, slagDebuff2 = DBM:GetSpellName(156096), DBM:GetSpellName(157000), DBM:GetSpellName(159179)
 local playerName = UnitName("player")
 do
 	tankFilter = function(uId)

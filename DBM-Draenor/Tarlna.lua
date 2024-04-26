@@ -36,7 +36,7 @@ local timerGrowUntamedMandragoraCD	= mod:NewCDTimer(30, 176013, nil, nil, nil, 1
 --mod:AddReadyCheckOption(37462, false, 100)
 --mod:AddRangeFrameOption(8, 175979)
 
-local debuffName = DBM:GetSpellInfo(176004)
+local debuffName = DBM:GetSpellName(176004)
 local debuffFilter
 do
 	debuffFilter = function(uId)

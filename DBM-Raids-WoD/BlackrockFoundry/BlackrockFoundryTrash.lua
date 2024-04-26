@@ -30,7 +30,7 @@ local specWarnReapingWhirl			= mod:NewSpecialWarningDodge(171537, "MeleeDps")
 local specWarnBurning				= mod:NewSpecialWarningStack(175594, nil, 8, nil, nil, 1, 6)
 local specWarnBurningOther			= mod:NewSpecialWarningTaunt(175594, nil, nil, nil, nil, 2)
 
-local volcanicBomb = DBM:GetSpellInfo(156413)
+local volcanicBomb = DBM:GetSpellName(156413)
 local blastCount = 0--Non synced variable, because mods that don't use start/endcombat don't have timer recovery
 
 function mod:SPELL_CAST_START(args)

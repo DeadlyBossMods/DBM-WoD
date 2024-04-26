@@ -183,7 +183,7 @@ local felburstTargets = {}
 local playerName = UnitName("player")
 local playerBanished = false
 local UnitDetailedThreatSituation, UnitClass, UnitIsUnit = UnitDetailedThreatSituation, UnitClass, UnitIsUnit
-local NetherBanish, shackledDebuff, felburstDebuff, markOfLegionDebuff = DBM:GetSpellInfo(186961), DBM:GetSpellInfo(184964), DBM:GetSpellInfo(183634), DBM:GetSpellInfo(187050)
+local NetherBanish, shackledDebuff, felburstDebuff, markOfLegionDebuff = DBM:GetSpellName(186961), DBM:GetSpellName(184964), DBM:GetSpellName(183634), DBM:GetSpellName(187050)
 local netherFilter, markOfLegionFilter
 do
 	netherFilter = function(uId)

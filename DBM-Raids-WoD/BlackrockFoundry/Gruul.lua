@@ -52,7 +52,7 @@ mod.vb.sliceCount = 0
 mod.vb.petrifyCount = 0
 mod.vb.rampage = false
 mod.vb.firstWarned = false
-local petrifyDebuff = DBM:GetSpellInfo(155323)
+local petrifyDebuff = DBM:GetSpellName(155323)
 local debuffFilter
 do
 	debuffFilter = function(uId)

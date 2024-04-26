@@ -112,7 +112,7 @@ local UnitExists, UnitGUID, UnitDetailedThreatSituation = UnitExists, UnitGUID, 
 local AddsSeen = {}
 
 local debuffFilter
-local debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellInfo(189775), DBM:GetSpellInfo(186135), DBM:GetSpellInfo(186134)
+local debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellName(189775), DBM:GetSpellName(186135), DBM:GetSpellName(186134)
 do
 	debuffFilter = function(uId)
 		if DBM:UnitDebuff(uId, debuffName) then

@@ -104,7 +104,7 @@ local AncientSovereign = DBM:EJ_GetSectionInfo(11170)
 local TyrantVelhari = EJ_GetEncounterInfo(1394)
 
 local debuffFilter, debuffFilter2
-local debuffName = DBM:GetSpellInfo(180526)
+local debuffName = DBM:GetSpellName(180526)
 do
 	debuffFilter = function(uId)
 		if DBM:UnitDebuff(uId, debuffName) then

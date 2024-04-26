@@ -75,7 +75,7 @@ local sharedFateTimers = {19, 28, 25, 22}
 local sharedFateTargets = {}
 local playerHasFate = false
 local playerName = UnitName("player")
-local digestDebuff, gorefiendCorruption = DBM:GetSpellInfo(181295), DBM:GetSpellInfo(179867)
+local digestDebuff, gorefiendCorruption = DBM:GetSpellName(181295), DBM:GetSpellName(179867)
 --[[
 Time   Player Role   # of players sent, if your raid size is...
                           10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29

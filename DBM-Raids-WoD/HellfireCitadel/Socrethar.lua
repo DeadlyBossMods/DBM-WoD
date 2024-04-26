@@ -100,7 +100,7 @@ mod.vb.dominatorCount = 0
 mod.vb.interruptBehavior = "Count3Resume"
 local soulsSeen = {}
 local playerInConstruct = false
-local exertSpellName, debuffName = DBM:GetSpellInfo(183331), DBM:GetSpellInfo(184124)
+local exertSpellName, debuffName = DBM:GetSpellName(183331), DBM:GetSpellName(184124)
 local debuffFilter
 do
 	debuffFilter = function(uId)

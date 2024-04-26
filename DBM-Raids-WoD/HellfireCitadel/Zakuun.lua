@@ -75,7 +75,7 @@ mod.vb.yellType = "Icon"
 mod.vb.latentIcon = 8
 local yellSeeds2 = mod:NewPosYell(181508, nil, true, false)
 local seedsTargets = {}
-local befouledName, latentDebuff = DBM:GetSpellInfo(179711), DBM:GetSpellInfo(182008)
+local befouledName, latentDebuff = DBM:GetSpellName(179711), DBM:GetSpellName(182008)
 local debuffFilter
 do
 	debuffFilter = function(uId)

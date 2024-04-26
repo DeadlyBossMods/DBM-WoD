@@ -27,7 +27,7 @@ local specWarnArcaneSurgeDispel	= mod:NewSpecialWarningDispel(180816, "MagicDisp
 mod:AddRangeFrameOption(10, 180908)
 
 mod.vb.debuffCount = 0
-local debuffName = DBM:GetSpellInfo(180908)
+local debuffName = DBM:GetSpellName(180908)
 local debuffFilter
 do
 	debuffFilter = function(uId)

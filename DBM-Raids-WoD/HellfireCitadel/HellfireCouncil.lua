@@ -89,7 +89,7 @@ mod.vb.reapActive = false
 mod.vb.visageCount = 0
 local felRageTimers = {28, 64.2, 75}--Post august 14th hotfix timers.
 local UnitExists, UnitGUID, UnitDetailedThreatSituation = UnitExists, UnitGUID, UnitDetailedThreatSituation
-local markofNecroDebuff = DBM:GetSpellInfo(184449)--Spell name should work, without knowing what right spellid is, For this anyways.
+local markofNecroDebuff = DBM:GetSpellName(184449)--Spell name should work, without knowing what right spellid is, For this anyways.
 
 --[[local function delayedReapCheck(self)
 	--Fires 55 seconds after combat start, unless 50 second reap happens.

@@ -70,9 +70,9 @@ mod.vb.arcaneDebuff = 0
 local GetTime = GetTime
 local PhemosEnergyRate = 33
 local polEnergyRate = 28
-local arcaneDebuff, arcaneTwisted = DBM:GetSpellInfo(163372), DBM:GetSpellInfo(163297)
-local PhemName1, PhemName2, PhemName3, PhemName4= DBM:GetSpellInfo(157943), DBM:GetSpellInfo(163321), DBM:GetSpellInfo(158057), DBM:GetSpellInfo(158200)
-local PolName1, PolName2, PolName3, PolName4 = DBM:GetSpellInfo(158134), DBM:GetSpellInfo(163336), DBM:GetSpellInfo(158093), DBM:GetSpellInfo(158385)
+local arcaneDebuff, arcaneTwisted = DBM:GetSpellName(163372), DBM:GetSpellName(163297)
+local PhemName1, PhemName2, PhemName3, PhemName4= DBM:GetSpellName(157943), DBM:GetSpellName(163321), DBM:GetSpellName(158057), DBM:GetSpellName(158200)
+local PolName1, PolName2, PolName3, PolName4 = DBM:GetSpellName(158134), DBM:GetSpellName(163336), DBM:GetSpellName(158093), DBM:GetSpellName(158385)
 local arcaneVTimers = {8.5, 6, 45, 8, 16.5, 8.5, 5.5, 39, 130, 10, 56.5, 8, 6}
 local debuffFilter
 do

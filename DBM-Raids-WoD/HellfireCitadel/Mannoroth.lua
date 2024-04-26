@@ -124,7 +124,7 @@ local guldanTargets = {}
 local doomSpikeTargets = {}
 local AddsSeen = {}
 local playerName = UnitName("player")
-local doomName, guldanName, doomSpikeName, gaze1, gaze2 = DBM:GetSpellInfo(181099), DBM:GetSpellInfo(186362), DBM:GetSpellInfo(181119), DBM:GetSpellInfo(181597), DBM:GetSpellInfo(182006)
+local doomName, guldanName, doomSpikeName, gaze1, gaze2 = DBM:GetSpellName(181099), DBM:GetSpellName(186362), DBM:GetSpellName(181119), DBM:GetSpellName(181597), DBM:GetSpellName(182006)
 local doomFilter, guldanFilter, doomSpikeFilter
 do
 	doomFilter = function(uId)

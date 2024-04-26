@@ -65,7 +65,7 @@ mod:AddDropdownOption("InfoFrameSpeed", {"Immediately", "Delayed"}, "Delayed", "
 mod.vb.trainCount = 0
 mod.vb.infoCount = 0
 local GetTime, UnitPosition = GetTime, UnitPosition
-local MovingTrain, Cannon = DBM:GetSpellInfo(176312), DBM:GetSpellInfo(62357)
+local MovingTrain, Cannon = DBM:GetSpellName(176312), DBM:GetSpellName(62357)
 local Reinforcements, ManOArms, Deforester = DBM:EJ_GetSectionInfo(9537), DBM:EJ_GetSectionInfo(9549), DBM:EJ_GetSectionInfo(10329)
 local fakeYellTime = 0
 local bombFrom = nil

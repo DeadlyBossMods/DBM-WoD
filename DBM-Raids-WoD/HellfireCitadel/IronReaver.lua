@@ -85,7 +85,7 @@ local unstableOrbsTimers = {3, 18, 24, 24, 24}--Nerfed considerbly, useful now.
 local poundingTimers = {32.6, 54, 24}
 
 local debuffFilter
-local debuffName, reactiveName, burningName, quickfuseName, reinforcedName, volatileName = DBM:GetSpellInfo(182280), DBM:GetSpellInfo(186676), DBM:GetSpellInfo(186667), DBM:GetSpellInfo(186660), DBM:GetSpellInfo(188294), DBM:GetSpellInfo(182523)
+local debuffName, reactiveName, burningName, quickfuseName, reinforcedName, volatileName = DBM:GetSpellName(182280), DBM:GetSpellName(186676), DBM:GetSpellName(186667), DBM:GetSpellName(186660), DBM:GetSpellName(188294), DBM:GetSpellName(182523)
 do
 	debuffFilter = function(uId)
 		if DBM:UnitDebuff(uId, debuffName) then

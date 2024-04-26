@@ -97,7 +97,7 @@ mod.vb.windsTargets = 0
 mod.vb.bombActive = nil
 local chakramTargets = {}
 local playerHasAnzu = false
-local darkBindings, realFelBomb, phantasmalFelBomb, phantWinds, corruption = DBM:GetSpellInfo(185510), DBM:GetSpellInfo(181753), DBM:GetSpellInfo(179219), DBM:GetSpellInfo(181957), DBM:GetSpellInfo(181824)
+local darkBindings, realFelBomb, phantasmalFelBomb, phantWinds, corruption = DBM:GetSpellName(185510), DBM:GetSpellName(181753), DBM:GetSpellName(179219), DBM:GetSpellName(181957), DBM:GetSpellName(181824)
 local playerName = UnitName("player")
 local AddsSeen = {}
 

@@ -132,7 +132,7 @@ mod.vb.rapidfire = 0
 mod.vb.shadowsWarned = false
 mod.vb.boatMissionActive = false
 mod.vb.lastBoatPower = 0
-local preyDebuff, bloodcallingDebuff = DBM:GetSpellInfo(170395), DBM:GetSpellInfo(170405)
+local preyDebuff, bloodcallingDebuff = DBM:GetSpellName(170395), DBM:GetSpellName(170405)
 
 local playerOnBoat = false
 
