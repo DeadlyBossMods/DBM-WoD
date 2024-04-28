@@ -48,8 +48,8 @@ local timerCrystalBarrage			= mod:NewBuffFadesTimer(15, 162346)
 
 local berserkTimer					= mod:NewBerserkTimer(600)
 
-mod:AddSetIconOption("SetIconOnEarthwarper", "ej10061", true, true)
-mod:AddSetIconOption("SetIconOnMote", "ej10064", false, true)--Working with both shard and mote. ej10083 description is bad / This more or less assumes the 4 at a time strat. if you unleash 8 it will fail. Although any guild unleashing 8 is probably doing it wrong (minus LFR)
+mod:AddSetIconOption("SetIconOnEarthwarper", "ej10061", true, 5)
+mod:AddSetIconOption("SetIconOnMote", "ej10064", false, 5)--Working with both shard and mote. ej10083 description is bad / This more or less assumes the 4 at a time strat. if you unleash 8 it will fail. Although any guild unleashing 8 is probably doing it wrong (minus LFR)
 mod:AddSetIconOption("SetIconOnCrystal", 162370, false)--icons 1 and 2, no conflict with icon on earthwarper
 
 local UnitGUID, UnitExists = UnitGUID, UnitExists

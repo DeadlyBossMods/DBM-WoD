@@ -81,10 +81,10 @@ local timerDarkBindingsCD				= mod:NewCDTimer(34, 185456, nil, nil, nil, 3, nil,
 local berserkTimer						= mod:NewBerserkTimer(540)
 
 mod:AddRangeFrameOption(15)--Both aoes are 15 yards, ref 187991 and 181748
-mod:AddSetIconOption("SetIconOnAnzu", 179202, false)
-mod:AddSetIconOption("SetIconOnWinds", 181957, true)
-mod:AddSetIconOption("SetIconOnFelBomb", 181753, true)
-mod:AddSetIconOption("SetIconOnAdds", 181873, false, true)
+mod:AddSetIconOption("SetIconOnAnzu", 179202, false, 0)
+mod:AddSetIconOption("SetIconOnWinds", 181957, true, 0)
+mod:AddSetIconOption("SetIconOnFelBomb", 181753, true, 0)
+mod:AddSetIconOption("SetIconOnAdds", 181873, false, 5)
 mod:AddHudMapOption("HudMapOnChakram", 182178)
 
 mod.vb.escapeCount = 0

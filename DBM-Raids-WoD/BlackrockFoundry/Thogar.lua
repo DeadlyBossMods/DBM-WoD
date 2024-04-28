@@ -56,7 +56,7 @@ local timerDelayedSiegeBomb			= mod:NewNextCountTimer(6, 159481)
 local berserkTimer					= mod:NewBerserkTimer(492)
 
 mod:AddInfoFrameOption(176312)
-mod:AddSetIconOption("SetIconOnAdds", "ej9549", false, true)
+mod:AddSetIconOption("SetIconOnAdds", "ej9549", false, 5)
 mod:AddHudMapOption("HudMapForTrain", 176312, false)
 mod:AddBoolOption("HudMapUseIcons")--Depending what is easier to see/understand, i may change this to default off
 mod:AddDropdownOption("TrainVoiceAnnounce", {"LanesOnly", "MovementsOnly", "LanesandMovements"}, "LanesOnly", "misc", nil, 176312)

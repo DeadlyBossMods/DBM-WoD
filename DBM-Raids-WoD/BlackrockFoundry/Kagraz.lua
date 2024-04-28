@@ -63,7 +63,7 @@ local timerFireStorm					= mod:NewBuffActiveTimer(14, 155493, nil, nil, nil, 6)
 local berserkTimer						= mod:NewBerserkTimer(420)
 
 mod:AddRangeFrameOption("10/6")
-mod:AddSetIconOption("SetIconOnAdds", 155776, true, true)
+mod:AddSetIconOption("SetIconOnAdds", 155776, true, 5)
 mod:AddHudMapOption("HudMapOnFixate", 154952, false)
 
 mod.vb.firestorm = 0

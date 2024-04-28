@@ -97,7 +97,7 @@ local timerOverwhelmingChaosCD		= mod:NewNextCountTimer(10, 187204, nil, nil, 2,
 --Applied gives all targets, this is the easier strat for most users, where they wait until everyone has it, then run in different directions.
 --Both, gives users ALL the information for everything so they can decide on their own. This will be default until I can see what becomes more popular. Maybe both will be what everyone ends up preferring.
 mod:AddRangeFrameOption(5, 189775)--Mythic
-mod:AddSetIconOption("SetIconOnImps", -11694, true, true)
+mod:AddSetIconOption("SetIconOnImps", -11694, true, 5)
 mod:AddDropdownOption("ChainsBehavior", {"Cast", "Applied", "Both"}, "Both", "misc", nil, 186490)
 
 mod.vb.EmpFelChainCount = 0
