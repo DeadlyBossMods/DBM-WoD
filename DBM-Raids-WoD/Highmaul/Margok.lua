@@ -612,9 +612,9 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 			if self.Options.SetIconOnBrandedDebuff then
 				if spellId == 164006 or (self:IsMythic() and spellId == 164004) then--On mythic, displacement/replication in phase 1. Using dipslacemnet spellid, on two targets.
-					self:SetSortedIcon("roster", 1, name, 1, 2)
+					self:SetSortedIcon("roster", 1, args.destName, 1, 2)
 				else
-					self:SetIcon(name, 1)
+					self:SetIcon(args.destName, 1)
 				end
 			end
 			updateRangeFrame(self)--Update it here cause we don't need it before stacks get to relevant levels.

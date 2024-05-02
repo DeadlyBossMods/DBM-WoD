@@ -501,9 +501,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 181099 then
 		timerMarkofDoomCD:Start(args.sourceGUID)
-		local name = args.destName
-		if not tContains(doomTargets, name) then
-			doomTargets[#doomTargets+1] = name
+		if not tContains(doomTargets, args.destName) then
+			doomTargets[#doomTargets+1] = args.destName
 		end
 		local count = #doomTargets
 		self.vb.DoomTargetCount = self.vb.DoomTargetCount + 1
@@ -523,7 +522,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellMarkOfDoom:Yell(count, count, count)
 		end
 		if self.Options.SetIconOnDoom2 then
-			self:SetIcon(name, count)
+			self:SetIcon(args.destName, count)
 		end
 		updateRangeFrame(self)
 	elseif spellId == 181191 and self:CheckInterruptFilter(args.sourceGUID, true) and self:IsMelee() and self:AntiSpam(2, 5) then--No sense in duplicating code, just use CheckInterruptFilter with arg to skip the filter setting check
