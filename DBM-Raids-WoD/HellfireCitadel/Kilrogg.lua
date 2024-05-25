@@ -59,7 +59,7 @@ local timerRendingHowlCD			= mod:NewNextTimer(6, 183917, nil, "HasInterrupt", 2,
 
 local berserkTimer					= mod:NewBerserkTimer(600)
 
-mod:AddInfoFrameOption("ej11280")
+mod:AddInfoFrameOption(-11280)
 
 mod.vb.berserkerCount = 0
 mod.vb.deathThrowsCount = 0

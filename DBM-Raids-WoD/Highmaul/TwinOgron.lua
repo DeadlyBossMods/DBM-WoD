@@ -56,7 +56,7 @@ mod:AddTimerLine(ALL)
 local berserkTimer					= mod:NewBerserkTimer(420)--As reported in feedback threads
 
 mod:AddRangeFrameOption("8/3", 163372)
-mod:AddInfoFrameOption("ej9586")
+mod:AddInfoFrameOption(-9586)
 
 --Non resetting counts because strategy drastically changes based on number of people. Mechanics like debuff duration change with different player counts.
 mod.vb.EnfeebleCount = 0
