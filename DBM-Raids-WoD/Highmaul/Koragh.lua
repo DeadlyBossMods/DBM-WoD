@@ -67,14 +67,10 @@ local timerExpelMagicFel			= mod:NewBuffFadesTimer(12, 172895, nil, nil, nil, 5,
 mod:AddRangeFrameOption("5")
 --mod:AddSetIconOption("SetIconOnMC", 163472, false)
 mod:AddSetIconOption("SetIconOnFel", 172895, false)
-mod:AddArrowOption("FelArrow", 172895, true, 3)
---mod:AddHudMapOption("HudMapOnMC", 163472)
-mod:AddHudMapOption("HudMapForFel", 172895)
 
 mod.vb.ballsCount = 0
 mod.vb.shieldCharging = false
 mod.vb.fireActive = false
-local lastX, LastY = nil, nil--Not in VB table because it player personal position
 local arcaneDebuff = DBM:GetSpellName(162186)
 
 local function closeRange(self)
@@ -104,9 +100,6 @@ end
 local function returnPosition(self)
 	specWarnExpelMagicFelFades:Show()
 	specWarnExpelMagicFelFades:Play("backtowhereyouwere")
-	if self.Options.FelArrow and lastX and LastY then
-		DBM.Arrow:ShowRunTo(lastX, LastY, 0, 5)
-	end
 end
 
 function mod:FrostTarget(targetname, uId)
@@ -134,12 +127,6 @@ end
 function mod:OnCombatEnd()
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
-	end
-	if self.Options.FelArrow then
-		DBM.Arrow:Hide()
-	end
-	if self.Options.HudMapOnMC or self.Options.HudMapForFel then
-		DBM.HudMap:Disable()
 	end
 end
 
@@ -263,22 +250,13 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnMC then
 			self:SetSortedIcon("roster", 1, args.destName, 8, nil, true)--TODO, find out number of targets and add
 		end
-		if self.Options.HudMapOnMC then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 0, 1, 0, 0, 0.5, nil, true, 1):Pulse(0.5, 0.5)
-		end--]]
+		--]]
 	elseif spellId == 172895 then
 		warnExpelMagicFel:CombinedShow(0.5, args.destName)
 		if args:IsPlayer() then
 			specWarnExpelMagicFel:Show()
 			timerExpelMagicFel:Start()
 			yellExpelMagicFel:Schedule(11)--Yell right before expire, not apply
-			if not self:HasMapRestrictions() then
-				lastX, LastY = UnitPosition("player")
-				self:Schedule(7, returnPosition, self)
-				if self.Options.HudMapForFel then
-					DBM.HudMap:RegisterStaticMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 12, 0, 1, 0, 0.5):Pulse(0.5, 0.5)
-				end
-			end
 		end
 		if self.Options.SetIconOnFel then
 			self:SetSortedIcon("roster", 1, args.destName, 1, 3)
@@ -296,19 +274,8 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnMC then
 			self:SetIcon(args.destName, 0)
 		end
-		if self.Options.HudMapOnMC then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end--]]
+		--]]
 	elseif spellId == 172895 then
-		if args:IsPlayer() then
-			lastX, LastY = nil, nil
-			if self.Options.FelArrow then
-				DBM.Arrow:Hide()
-			end
-			if self.Options.HudMapForFel then
-				DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-			end
-		end
 		if self.Options.SetIconOnFel then
 			self:SetIcon(args.destName, 0)
 		end
