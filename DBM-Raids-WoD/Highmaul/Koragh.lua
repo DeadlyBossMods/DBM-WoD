@@ -257,6 +257,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnExpelMagicFel:Show()
 			timerExpelMagicFel:Start()
 			yellExpelMagicFel:Schedule(11)--Yell right before expire, not apply
+			self:Schedule(7, returnPosition, self)
 		end
 		if self.Options.SetIconOnFel then
 			self:SetSortedIcon("roster", 1, args.destName, 1, 3)
