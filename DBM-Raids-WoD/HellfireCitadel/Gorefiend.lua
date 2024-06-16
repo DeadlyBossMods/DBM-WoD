@@ -27,7 +27,7 @@ local warnTouchofDoom				= mod:NewTargetAnnounce(179978, 4)
 local warnSharedFate				= mod:NewTargetCountAnnounce(179909, 4, nil, "-Tank", 2)--Announce all 2/3
 local warnHungerforLife				= mod:NewTargetAnnounce(180148, 3, nil, false)--Knowing who has it not very important, only if it's on you
 local warnGoreboundSpiritSoon		= mod:NewSoonAnnounce("ej11020", 3, 187814)
-local warnRagingCharge				= mod:NewSpellAnnounce(187814, 3, nil, "Melee")
+local warnRagingCharge				= mod:NewSpellSourceAnnounce(187814, 3, nil, "Melee")
 local warnCrushingDarkness			= mod:NewCastAnnounce(180017, 3, 6, nil, false)
 
 local specWarnShadowofDeath			= mod:NewSpecialWarningYouCount(179864, nil, nil, nil, 1, 5)

@@ -153,6 +153,7 @@ function mod:SPELL_CAST_START(args)
 			if self.Options.SpecWarn155080count then
 				specWarnInfernoSlice:Show(self.vb.sliceCount.."-"..otherSoakOrder[self.vb.sliceCount])
 			else
+				---@diagnostic disable-next-line: param-type-mismatch
 				warnInfernoSlice:Show(self.vb.sliceCount.."-"..otherSoakOrder[self.vb.sliceCount])
 			end
 		else
@@ -165,6 +166,7 @@ function mod:SPELL_CAST_START(args)
 				if self.Options.SpecWarn155080count then
 					specWarnInfernoSlice:Show(countFormat)
 				else
+					---@diagnostic disable-next-line: param-type-mismatch
 					warnInfernoSlice:Show(countFormat)
 				end
 			else
@@ -174,6 +176,7 @@ function mod:SPELL_CAST_START(args)
 				if self.Options.SpecWarn155080count then
 					specWarnInfernoSlice:Show(countFormat)
 				else
+					---@diagnostic disable-next-line: param-type-mismatch
 					warnInfernoSlice:Show(countFormat)
 				end
 			end

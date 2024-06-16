@@ -151,7 +151,7 @@ local jumpDistance2 = {
 }
 local UnitDetailedThreatSituation, select = UnitDetailedThreatSituation, select
 local playerName = UnitName("player")
-local chogallName, inter1, inter2 = EJ_GetEncounterInfo(167), DBM:EJ_GetSectionInfo(9891), DBM:EJ_GetSectionInfo(9893)
+local inter1, inter2 = DBM:EJ_GetSectionInfo(9891), DBM:EJ_GetSectionInfo(9893)
 local fixateDebuff, gazeDebuff = DBM:GetSpellName(157763), DBM:GetSpellName(165595)
 local chaosDebuff1, chaosDebuff2, chaosDebuff3, chaosDebuff4 = DBM:GetSpellName(158605), DBM:GetSpellName(164176), DBM:GetSpellName(164178), DBM:GetSpellName(164191)
 local brandedDebuff1, brandedDebuff2, brandedDebuff3, brandedDebuff4 = DBM:GetSpellName(156225), DBM:GetSpellName(164004), DBM:GetSpellName(164005), DBM:GetSpellName(164006)
@@ -574,6 +574,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if currentStack > 2 then
 			if spellId == 156225 then
 				if self.Options.warnBranded then
+					---@diagnostic disable-next-line: param-type-mismatch
 					warnBranded:Show(name, currentStack)
 				end
 				if args:IsPlayer() and currentStack > 4 then--Special warning only for person that needs to get out
@@ -593,6 +594,7 @@ function mod:SPELL_AURA_APPLIED(args)
 				end
 			elseif spellId == 164005 then
 				if self.Options.warnBranded then
+					---@diagnostic disable-next-line: param-type-mismatch
 					warnBrandedFortification:Show(name, currentStack)
 				end
 				if args:IsPlayer() and currentStack > 4 then--Special warning all stacks 5 and higher because even if can't get out, high damage
@@ -811,8 +813,10 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		if spellId == 164810 then
 			timerCrushArmorCD:Start(23)
 			timerKickToFaceCD:Start(42)
+			---@diagnostic disable-next-line: param-type-mismatch
 			warnPhase:Show(inter2)
 		else
+			---@diagnostic disable-next-line: param-type-mismatch
 			warnPhase:Show(inter1)
 		end
 	elseif spellId == 158012 or spellId == 157964 then--Power of Foritification/Replication
