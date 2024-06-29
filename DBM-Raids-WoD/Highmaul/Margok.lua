@@ -109,7 +109,7 @@ local timerForceNovaFortification				= mod:NewNextTimer(9, 157349, nil, nil, nil
 local timerSummonArcaneAberrationCD				= mod:NewCDCountTimer(45, "ej9945", nil, "-Healer", nil, 1, 156471, DBM_COMMON_L.DAMAGE_ICON)--45-52 Variation Noted
 --Intermission: Lineage of Power
 mod:AddTimerLine(DBM_COMMON_L.INTERMISSION)
-local timerTransition							= mod:NewPhaseTimer(74, nil, nil, nil, nil, nil, nil, nil, nil, 1, 5)
+local timerTransition							= mod:NewStageTimer(74, nil, nil, nil, nil, nil, nil, nil, nil, 1, 5)
 local timerCrushArmorCD							= mod:NewNextTimer(6, 158553, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerKickToFaceCD							= mod:NewCDTimer(17, 158563, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 --Mythic

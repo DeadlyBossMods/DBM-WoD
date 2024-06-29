@@ -71,7 +71,7 @@ local timerVolatileFelOrbCD			= mod:NewCDTimer(23, 180221, 186532, nil, nil, 3)
 local timerFelChargeCD				= mod:NewCDTimer(23, 182051, nil, nil, nil, 3, nil, nil, nil, 2, 4)
 local timerApocalypticFelburstCD	= mod:NewCDCountTimer(30, 188693, 206388, nil, nil, 2, nil, DBM_COMMON_L.HEROIC_ICON)
 --Socrethar
-local timerTransition				= mod:NewPhaseTimer(6.5)
+local timerTransition				= mod:NewStageTimer(6.5)
 local timerExertDominanceCD			= mod:NewCDCountTimer(4.5, 183331, nil, "-Healer", nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
 local timerApocalypseCD				= mod:NewCDTimer(46, 183329, nil, nil, nil, 2)
 --Adds
