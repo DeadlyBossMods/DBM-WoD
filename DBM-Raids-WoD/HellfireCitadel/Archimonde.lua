@@ -548,8 +548,8 @@ end
 --Demonic Feedback triggers 3.5 second ICD
 --Rain of chaos doesn't trigger ICD nor is affected by it
 --Nether banish IS affected by ICD but inconclusive on whether it CAUSES one
---Allure and desecreate do not trigger ICD for eachother but trigger them for everythinge else in phase 1.5
---Allure and shackles don't trigger ICDs fore achother but do for everything else in phase 2
+--Allure and desecreate do not trigger ICD for eachother but trigger them for everything else in phase 1.5
+--Allure and shackles don't trigger ICDs for eachother but do for everything else in phase 2
 local function updateAllTimers(self, ICD, AllureSpecial)
 --	if not DBM.Options.DebugMode then return end
 	DBM:Debug("updateAllTimers running", 3)
