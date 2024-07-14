@@ -125,6 +125,7 @@ local function warnSeeds(self)
 		local targetName = seedsTargets[i]
 		if targetName == playerName then
 			if self.Options.SpecWarn181508you then
+				---@diagnostic disable-next-line: param-type-mismatch
 				specWarnSeedPosition:Show(currentType[i])
 			end
 			if self.Options.Yell181508 then

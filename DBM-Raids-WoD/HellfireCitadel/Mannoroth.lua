@@ -513,7 +513,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:Schedule(2, breakDoom, self)--3 targets, pretty slowly. I've seen at least 1.2, so make this 2
 		end
 		if args:IsPlayer() then
-			specWarnMarkOfDoom:Show(self:IconNumToString(count))
+			specWarnMarkOfDoom:Show()
 			if self:IsMythic() then
 				specWarnMarkOfDoom:Play("mm"..count)
 			else

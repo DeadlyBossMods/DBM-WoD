@@ -24,7 +24,6 @@ local warnSavageVines				= mod:NewTargetAnnounce(176004, 2)
 local specWarnColossalBlow			= mod:NewSpecialWarningDodge(175973, nil, nil, nil, 2, 2)
 local specWarnGenesis				= mod:NewSpecialWarningSpell(175979, nil, nil, nil, nil, 12)--Everyone. "Switch" is closest generic to "run around stomping flowers". Might need custom message
 local specWarnSavageVines			= mod:NewSpecialWarningYou(176004)
-local specWarnSavageVinesNear		= mod:NewSpecialWarningClose(176004)
 local specWarnGrowUntamedMandragora	= mod:NewSpecialWarningSwitch(176013, "-Healer", nil, nil, nil, 2)
 local specWarnNoxiousSpit			= mod:NewSpecialWarningMove(176037)
 
@@ -89,10 +88,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnSavageVines:CombinedShow(0.5, targetName)
 		if args:IsPlayer() then
 			specWarnSavageVines:Show()
-		else
-			if self:CheckNearby(8, targetName) then
-				specWarnSavageVinesNear:Show(targetName)
-			end
 		end
 		if self.Options.RangeFrame then
 			if DBM:UnitDebuff("player", debuffName) then

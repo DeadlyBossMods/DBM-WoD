@@ -81,7 +81,7 @@ local specWarnConvulsiveShadows			= mod:NewSpecialWarningMoveAway(156214, nil, n
 local specWarnConvulsiveShadowsOther	= mod:NewSpecialWarningTargetCount(156214, false)
 local yellConvulsiveShadows				= mod:NewYell(156214, nil, false)
 local specWarnDarkHunt					= mod:NewSpecialWarningYou(158315, nil, nil, nil, 1, 2)
-local specWarnDarkHuntOther				= mod:NewSpecialWarningTarget(158315, false)--Healer may want this, or raid leader
+local specWarnDarkHuntOther				= mod:NewSpecialWarningTargetCount(158315, false)--Healer may want this, or raid leader
 ----Marak the Blooded
 local specWarnBloodRitual				= mod:NewSpecialWarningYou(158078, nil, nil, nil, 1, 2)
 local specWarnBloodRitualOther			= mod:NewSpecialWarningTargetCount(158078, "Tank", nil, nil, 1, 2)

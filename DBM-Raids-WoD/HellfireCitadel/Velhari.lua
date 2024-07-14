@@ -263,7 +263,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		self.vb.touchofHarmCount = self.vb.touchofHarmCount + 1
 		timerTouchofHarmCD:Start(nil, self.vb.touchofHarmCount+1)
 		if self.Options.SpecWarn180166target then
-			specWarnTouchofHarm:Show(0.3, args.destName)--Only one target, but combined show in case you do something crazy like mass dispel or something and trigger a bunch of jumps
+			specWarnTouchofHarm:CombinedShow(0.3, args.destName)--Only one target, but combined show in case you do something crazy like mass dispel or something and trigger a bunch of jumps
 		else
 			warnTouchofHarm:CombinedShow(0.3, args.destName)
 		end
@@ -374,6 +374,7 @@ function mod:UNIT_SPELLCAST_START(uId, _, spellId)
 		if self.vb.interruptCount == 2 then self.vb.interruptCount = 0 end
 		self.vb.interruptCount = self.vb.interruptCount + 1
 		local count = self.vb.interruptCount
+		---@diagnostic disable-next-line: param-type-mismatch
 		specWarnHarbingersMending:Show(AncientHarbinger, self.vb.interruptCount)
 		timerHarbingersMendingCD:Start()
 		if count == 1 then

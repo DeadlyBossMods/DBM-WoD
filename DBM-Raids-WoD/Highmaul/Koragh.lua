@@ -131,7 +131,7 @@ function mod:OnCombatEnd()
 end
 
 function mod:ArcaneTarget()
-	local targetName, uId = self:GetBossTarget(79015)
+	local targetName = self:GetBossTarget(79015) or DBM_COMMON_L.UNKNOWN
 	local tanking, status = UnitDetailedThreatSituation("player", "boss1")
 	if tanking or (status == 3) then--Player is current target
 		specWarnExpelMagicArcaneYou:Show()--So show tank warning

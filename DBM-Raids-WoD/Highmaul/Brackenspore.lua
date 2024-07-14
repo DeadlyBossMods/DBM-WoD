@@ -34,7 +34,7 @@ local specWarnExplodingFungus		= mod:NewSpecialWarningDodge(163794, nil, nil, ni
 local specWarnWaves					= mod:NewSpecialWarningDodge(160425, nil, nil, nil, 2, 2)
 --Adds
 local specWarnSporeShooter			= mod:NewSpecialWarningSwitch(163594, "RangedDps", nil, 2, nil, 12)
-local specWarnFungalFlesheater		= mod:NewSpecialWarningSwitch("ej9995", "-Healer", nil, nil, nil, 12)
+local specWarnFungalFlesheater		= mod:NewSpecialWarningSwitchCount("ej9995", "-Healer", nil, nil, nil, 12)
 local specWarnMindFungus			= mod:NewSpecialWarningSwitch(163141, "Dps", nil, nil, nil, 12)
 
 local timerInfestingSporesCD		= mod:NewCDCountTimer(57, 159996, nil, nil, nil, 2, nil, nil, nil, 1, 4)--57-63 variation

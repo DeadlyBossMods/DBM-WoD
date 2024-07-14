@@ -52,7 +52,6 @@ local yellRupture				= mod:NewYell(156932)
 --Phase 2
 local specWarnFixate			= mod:NewSpecialWarningYou(155196, nil, nil, nil, 1, 2)
 local specWarnMeltYou			= mod:NewSpecialWarningYou(155225, nil, nil, nil, 1, 2)
-local specWarnMeltNear			= mod:NewSpecialWarningClose(155225, false, nil, nil, 1, 2)
 local specWarnMelt				= mod:NewSpecialWarningMove(155223, nil, nil, nil, 1, 2)
 local yellMelt					= mod:NewYell(155223)
 local specWarnCauterizeWounds	= mod:NewSpecialWarningInterrupt(155186, "-Healer", nil, nil, 1, 2)
@@ -511,9 +510,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnMeltYou:Show()
 			yellMelt:Schedule(5)--yell after 5 sec to warn nearby player (aoe actually after 6 sec). like expel magic: fel
 			specWarnMeltYou:Play("runout")
-		elseif self:CheckNearby(8, args.destName) then
-			specWarnMeltNear:Show()
-			specWarnMeltNear:Play("runaway")
 		end
 	elseif spellId == 156934 then
 		--Increase to 50 should fix any rare issues not get timer if on same area as boss.

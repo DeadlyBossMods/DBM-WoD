@@ -95,7 +95,7 @@ local specWarnKickToTheFaceOther				= mod:NewSpecialWarningTaunt(158563)
 --Mythic
 local specWarnGaze								= mod:NewSpecialWarningStack(165595, nil, 1)--, nil, nil, 1, 6
 local yellGaze									= mod:NewYell(165595, L.GazeYell)
-local specWarnEnvelopingNight					= mod:NewSpecialWarningSpell(165876, nil, nil, nil, 2, 2)
+local specWarnEnvelopingNight					= mod:NewSpecialWarningCount(165876, nil, nil, nil, 2, 2)
 local specWarnGrowingDarkness					= mod:NewSpecialWarningMove(176533, nil, nil, nil, nil, 2)
 local specWarnDarkStar							= mod:NewSpecialWarningSpell(178607, nil, nil, nil, 2)--Change to target/near warning if targetscanning or any other method to detect target possible.
 
@@ -442,7 +442,7 @@ function mod:SPELL_CAST_START(args)
 		timerSummonArcaneAberrationCD:Start(nil, self.vb.arcaneAdd+1)
 		specWarnAberration:Play("killmob")
 	elseif args:IsSpellID(158605, 164176, 164178, 164191) then
-		local targetName, uId = self:GetBossTarget(77428)
+		local targetName = self:GetBossTarget(77428) or DBM_COMMON_L.UNKNOWN
 		local tanking, status = UnitDetailedThreatSituation("player", "boss1")
 		self.vb.noTaunt = true
 		timerMarkOfChaosCD:Start()
