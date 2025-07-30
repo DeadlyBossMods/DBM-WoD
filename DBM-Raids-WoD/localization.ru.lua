@@ -31,7 +31,7 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization(1196)
 
 L:SetOptionLocalization({
-	InterruptCounter	= "Сбрасывать счетчик Ослабления после",
+	InterruptCounter	= "Сбрасывать счетчик $spell:160013",
 	Two					= "После 2-х кастов",
 	Three				= "После 3-х кастов",
 	Four				= "После 4-х кастов"
@@ -43,8 +43,8 @@ L:SetOptionLocalization({
 L = DBM:GetModLocalization(1148)
 
 L:SetOptionLocalization({
-	PhemosSpecial		= "Звуковой обратный отсчет для кулдаунов Фем'а",
-	PolSpecial			= "Звуковой обратный отсчет для кулдаунов Пол'а",
+	PhemosSpecial		= "Звуковой обратный отсчет для восстановления способностей Фем'а",
+	PolSpecial			= "Звуковой обратный отсчет для восстановления способностей Пол'а",
 	PhemosSpecialVoice	= "Звуковые оповещения для способностей Фем'а, используя выбранный звуковой пакет",
 	PolSpecialVoice		= "Звуковые оповещения для способностей Пол'а, используя выбранный звуковой пакет"
 })
@@ -107,7 +107,7 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization(1161)
 
 L:SetOptionLocalization({
-	MythicSoakBehavior	= "Настройка получения стаков (групповых поглощений) от $spell:155080 для спецпредупреждений (эпох. сложность)",
+	MythicSoakBehavior	= "Настройка получения стаков (групповых поглощений) от $spell:155080 для спецпредупреждений (эпохальный режим)",
 	ThreeGroup			= "3 группы по 1 стаку каждая",
 	TwoGroup			= "2 группы по 2 стака каждая"
 })
@@ -135,8 +135,8 @@ L:SetWarningLocalization({
 })
 
 L:SetOptionLocalization({
-	warnRegulators			= "Объявлять, сколько Регуляторов температуры осталось",
-	warnBlastFrequency		= "Объявлять, когда увеличивается частота $spell:155209",
+	warnRegulators			= "Показывать предупреждение для оставшихся Регуляторов температуры",
+	warnBlastFrequency		= "Показывать предупреждение для увеличения частоты $spell:155209",
 	specWarnTwoVolatileFire	= "Показывать спецпредупреждение, когда на Вас два $spell:176121",
 	InfoFrame				= "Показывать информационное окно для $spell:155192 и $spell:155196",
 	VFYellType2				= "Тип крика для Неустойчивого огня (только эпохальный режим)",
@@ -166,9 +166,9 @@ L:SetOptionLocalization({
 	Delayed				= "После того, как текущий поезд выехал",
 	HudMapUseIcons		= "Использовать рейдовые метки для HudMap вместо зеленого круга",
 	TrainVoiceAnnounce	= "Настройка голосовых оповещений о поездах",
-	LanesOnly			= "Объявлять только прибывающие пути",
-	MovementsOnly		= "Объявлять только передвижения по путям (только эпох. сложность)",
-	LanesandMovements	= "Объявлять прибывающие пути и передвижения (только эпох. сложность)"
+	LanesOnly			= "Показывать предупреждение только для прибывающих путей",
+	MovementsOnly		= "Показывать предупреждение только для движения по путям (эпохальный режим)",
+	LanesandMovements	= "Объявлять прибывающие пути и передвижения (эпохальный режим)"
 })
 
 L:SetMiscLocalization({
@@ -213,7 +213,7 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	PositionsAllPhases	= "Указывать позиции $spell:156096 для криков во время всех фаз<br/>(вместо 3-й фазы. Это в основном для тестирования и гарантий, что эта опция на самом деле не нужна)",
-	InfoFrame			= "Информационное окно для $spell:155992 и $spell:156530"
+	InfoFrame			= "Показывать информационное окно для $spell:155992 и $spell:156530"
 })
 
 L:SetMiscLocalization({
@@ -236,7 +236,7 @@ L:SetGeneralLocalization({
 L = DBM:GetModLocalization(1426)
 
 L:SetTimerLocalization({
-	timerSiegeVehicleCD	= "След. осад. машина %s",
+	timerSiegeVehicleCD	= "След. Осад. машина %s",
 })
 
 L:SetOptionLocalization({
@@ -283,9 +283,9 @@ L:SetTimerLocalization({
 })
 
 L:SetOptionLocalization({
-	SoDDPS2			= "Отсчет времени до след. $spell:179864 (дд)",
-	SoDTank2		= "Отсчет времени до след. $spell:179864 (танки)",
-	SoDHealer2		= "Отсчет времени до след. $spell:179864 (хилы)",
+	SoDDPS2			= "Отсчет времени до следующей $spell:179864 (дд)",
+	SoDTank2		= "Отсчет времени до следующей $spell:179864 (танки)",
+	SoDHealer2		= "Отсчет времени до следующей $spell:179864 (хилы)",
 	ShowOnlyPlayer	= "Показывать HudMap для $spell:179909, только если Вы участник"
 })
 
@@ -338,7 +338,7 @@ L:SetOptionLocalization({
 L = DBM:GetModLocalization(1427)
 
 L:SetOptionLocalization({
-	InterruptBehavior	= "Режим ротации прерывания для рейда (требуется лидер рейда)",
+	InterruptBehavior	= "Режим ротации прерываний для рейда (требуется лидер рейда)",
 	Count3Resume		= "Ротация из 3-х чел., которая продолжается, когда барьер спадает",--По умолчанию
 	Count3Reset			= "Ротация из 3-х чел., которая начинается заново, когда барьер спадает",
 	Count4Resume		= "Ротация из 4-х чел., которая продолжается, когда барьер спадает",
