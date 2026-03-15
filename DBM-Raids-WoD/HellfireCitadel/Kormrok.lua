@@ -81,8 +81,6 @@ function mod:OnCombatStart(delay)
 	timerLeapCD:Start(12-delay)
 end
 
-function mod:OnCombatEnd()
-end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

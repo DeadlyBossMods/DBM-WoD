@@ -77,8 +77,6 @@ function mod:OnCombatStart(delay)
 	specWarnChainHurl:ScheduleVoice(84.5-delay, "tosscoming") --ready for hurl
 end
 
-function mod:OnCombatEnd()
-end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

@@ -112,19 +112,6 @@ local prevHealth = 100
 local yellVolatileFire2 = mod:NewFadesYell(176121, nil, true, false)
 local UnitHealth, UnitHealthMax, UnitPower, UnitGUID, GetTime, mceil = UnitHealth, UnitHealthMax, UnitPower, UnitGUID, GetTime, math.ceil
 
-local BombFilter, VolatileFilter, FixateFilter
-do
-	BombFilter = function(uId)
-		return DBM:UnitDebuff(uId, bombDebuff)
-	end
-	VolatileFilter = function(uId)
-		return DBM:UnitDebuff(uId, volatileFireDebuff)
-	end
-	FixateFilter = function(uId)
-		return DBM:UnitDebuff(uId, fixateDebuff)
-	end
-end
-
 local updateInfoFrame1, updateInfoFrame2
 do
 	local lines = {}

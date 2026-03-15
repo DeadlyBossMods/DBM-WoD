@@ -130,8 +130,6 @@ function mod:OnCombatStart(delay)
 --	self:Schedule(55, delayedReapCheck, self)
 end
 
-function mod:OnCombatEnd()
-end
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

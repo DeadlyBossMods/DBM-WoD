@@ -120,8 +120,6 @@ function mod:OnCombatStart(delay)
 	end
 end
 
-function mod:OnCombatEnd()
-end
 
 function mod:ArcaneTarget()
 	local targetName = self:GetBossTarget(79015) or DBM_COMMON_L.UNKNOWN

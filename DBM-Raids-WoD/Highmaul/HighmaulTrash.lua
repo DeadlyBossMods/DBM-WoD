@@ -24,15 +24,6 @@ local specWarnArcaneVol				= mod:NewSpecialWarningMoveAway(166200)
 local yellArcaneVol					= mod:NewYell(166200)
 local specWarnWildFlames			= mod:NewSpecialWarningMove(173827)
 
-
-local debuff = DBM:GetSpellName(166200)
-local DebuffFilter
-do
-	DebuffFilter = function(uId)
-		return DBM:UnitDebuff(uId, debuff)
-	end
-end
-
 function mod:SPELL_AURA_APPLIED(args)
 	if not self.Options.Enabled then return end
 	local spellId = args.spellId
