@@ -33,9 +33,6 @@ local timerGenesisCD				= mod:NewCDTimer(45, 175979, nil, nil, nil, 5)--45-60 va
 local timerGrowUntamedMandragoraCD	= mod:NewCDTimer(30, 176013, nil, nil, nil, 1)
 
 --mod:AddReadyCheckOption(37462, false, 100)
---mod:AddRangeFrameOption(8, 175979)
-
-local debuffName = DBM:GetSpellName(176004)
 
 function mod:OnCombatStart(delay, yellTriggered)
 --	if yellTriggered then

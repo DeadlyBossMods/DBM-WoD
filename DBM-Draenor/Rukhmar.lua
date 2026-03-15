@@ -32,7 +32,6 @@ local timerSolarBreathCD	= mod:NewCDTimer(29, 167679, nil, "Tank", nil, 5)
 local timerSharpBeakCD		= mod:NewCDTimer(11.5, 167614, nil, "Tank|Healer", 2, 5)
 
 --mod:AddReadyCheckOption(37474, false)
---mod:AddRangeFrameOption(8, 167647)
 
 function mod:OnCombatStart(delay, yellTriggered)
 --	if yellTriggered then
