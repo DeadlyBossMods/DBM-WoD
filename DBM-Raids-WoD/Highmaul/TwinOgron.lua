@@ -2,6 +2,7 @@ local mod	= DBM:NewMod(1148, "DBM-Raids-WoD", 3, 477)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("@file-date-integer@")
+mod:DisableHardcodedOptions()
 mod:SetCreatureID(78238, 78237)--Pol 78238, Phemos 78237
 mod:SetEncounterID(1719)
 --Could not find south path for this one

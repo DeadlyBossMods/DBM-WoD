@@ -2,6 +2,7 @@ local mod	= DBM:NewMod(1196, "DBM-Raids-WoD", 3, 477)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("@file-date-integer@")
+mod:DisableHardcodedOptions()
 mod:SetCreatureID(78491)
 mod:SetEncounterID(1720)
 --Has no audio files

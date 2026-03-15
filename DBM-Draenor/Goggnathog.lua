@@ -2,6 +2,7 @@ local mod	= DBM:NewMod("Goggnathog", "DBM-Draenor", 2)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("@file-date-integer@")
+mod:DisableHardcodedOptions()
 mod:SetCreatureID(90995)
 
 mod:RegisterCombat("combat")

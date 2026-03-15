@@ -2,6 +2,7 @@ local mod	= DBM:NewMod(1262, "DBM-Draenor", 1, 557)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("@file-date-integer@")
+mod:DisableHardcodedOptions()
 mod:SetCreatureID(83746)
 mod:SetEncounterID(1755)
 mod:SetReCombatTime(20)

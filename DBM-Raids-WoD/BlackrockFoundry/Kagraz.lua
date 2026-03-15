@@ -2,6 +2,7 @@ local mod	= DBM:NewMod(1123, "DBM-Raids-WoD", 2, 457)
 local L		= mod:GetLocalizedStrings()
 
 mod:SetRevision("@file-date-integer@")
+mod:DisableHardcodedOptions()
 mod:SetCreatureID(76814)--76794 Cinder Wolf, 80590 Aknor Steelbringer
 mod:SetEncounterID(1689)
 mod:SetUsedIcons(6, 5, 4, 3)
