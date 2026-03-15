@@ -376,13 +376,11 @@ local function breakShackles(self, spellName)
 		warnShackledTorment:Show(self.vb.tormentCast, table.concat(shacklesTargets, "<, >"))
 	end
 	if self:IsLFR() then return end
-	local playerHasShackle = false
 	for i = 1, #shacklesTargets do
 		local name = shacklesTargets[i]
 		if not name then break end
 		if not DBM:GetRaidUnitId(name) then break end
 		if name == playerName then
-			playerHasShackle = true
 			yellShackledTorment:Yell(i, i, i)
 			if i == 1 then
 				specWarnBreakShackle:Show(L.First)
