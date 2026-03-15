@@ -91,12 +91,10 @@ local timerShadowForceCD			= mod:NewCDTimer(52.2, 181799, nil, nil, nil, 3, nil,
 
 --local berserkTimer					= mod:NewBerserkTimer(360)
 
-mod:AddRangeFrameOption(20, 181099)
 mod:AddSetIconOption("SetIconOnGaze", 181597, false)
 mod:AddSetIconOption("SetIconOnDoom2", 181099, true)
 mod:AddSetIconOption("SetIconOnWrath", 186348, false)
 mod:AddBoolOption("CustomAssignWrath", false)
-mod:AddHudMapOption("HudMapOnGaze2", 181597, false)
 mod:AddInfoFrameOption(181597)
 
 mod.vb.DoomTargetCount = 0
@@ -125,62 +123,6 @@ local doomSpikeTargets = {}
 local AddsSeen = {}
 local playerName = UnitName("player")
 local doomName, guldanName, doomSpikeName, gaze1, gaze2 = DBM:GetSpellName(181099), DBM:GetSpellName(186362), DBM:GetSpellName(181119), DBM:GetSpellName(181597), DBM:GetSpellName(182006)
-local doomFilter, guldanFilter, doomSpikeFilter
-do
-	doomFilter = function(uId)
-		if DBM:UnitDebuff(uId, doomName) then
-			return true
-		end
-	end
-	guldanFilter = function(uId)
-		if DBM:UnitDebuff(uId, guldanName) then
-			return true
-		end
-	end
-	doomSpikeFilter = function(uId)
-		if DBM:UnitDebuff(uId, guldanName) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame then return end
-	if self:IsTank() and #doomSpikeTargets > 0 then
-		if DBM:UnitDebuff("Player", doomSpikeName) then
-			DBM.RangeCheck:Show(30)
-		else
-			DBM.RangeCheck:Show(30, doomSpikeFilter)
-		end
-	elseif self.vb.DoomTargetCount > 0 then
-		if DBM:UnitDebuff("Player", doomName) then
-			DBM.RangeCheck:Show(20)
-		else
-			DBM.RangeCheck:Show(20, doomFilter)
-		end
-	elseif #guldanTargets > 0 then
-		if DBM:UnitDebuff("Player", guldanName) then
-			DBM.RangeCheck:Show(15)
-		else
-			DBM.RangeCheck:Show(15, guldanFilter)
-		end
-	elseif not self:IsTank() and #doomSpikeTargets > 0 then
-		local showDoomSpike = false
-		for i = 1, #doomSpikeTargets do
-			local name = doomSpikeTargets[i]
-			if name and self:CheckNearby(31, name) then
-				showDoomSpike = true
-				break
-			end
-		end
-		if showDoomSpike then
-			--Only show doom spike if you have no debuffs
-			DBM.RangeCheck:Show(30, doomSpikeFilter)
-		end
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 local updateInfoFrame
 do
@@ -373,12 +315,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnGaze2 then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -524,7 +460,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnDoom2 then
 			self:SetIcon(args.destName, count)
 		end
-		updateRangeFrame(self)
 	elseif spellId == 181191 and self:CheckInterruptFilter(args.sourceGUID, true) and self:IsMelee() and self:AntiSpam(2, 5) then--No sense in duplicating code, just use CheckInterruptFilter with arg to skip the filter setting check
 		specWarnFelHellfire:Play("runaway")
 		specWarnFelHellfire:Show()--warn melee who are targetting infernal to run out if it's exploding
@@ -547,9 +482,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnGaze:ScheduleVoice(0.3, "gathershare")
 			end
 		end
-		if self.Options.HudMapOnGaze2 then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 8, 8, nil, nil, nil, 0.5):Appear():SetLabel(args.destName)
-		end
 	elseif spellId == 181119 then
 		local amount = args.amount or 1
 		if amount % 3 == 0 or amount > 6 then
@@ -562,7 +494,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			if not tContains(doomSpikeTargets, args.destName) then
 				table.insert(doomSpikeTargets, args.destName)
 			end
-			updateRangeFrame(self)
 		end
 	elseif spellId == 186362 then--Only cast once per phase transition (twice whole fight)
 		if not tContains(guldanTargets, args.destName) then
@@ -598,7 +529,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.vb.wrathIcon then
 			self.vb.wrathIcon = self.vb.wrathIcon - 1--Update icon even if icon option off, for sync accuracy
 		end
-		updateRangeFrame(self)
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -607,7 +537,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 181099 then
 		self.vb.DoomTargetCount = self.vb.DoomTargetCount - 1
-		updateRangeFrame(self)
 		if self.Options.SetIconOnDoom2 and not self:IsLFR() then
 			self:SetIcon(args.destName, 0)
 		end
@@ -637,9 +566,6 @@ function mod:SPELL_AURA_REMOVED(args)
 			end
 		end
 	elseif spellId == 181597 or spellId == 182006 then
-		if self.Options.HudMapOnGaze2 then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
 		if self.Options.SetIconOnGaze and not self:IsLFR() then
 			self:SetIcon(args.destName, 0)
 		end
@@ -649,13 +575,11 @@ function mod:SPELL_AURA_REMOVED(args)
 		end
 	elseif spellId == 186362 then--Only cast once per phase transition (twice whole fight)
 		tDeleteItem(guldanTargets, args.destName)
-		updateRangeFrame(self)
 		if self.Options.SetIconOnWrath then
 			self:SetIcon(args.destName, 0)
 		end
 	elseif spellId == 181119 and self:IsMythic() then
 		tDeleteItem(doomSpikeTargets, args.destName)
-		updateRangeFrame(self)
 	end
 end
 

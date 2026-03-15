@@ -14,8 +14,6 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 184394 181155 185816 183452 181968 180945 190748",
 	"SPELL_AURA_APPLIED 180079 184243 180927 184369 180076",
 	"SPELL_AURA_APPLIED_DOSE 184243",
-	"SPELL_AURA_REMOVED 184369",
-	"SPELL_CAST_SUCCESS 184370",
 	"UNIT_DIED",
 	"CHAT_MSG_MONSTER_YELL",
 	"UNIT_SPELLCAST_SUCCEEDED"--Have to register all unit ids to catch the boss when she casts haste
@@ -89,8 +87,6 @@ local timerSiegeVehicleCD			= mod:NewTimer(60, "timerSiegeVehicleCD", 160240, ni
 
 --local berserkTimer				= mod:NewBerserkTimer(360)
 
-mod:AddRangeFrameOption(8, 184369)
-mod:AddHudMapOption("HudMapOnAxe", 184369)
 --mod:AddSetIconOption("SetIconOnAdds", "ej11411", false, true)--If last wave isn't dead before new wave, this icon option will screw up. A more complex solution may be needed. Or just accept that this will only work for guilds with high dps
 
 mod.vb.vehicleCount = 0
@@ -109,27 +105,6 @@ local mythicberserkerTimers = {54.7, 59.6, 140.7, 39.7, 46.5, 28.5, 38.9}--29.5 
 local felcasterTimers = {8.5, 32.2, 39.5, 45.6, 50.9, 31.1, 36.7, 10, 103.8, 0.3, 27.8, 47.2}--35 (first) is omitted
 local mythicfelcasterTimers = {9.5, 160, 33.8, 49.4, 41.3, 44.9, 70.6}--35 (first) is omitted.
 local axeDebuff = DBM:GetSpellName(184369)
-local axeFilter
-do
-	axeFilter = function(uId)
-		if DBM:UnitDebuff(uId, axeDebuff) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self, show)
-	if not self.Options.RangeFrame then return end
-	if show then
-		if DBM:UnitDebuff("player", axeDebuff) then
-			DBM.RangeCheck:Show(10)
-		else
-			DBM.RangeCheck:Show(10, axeFilter)
-		end
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 function mod:CannonTarget(targetname, uId)
 	if not targetname then return end
@@ -163,12 +138,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnAxe then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -193,12 +162,6 @@ function mod:SPELL_CAST_START(args)
 		warnNova:Show()
 	elseif spellId == 190748 then
 		self:BossTargetScanner(95653, "CannonTarget", 0.2, 10, true, nil, nil, nil, true)
-	end
-end
-function mod:SPELL_CAST_SUCCESS(args)
-	local spellId = args.spellId
-	if spellId == 184370 then--Axe over
-		updateRangeFrame(self)
 	end
 end
 
@@ -285,25 +248,12 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnHowlingAxe:Show()
 			yellHowlingAxe:Yell()
 			specWarnHowlingAxe:Play("runout")
-			updateRangeFrame(self, true)
-		end
-		if self.Options.HudMapOnAxe then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(184369, "highlight", args.destName, 5, 7, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 		end
 	elseif spellId == 180076 then
 		warnSiphon:Show(args.destName)
 	end
 end
 mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
-
-function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
-	if spellId == 184369 then
-		if self.Options.HudMapOnAxe then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
-	end
-end
 
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
@@ -341,7 +291,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		self:SendSync("BossLeaving")
 	elseif spellId == 184350 and self:AntiSpam(3, 3) then--Actual axe cast.
 		timerHowlingAxeCD:Start()
-		updateRangeFrame(self, true)
 	end
 end
 
@@ -350,12 +299,6 @@ function mod:OnSync(msg)
 	if msg == "BossLeaving" and self:AntiSpam(20, 5) then
 		timerHowlingAxeCD:Stop()
 		timerShockwaveCD:Stop()
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Hide()
-		end
-		if self.Options.HudMapOnAxe then
-			DBM.HudMap:Disable()
-		end
 	elseif msg == "Felcaster" then
 		self.vb.felcasterCount = self.vb.felcasterCount + 1
 		warnFelCaster:Show(self.vb.felcasterCount)

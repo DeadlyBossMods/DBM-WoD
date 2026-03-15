@@ -42,7 +42,6 @@ local timerImpaleCD					= mod:NewCDTimer(43.5, 159113, nil, "Tank|Healer", nil, 
 mod:AddTimerLine(ENCOUNTER_JOURNAL_SECTION_FLAG12)
 local timerTigerCD					= mod:NewNextTimer(110, "ej9396", nil, "-Tank", nil, 1, 162497, DBM_COMMON_L.HEROIC_ICON, nil, 3, 4)
 
-mod:AddRangeFrameOption(4, 159386)
 
 local firePillar = DBM:EJ_GetSectionInfo(9394)
 local chainName = DBM:GetSpellInfo(159947)
@@ -72,9 +71,6 @@ function mod:OnCombatStart(delay)
 	timerImpaleCD:Start(35-delay)
 	timerBerserkerRushCD:Start(48-delay)
 	timerChainHurlCD:Start(91-delay)
-	if self.Options.RangeFrame and not self:IsLFR() then
-		DBM.RangeCheck:Show(4)--For Mauling Brew splash damage.
-	end
 	if self:IsMythic() then
 		timerTigerCD:Start()
 	end
@@ -82,9 +78,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_CAST_START(args)

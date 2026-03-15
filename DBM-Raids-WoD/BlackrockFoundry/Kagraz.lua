@@ -14,7 +14,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 155776 155074",
 	"SPELL_AURA_APPLIED 155277 154952 163284 155074 154932 154950",
 	"SPELL_AURA_APPLIED_DOSE 163284 155074",
-	"SPELL_AURA_REMOVED 155277 154932 154950 154952 155493",
+	"SPELL_AURA_REMOVED 154932 154950 154952 155493",
 	"SPELL_PERIODIC_DAMAGE 155314",
 	"SPELL_ABSORBED 155314",
 	"UNIT_SPELLCAST_SUCCEEDED boss1"
@@ -62,9 +62,7 @@ local timerFireStorm					= mod:NewBuffActiveTimer(14, 155493, nil, nil, nil, 6)
 
 local berserkTimer						= mod:NewBerserkTimer(420)
 
-mod:AddRangeFrameOption("10/6")
 mod:AddSetIconOption("SetIconOnAdds", 155776, true, 5)
-mod:AddHudMapOption("HudMapOnFixate", 154952, false)
 
 mod.vb.firestorm = 0
 local fixateTagets = {}
@@ -75,9 +73,6 @@ local function showFixate(self)
 	local text = {}
 	for name, time in pairs(fixateTagets) do
 		text[#text + 1] = name
-		if self.Options.HudMapOnFixate then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(154952, "highlight", name, 3, 10, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
-		end
 	end
 	warnFixate:Show(table.concat(text, "<, >"))
 	table.wipe(fixateTagets)
@@ -94,19 +89,10 @@ function mod:OnCombatStart(delay)
 	if self:IsMythic() then
 		berserkTimer:Start(-delay)
 	end
-	if self.Options.RangeFrame and self:IsRanged() then
-		DBM.RangeCheck:Show(6)
-	end
 end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnFixate then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -149,9 +135,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnBlazinRadiance:Show()
 			yellBlazinRadiance:Yell()
 			specWarnBlazinRadiance:Play("runout")
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(10)
-			end
 		end
 	elseif spellId == 154952 then
 		--Schedule, do to dogs changing mind bug
@@ -225,15 +208,7 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if spellId == 155277 and args:IsPlayer() then
-		if self.Options.RangeFrame then
-			if self:IsRanged() then
-				DBM.RangeCheck:Show(6)
-			else
-				DBM.RangeCheck:Hide()
-			end
-		end
-	elseif spellId == 154932 then
+	if spellId == 154932 then
 		if args:IsPlayer() then
 			yellMoltenTorrent:Cancel()--In case player dies
 		end
@@ -247,9 +222,6 @@ function mod:SPELL_AURA_REMOVED(args)
 			if GetTime() - (fixateTagets[args.destName] or 0) > 1 then
 				specWarnFixateEnded:Show()
 			end
-		end
-		if self.Options.HudMapOnFixate then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
 		end
 		if fixateTagets[args.destName] then
 			fixateTagets[args.destName] = nil

@@ -24,40 +24,15 @@ local specWarnArcaneOrb			= mod:NewSpecialWarningSpell(180819, nil, nil, nil, 2,
 local specWarnArcaneSurge		= mod:NewSpecialWarningInterrupt(180816, false, nil, nil, 1, 2)
 local specWarnArcaneSurgeDispel	= mod:NewSpecialWarningDispel(180816, "MagicDispeller", nil, nil, 1, 2)
 
-mod:AddRangeFrameOption(10, 180908)
 
 mod.vb.debuffCount = 0
 local debuffName = DBM:GetSpellName(180908)
-local debuffFilter
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, debuffName) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame then return end
-	if self.vb.debuffCount > 0 then
-		if DBM:UnitDebuff("player", debuffName) then
-			DBM.RangeCheck:Show(10)
-		else
-			DBM.RangeCheck:Show(10, debuffFilter)
-		end
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 function mod:OnCombatStart(delay)
 	self.vb.debuffCount = 0
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -83,7 +58,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellUnleashedEnergy:Yell()
 			specWarnUnleashedEnergy:Play("runout")
 		end
-		updateRangeFrame(self)
 	elseif spellId == 180816 and not args:IsDestTypePlayer() and self:AntiSpam(3, 1) then
 		specWarnArcaneSurgeDispel:Show(args.destName)
 		if self:IsMagicDispeller() then
@@ -99,6 +73,5 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 180908 then
 		self.vb.debuffCount = self.vb.debuffCount - 1
-		updateRangeFrame(self)
 	end
 end

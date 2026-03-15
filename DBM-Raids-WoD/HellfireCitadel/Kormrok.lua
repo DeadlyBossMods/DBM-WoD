@@ -11,7 +11,7 @@ mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 181292 181293 181296 181297 181299 181300 180244 181305",
-	"SPELL_CAST_SUCCESS 181307 181299 181300",
+	"SPELL_CAST_SUCCESS 181307",
 	"SPELL_AURA_APPLIED 181306 186882 180115 180116 180117 189197 189198 189199 186879 186880 186881",
 	"SPELL_AURA_REMOVED 181306 180244"
 )
@@ -53,7 +53,6 @@ local timerSwatCD					= mod:NewNextCountTimer(40, 181305, nil, "Tank", nil, 5, n
 
 --local berserkTimer				= mod:NewBerserkTimer(360)--Was 8 min on heroic PTR, but that also might have been a bug so will wait to confirm
 
-mod:AddRangeFrameOption("4/40")
 
 mod.vb.explodingTank = nil
 mod.vb.poundActive = false
@@ -62,34 +61,7 @@ mod.vb.explosiveBurst = 0
 mod.vb.foulCrush = 0
 mod.vb.swatCount = 0
 mod.vb.enraged = false
-local debuffName = DBM:GetSpellName(181306)
 local playerName = UnitName("player")
-
-local debuffFilter
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, debuffName) then
-			return true
-		end
-	end
-end
-
-local function updateRangeCheck(self, force)
-	if not self.Options.RangeFrame then return end
-	if self.vb.explodingTank then
-		if DBM:UnitDebuff("player", debuffName) then
-			DBM.RangeCheck:Show(30)
-		elseif not self:CheckNearby(31, self.vb.explodingTank) and self.vb.poundActive then--far enough from tank and pound is active, switch back to 4
-			DBM.RangeCheck:Show(4)
-		else--No pound, tank still active, keep filtered radar up to prevent walking back into tank
-			DBM.RangeCheck:Show(30, debuffFilter)
-		end
-	elseif self.vb.poundActive or force then--Just pound, no tank debuff.
-		DBM.RangeCheck:Show(4)
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 local function trippleBurstCheck(self, target, first)
 	if self:CheckNearby(31, target) then--Second and third check will use smaller range
@@ -99,7 +71,6 @@ local function trippleBurstCheck(self, target, first)
 	if first then
 		self:Schedule(2.5, trippleBurstCheck, self, target)
 	end
-	updateRangeCheck(self)
 end
 
 function mod:OnCombatStart(delay)
@@ -111,9 +82,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -138,13 +106,11 @@ function mod:SPELL_CAST_START(args)
 		else
 			specWarnGraspingHands:Show()
 		end
-		updateRangeCheck(self, true)
 	elseif spellId == 180244 then
 		self.vb.poundActive = true
 		self.vb.poundCount = self.vb.poundCount + 1
 		specWarnPound:Show(self.vb.poundCount)
 		specWarnPound:Play("scatter")
-		updateRangeCheck(self)
 	elseif spellId == 181305 then
 		self.vb.swatCount = self.vb.swatCount + 1
 		specWarnSwat:Show(self.vb.swatCount)
@@ -157,8 +123,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if spellId == 181307 then
 		self.vb.foulCrush = self.vb.foulCrush + 1
 		specWarnFoulCrush:Show(self.vb.foulCrush)
-	elseif spellId == 181299 or spellId == 181300 then
-		updateRangeCheck(self)
 	end
 end
 
@@ -213,7 +177,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			--Check player distance 3x, like mark of chaos, don't let players run INTO it after they are safe
 			self:Schedule(3, trippleBurstCheck, self, args.destName, true)
 		end
-		updateRangeCheck(self)
 	--Each energy has it's own hard coded sequence of events/timers.
 	--So all timers need to be scheduled here, they aren't started by any ability casts
 	elseif spellId == 180115 or spellId == 186879 then--Shadow Energy (186879 enraged version)
@@ -404,9 +367,7 @@ function mod:SPELL_AURA_REMOVED(args)
 	if spellId == 181306 then
 		self.vb.explodingTank = nil
 		self:Unschedule(trippleBurstCheck)
-		updateRangeCheck(self)
 	elseif spellId == 180244 then
 		self.vb.poundActive = false
-		updateRangeCheck(self)
 	end
 end

@@ -15,7 +15,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 181912 181827 187998 181873 185345",
 	"SPELL_CAST_SUCCESS 182178 181956 185510 181912 185345",
 	"SPELL_AURA_APPLIED 179202 181957 182325 187990 181824 179219 185510 181753 182178 182200",
-	"SPELL_AURA_REMOVED 179202 181957 182325 187990 181824 179219 185510 181753 182178 182200",
+	"SPELL_AURA_REMOVED 179202 181957 181753 182178 182200",
 	"SPELL_PERIODIC_DAMAGE 182600",
 	"SPELL_PERIODIC_MISSED 182600",
 	"RAID_BOSS_WHISPER",
@@ -80,12 +80,10 @@ local timerDarkBindingsCD				= mod:NewCDTimer(34, 185456, nil, nil, nil, 3, nil,
 
 local berserkTimer						= mod:NewBerserkTimer(540)
 
-mod:AddRangeFrameOption(15)--Both aoes are 15 yards, ref 187991 and 181748
 mod:AddSetIconOption("SetIconOnAnzu", 179202, false, 0)
 mod:AddSetIconOption("SetIconOnWinds", 181957, true, 0)
 mod:AddSetIconOption("SetIconOnFelBomb", 181753, true, 0)
 mod:AddSetIconOption("SetIconOnAdds", 181873, false, 5)
-mod:AddHudMapOption("HudMapOnChakram", 182178)
 
 mod.vb.escapeCount = 0
 mod.vb.focusedBlast = 0
@@ -101,60 +99,9 @@ local darkBindings, realFelBomb, phantasmalFelBomb, phantWinds, corruption = DBM
 local playerName = UnitName("player")
 local AddsSeen = {}
 
-local debuffFilter
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, corruption, phantasmalFelBomb, realFelBomb) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame then return end
-	--Both spells have same 15 yard range so this makes it easy
-	--Player has either debuff, show everyone
-	if DBM:UnitDebuff("player", corruption, phantasmalFelBomb, realFelBomb) then
-		DBM.RangeCheck:Show(15)
-	else--Show players with either debuff near you.
-		DBM.RangeCheck:Show(15, debuffFilter)
-	end
-end
 
 local function showChakram(self)
 	warnFelChakram:Show(table.concat(chakramTargets, "<, >"))
-	--Chakram is always thrown ranged-->melee-->Tank
-	--Need to determine roles for the hud
-	if not self.Options.HudMapOnChakram then return end
-	local ranged, melee, tank = nil, nil, nil
-	for i = 1, #chakramTargets do
-		local name = chakramTargets[i]
-		local uId = DBM:GetRaidUnitId(name)
-		if not uId then return end--Prevent errors if person leaves group
-		if self:IsMeleeDps(uId) then--Melee
-			melee = name
-			DBM:Debug("Melee Chakram found: "..name, 2)
-		elseif self:IsTanking(uId, "boss1") then--Tank
-			tank = name
-			DBM:Debug("Tank Chakram found: "..name, 2)
-		else--Ranged
-			ranged = name
-			DBM:Debug("Ranged Chakram found: "..name, 2)
-		end
-	end
-	if ranged and melee and tank then
-		DBM:Debug("All Chakram found!", 2)
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", ranged, 0.65, 6, nil, nil, nil, 0.8):Appear():SetLabel(ranged, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", melee, 0.65, 6, nil, nil, nil, 0.8):Appear():SetLabel(melee, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(182178, "party", tank, 0.65, 6, nil, nil, nil, 0.8):Appear():SetLabel(tank, nil, nil, nil, nil, nil, 0.8, nil, -15, 8, nil)
-		if playerName == melee or playerName == ranged or playerName == tank then--Player in it, Yellow lines
-			DBM.HudMap:AddEdge(1, 1, 0, 0.5, 6, ranged, melee, nil, nil, nil, nil)
-			DBM.HudMap:AddEdge(1, 1, 0, 0.5, 6, melee, tank, nil, nil, nil, nil)
-		else--Red lines
-			DBM.HudMap:AddEdge(1, 0, 0, 0.5, 6, ranged, melee, nil, nil, nil, nil)
-			DBM.HudMap:AddEdge(1, 0, 0, 0.5, 6, melee, tank, nil, nil, nil, nil)
-		end
-	end
 end
 
 function mod:OnCombatStart(delay)
@@ -169,7 +116,6 @@ function mod:OnCombatStart(delay)
 	playerHasAnzu = false
 	table.wipe(AddsSeen)
 	table.wipe(chakramTargets)
-	updateRangeFrame(self)
 	timerChakramCD:Start(5-delay)--Seems still 5 in all modes
 	if self:IsNormal() then--Normal timers are about 40% slower on pull, 20% slower rest of fight
 		timerFelLaserCD:Start(25)
@@ -191,12 +137,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnChakram then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -357,7 +297,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerPhantasmalCorruptionCD:Start(14, args.sourceGUID)
 		end
 		if args:IsPlayer() then
-			updateRangeFrame(self)
 			specWarnPhantasmalCorruption:Show()
 			specWarnPhantasmalCorruption:Play("targetyou")
 			yellPhantasmalCorruption:Yell()
@@ -370,7 +309,6 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 179219 then
 		warnPhantasmalFelBomb:CombinedShow(0.3, args.destName)
 		if args:IsPlayer() then
-			updateRangeFrame(self)
 			specWarnPhantasmalFelBomb:Schedule(0.3)
 			specWarnPhantasmalFelBomb:ScheduleVoice(0.3, "targetyou")
 			yellPhantasmalFelBomb:Schedule(0.3)
@@ -384,16 +322,12 @@ function mod:SPELL_AURA_APPLIED(args)
 			timerFelBombCD:Start(args.sourceGUID)
 		end
 		if args:IsPlayer() then
-			updateRangeFrame(self)
 			specWarnPhantasmalFelBomb:Cancel()
 			specWarnPhantasmalFelBomb:CancelVoice()
 			yellPhantasmalFelBomb:Cancel()
 			specWarnFelBomb:Show()
 			specWarnFelBomb:Play("targetyou")
 			yellFelBomb:Yell()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(15)
-			end
 		else
 			if playerHasAnzu then
 				if self:IsHealer() then--Can dispel
@@ -453,24 +387,12 @@ function mod:SPELL_AURA_REMOVED(args)
 	elseif spellId == 181957 and self.Options.SetIconOnWinds then
 		self.vb.windsTargets = self.vb.windsTargets - 1
 		self:SetIcon(args.destName, 0)
-	elseif (spellId == 181824 or spellId == 187990) then
-		if args:IsPlayer() then
-			updateRangeFrame(self)
-		end
-	elseif spellId == 179219 then
-		if args:IsPlayer() then
-			updateRangeFrame(self)
-		end
 	elseif spellId == 181753 then
 		self.vb.bombActive = nil
-		if args:IsPlayer() then
-			updateRangeFrame(self)
-		end
 		if self.Options.SetIconOnFelBomb then
 			self:SetIcon(args.destName, 0)
 		end
 	elseif spellId == 182178 or spellId == 182200 then
---		if self.Options.HudMapOnChakram then
 --			DBM.HudMap:FreeEncounterMarkerByTarget(182178, args.destName)
 --		end
 	end

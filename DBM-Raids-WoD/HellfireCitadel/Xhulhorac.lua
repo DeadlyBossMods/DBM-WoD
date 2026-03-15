@@ -13,8 +13,8 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 190223 186453 190224 186783 186546 186490 189775 189779 188939",
 	"SPELL_CAST_SUCCESS 186407 186333 186490 189775 186453 186783 186271 186292",
-	"SPELL_AURA_APPLIED 186073 186063 186134 186135 186407 186333 186500 189777 186448 187204 186785",
-	"SPELL_AURA_APPLIED_DOSE 186073 186063 186448 186785 187204",
+	"SPELL_AURA_APPLIED 186073 186063 186134 186135 186407 186333 186500 189777 187204",
+	"SPELL_AURA_APPLIED_DOSE 186073 186063 187204",
 	"SPELL_AURA_REMOVED 189777",
 	"INSTANCE_ENCOUNTER_ENGAGE_UNIT",
 	"UNIT_DIED",
@@ -96,7 +96,6 @@ local timerOverwhelmingChaosCD		= mod:NewNextCountTimer(10, 187204, nil, nil, 2,
 --Cast only gives original target, not all targets, but does so 3 seconds faster. It allows the person to move early and change other players they affect with chains by pre moving.
 --Applied gives all targets, this is the easier strat for most users, where they wait until everyone has it, then run in different directions.
 --Both, gives users ALL the information for everything so they can decide on their own. This will be default until I can see what becomes more popular. Maybe both will be what everyone ends up preferring.
-mod:AddRangeFrameOption(5, 189775)--Mythic
 mod:AddSetIconOption("SetIconOnImps", -11694, true, 5)
 mod:AddDropdownOption("ChainsBehavior", {"Cast", "Applied", "Both"}, "Both", "misc", nil, 186490)
 
@@ -109,30 +108,9 @@ mod.vb.blackHoleCount = 0
 mod.vb.bothDead = 0
 local playerTanking = 0--1 Vanguard, 2 void walker
 local UnitExists, UnitGUID, UnitDetailedThreatSituation = UnitExists, UnitGUID, UnitDetailedThreatSituation
+local vanguardTank, voidwalkerTank = DBM:GetSpellName(186135), DBM:GetSpellName(186134)
 local AddsSeen = {}
 
-local debuffFilter
-local debuffName, vanguardTank, voidwalkerTank = DBM:GetSpellName(189775), DBM:GetSpellName(186135), DBM:GetSpellName(186134)
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, debuffName) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame then return end
-	if self.vb.EmpFelChainCount > 0 then
-		if DBM:UnitDebuff("Player", debuffName) then
-			DBM.RangeCheck:Show(5)
-		else
-			DBM.RangeCheck:Show(5, debuffFilter)
-		end
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 --You can use their first cast, but scheduling is more accurate from what i've tested
 --First cast will break if imps are stunned/interrupted by gorefiends grip on spawn and don't begin their first cast
@@ -207,9 +185,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -421,7 +396,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				yellFelChains:Yell()
 			end
 		end
-		updateRangeFrame(self)
 	elseif spellId == 187204 then
 		local amount = args.amount or 1
 		warnOverwhelmingChaos:Show(amount)
@@ -434,7 +408,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 189777 then
 		self.vb.EmpFelChainCount = self.vb.EmpFelChainCount - 1
-		updateRangeFrame(self)
 	end
 end
 

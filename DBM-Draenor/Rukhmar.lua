@@ -41,9 +41,6 @@ function mod:OnCombatStart(delay, yellTriggered)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -51,9 +48,6 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 167647 then
 		specWarnLooseQuills:Show()
 		timerLooseQuills:Start()
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(8)
-		end
 	elseif spellId == 167615 then
 		local amount = args.amount or 1
 		warnPiercedArmor:Show(args.destName, amount)

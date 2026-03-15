@@ -12,8 +12,8 @@ mod:RegisterCombat("combat")
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 179406 181508 181515",
 	"SPELL_CAST_SUCCESS 181508 181515 179709 179582",
-	"SPELL_AURA_APPLIED 181508 181515 182008 179670 179711 179681 179407 179667 189030 189031 189032",
-	"SPELL_AURA_REMOVED 179711 181508 181515 179667 189030 189031 189032 182008",
+	"SPELL_AURA_APPLIED 181508 181515 182008 179681 179407 179667 189030 189031 189032",
+	"SPELL_AURA_REMOVED 181508 181515 179667 189030 189031 189032 182008",
 	"UNIT_SPELLCAST_SUCCEEDED boss1"
 )
 
@@ -56,12 +56,10 @@ local timerSeedsofDestructionCD			= mod:NewNextCountTimer(14.5, 181508, nil, nil
 
 --local berserkTimer					= mod:NewBerserkTimer(360)
 
-mod:AddRangeFrameOption(10, 179711)
 mod:AddInfoFrameOption(182008, false)
 --Icon options will conflict on mythic or 25-30 players (when you get 5 targets for each debuff). Below that, they can coexist.
 mod:AddSetIconOption("SetIconOnSeeds", 181508, true)--Start at 8, descending. On by default, because it's quite imperative to know who/where seed targets are at all times.
 mod:AddSetIconOption("SetIconOnLatent", 182008, false)
-mod:AddHudMapOption("HudMapOnSeeds", 181508)
 mod:AddDropdownOption("SeedsBehavior", {"Iconed", "Numbered", "DirectionLine", "FreeForAll"}, "Iconed", "misc", nil, 181508)--CrossPerception, CrossCardinal, ExCardinal
 
 mod.vb.befouledTargets = 0
@@ -76,25 +74,6 @@ mod.vb.latentIcon = 8
 local yellSeeds2 = mod:NewPosYell(181508, nil, true, false)
 local seedsTargets = {}
 local befouledName, latentDebuff = DBM:GetSpellName(179711), DBM:GetSpellName(182008)
-local debuffFilter
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, befouledName) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame then return end
-	if DBM:UnitDebuff("player", befouledName) then
-		DBM.RangeCheck:Show(10)
-	elseif self.vb.befouledTargets > 0 then
-		DBM.RangeCheck:Show(10, debuffFilter)
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 local playerName = UnitName("player")
 local iconedAssignments = {RAID_TARGET_1, RAID_TARGET_2, RAID_TARGET_3, RAID_TARGET_4, RAID_TARGET_5}
@@ -138,19 +117,6 @@ local function warnSeeds(self)
 		end
 		if self.Options.SetIconOnSeeds and not self:IsLFR() then
 			self:SetIcon(targetName, i)
-		end
-		if self.Options.HudMapOnSeeds then
-			if i == 1 then--Yellow to match Star
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "star", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
-			elseif i == 2 then--Orange to match Circle
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "circle", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
-			elseif i == 3 then--Purple to match Diamond
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "diamond", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
-			elseif i == 4 then--Green to match Triangle
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "triangle", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
-			else--White to match  Moon
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(181508, "moon", targetName, 3, 13, 1, 1, 1, 0.5):Pulse(0.5, 0.5)
-			end
 		end
 	end
 end
@@ -218,12 +184,6 @@ end
 
 function mod:OnCombatEnd()
 	self.vb.yellType = "Icon"--Reset on combat end, resetting on combat start could accidentally overright raid leaders assignment set on combat start.
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnSeeds then
-		DBM.HudMap:Disable()
-	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
@@ -329,7 +289,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				warnBefouled:CombinedShow(0.3, self.vb.BefouledCount, args.destName)
 			end
 		end
-		updateRangeFrame(self)
 	elseif spellId == 179407 then
 		warnDisembodied:CombinedShow(0.3, self.vb.SoulCleaveCount, args.destName)
 		if args:IsPlayer() then
@@ -347,13 +306,9 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 189030 or spellId == 189031 or spellId == 189032 then--All versions
 		self.vb.befouledTargets = self.vb.befouledTargets - 1
-		updateRangeFrame(self)
 	elseif spellId == 181508 or spellId == 181515 then
 		if self.Options.SetIconOnSeeds and not self:IsLFR() then
 			self:SetIcon(args.destName, 0)
-		end
-		if self.Options.HudMapOnSeeds then
-			DBM.HudMap:FreeEncounterMarkerByTarget(181508, args.destName)
 		end
 	elseif spellId == 179667 then--Disarmed removed (armed)
 		self.vb.FissureCount = 0

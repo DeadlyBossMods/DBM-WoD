@@ -10,11 +10,11 @@ mod.respawnTime = 29.5
 mod:RegisterCombat("combat")
 
 mod:RegisterEventsInCombat(
-	"SPELL_CAST_START 155080 155301 155326",
-	"SPELL_CAST_SUCCESS 155326 155080",
+	"SPELL_CAST_START 155080 155301",
+	"SPELL_CAST_SUCCESS 155326",
 	"SPELL_AURA_APPLIED 155323 155539 155078",
 	"SPELL_AURA_APPLIED_DOSE 155078",
-	"SPELL_AURA_REMOVED 155323 155539",
+	"SPELL_AURA_REMOVED 155539",
 	"SPELL_PERIODIC_DAMAGE 173192",
 	"SPELL_ABSORBED 173192",
 	"UNIT_SPELLCAST_SUCCEEDED boss1"
@@ -43,8 +43,6 @@ local timerRampageCD				= mod:NewCDTimer(107, 155539, nil, nil, nil, 6)--Variabl
 
 local berserkTimer					= mod:NewBerserkTimer(360)
 
-mod:AddRangeFrameOption(8, 155530)
-mod:AddHudMapOption("HudMapOnShatter", 155530, false)--Might be overwhelming. up to 8 targets on non mythic, and on mythic, 20 of them. So off by default
 mod:AddDropdownOption("MythicSoakBehavior", {"ThreeGroup", "TwoGroup"}, "ThreeGroup", "misc", nil, 155080)
 
 mod.vb.smashCount = 0
@@ -53,15 +51,6 @@ mod.vb.petrifyCount = 0
 mod.vb.rampage = false
 mod.vb.firstWarned = false
 local petrifyDebuff = DBM:GetSpellName(155323)
-local debuffFilter
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, petrifyDebuff) then
-			return true
-		end
-	end
-end
-local hudEnabled = false--Only to avoid calling self.Options.HudMapOnShatter 20x in under a second when shatter goes out (20x SPELL_AURA_APPLIED events)
 --Tables used for better sync/recover. Slice count synced, then user preference "just works"
 local mythicSoakOrder3Group = {
 	[1] = 1,
@@ -128,20 +117,10 @@ function mod:OnCombatStart(delay)
 	end
 	timerSpecialCD:Start(-delay)
 	timerRampageCD:Start(-delay)--Variable. But seen as low as 108 in LFR, normal, mythic
-	if self.Options.HudMapOnShatter then
-		hudEnabled = true
-	end
 end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if hudEnabled then
-		hudEnabled = false
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -195,8 +174,6 @@ function mod:SPELL_CAST_START(args)
 			self.vb.firstWarned = true
 			timerPetrifyingSlamCD:Start(7, 1)
 		end
-	elseif spellId == 155326 and self.Options.RangeFrame and not self:IsMythic() then--On mythic everyone gets debuff so no reason to ever show this radar first
-		DBM.RangeCheck:Show(8, debuffFilter, nil, nil, nil, 10)--Show filtered frame at first for all, then update to unfiltered for those affected.
 	end
 end
 
@@ -223,13 +200,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then
 			specWarnPetrifyingSlam:Show()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(8)
-			end
 			specWarnPetrifyingSlam:Play("scatter")
-		end
-		if hudEnabled then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "timer", args.destName, 8, 10, 0, 1, 0, 0.6):Appear():RegisterForAlerts():Rotate(360, 9.5)
 		end
 	elseif spellId == 155539 then
 		self.vb.rampage = true
@@ -253,14 +224,7 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if spellId == 155323 then
-		if args:IsPlayer() and self.Options.RangeFrame then
-			DBM.RangeCheck:Hide()
-		end
-		if hudEnabled then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
-	elseif spellId == 155539 then
+	if spellId == 155539 then
 		specWarnRampageEnded:Show()
 		specWarnRampageEnded:Play("phasechange")
 		timerRampageCD:Start()

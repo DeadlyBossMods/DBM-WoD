@@ -57,8 +57,6 @@ local berserkTimer					= mod:NewBerserkTimer(492)
 
 mod:AddInfoFrameOption(176312)
 mod:AddSetIconOption("SetIconOnAdds", "ej9549", false, 5)
-mod:AddHudMapOption("HudMapForTrain", 176312, false)
-mod:AddBoolOption("HudMapUseIcons")--Depending what is easier to see/understand, i may change this to default off
 mod:AddDropdownOption("TrainVoiceAnnounce", {"LanesOnly", "MovementsOnly", "LanesandMovements"}, "LanesOnly", "misc", nil, 176312)
 mod:AddDropdownOption("InfoFrameSpeed", {"Immediately", "Delayed"}, "Delayed", "misc", nil, 176312)
 
@@ -413,90 +411,49 @@ end
 --Work In Progress
 --Timing may need tweaks. more Moves need adding.
 --Positions based on https://www.youtube.com/watch?v=0QC7BOEv2iE
-local function showHud(self, Train, center)
-	if self.Options.HudMapForTrain and not self:HasMapRestrictions() then
-		local Red, Green, Blue = 1, 1, 1
-		local hudType = nil
-		if not self.Options.HudMapUseIcons then
-			hudType = "highlight"
-			Red, Green, Blue = 0, 1, 0
+local function nextMovement(self, Train)
+	if Train == 9 then--Move to Circle (1)
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm2")
 		end
-		DBM.HudMap:FreeEncounterMarkerByTarget(176312, "TrainHelper")--Clear any current icon, before showing next move
-		--Regular Lane movements
-		local specialPosition = center and 3314 or self:IsMelee() and 3328 or 3300--Melee west, ranged east, unless center is passed then center
-		if Train == 9 then--Move to Circle (1)
-			if not hudType then hudType = "circle" end
-			if center then
-				DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 590, 3314, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			else
-				--East (where adds jump down, everyone goes west on this move)
-				DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 590, 3300, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			end
-			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-				warnTrain:Play("mm2")
-			end
-		elseif Train == 8 or Train == 11 or Train == 19.25 then--Move to diamond (2)
-			if not hudType then hudType = "diamond" end
-			DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 566, specialPosition, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
+	elseif Train == 8 or Train == 11 or Train == 19.25 then--Move to diamond (2)
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm3")
+		end
+	elseif Train == 1 or Train == 7 or Train == 15 or Train == 21 or Train == 23 or Train == 26 or Train == 28.5 then--Move to triangle (3)
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm4")
+		end
+	elseif Train == 20 or Train == 22 then--Move to Moon (4)
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm5")
+		end
+	--Special lane movements (usually corners)
+	elseif Train == 2 or Train == 28 then--Move to Cross (2 special corner)
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm7")
+		end
+	elseif Train == 14 or Train == 32 then--Move to skull (4 special corner)
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm8")
+		end
+	elseif Train == 17 then--Ranged and melee go to different lanes to avoid fire in on melee/adds in diamond while ranged kill cannon at triangle
+		if self:IsMelee() then--Move to diamond for man at arms Train
 			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
 				warnTrain:Play("mm3")
 			end
-		elseif Train == 1 or Train == 7 or Train == 15 or Train == 21 or Train == 23 or Train == 26 or Train == 28.5 then--Move to triangle (3)
-			if not hudType then hudType = "triangle" end
-			if Train == 1 then
-				specialPosition = self:IsMelee() and 3300 or 3328--Only Train that does reverse specialPosition
-				DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 542, specialPosition, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			else
-				DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 542, specialPosition, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			end
+		else--Move to triangle for Cannon
 			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
 				warnTrain:Play("mm4")
 			end
-		elseif Train == 20 or Train == 22 then--Move to Moon (4)
-			if not hudType then hudType = "moon" end
-			DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 517, specialPosition, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-				warnTrain:Play("mm5")
-			end
-		--Special lane movements (usually corners)
-		elseif Train == 2 or Train == 28 then--Move to Cross (2 special corner)
-			if not hudType then hudType = "cross" end
-			DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 566, 3277, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-				warnTrain:Play("mm7")
-			end
-		elseif Train == 14 or Train == 32 then--Move to skull (4 special corner)
-			if not hudType then hudType = "skull" end
-			DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 517, 3353, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-				warnTrain:Play("mm8")
-			end
-		elseif Train == 17 then--Ranged and melee go to different lanes to avoid fire in on melee/adds in diamond while ranged kill cannon at triangle
-			if self:IsMelee() then--Move to diamond for man at arms Train
-				if not hudType then hudType = "diamond" end
-				DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 566, 3332, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-				if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-					warnTrain:Play("mm3")
-				end
-			else--Move to triangle for Cannon
-				if not hudType then hudType = "triangle" end
-				DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 544, 3314, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-				if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-					warnTrain:Play("mm4")
-				end
-			end
-		elseif Train == 19 then-- (1 special corner)
-			if not hudType then hudType = "square" end
-			DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 590, 3352, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-				warnTrain:Play("mm6")
-			end
-		elseif Train == 19.5 then----Move to star, also during Train count 19, but later
-			if not hudType then hudType = "star" end
-			DBM.HudMap:RegisterPositionMarker(176312, "TrainHelper", hudType, 590, 3272, 3.5, 12, Red, Green, Blue, 0.5):Pulse(0.5, 0.5)
-			if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
-				warnTrain:Play("mm1")
-			end
+		end
+	elseif Train == 19 then-- (1 special corner)
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm6")
+		end
+	elseif Train == 19.5 then----Move to star, also during Train count 19, but later
+		if self.Options.TrainVoiceAnnounce ~= "LanesOnly" then
+			warnTrain:Play("mm1")
 		end
 	end
 end
@@ -568,7 +525,7 @@ function mod:OnCombatStart(delay)
 		self:Schedule(9.5, fakeTrainYell, self)
 		timerTrainCD:Start(12-delay, 1)
 		berserkTimer:Start()
-		showHud(self, 1)
+		nextMovement(self, 1)
 	else
 		self:Schedule(14.5, fakeTrainYell, self)
 		timerTrainCD:Start(17-delay, 1)
@@ -670,7 +627,7 @@ function mod:UNIT_DIED(args)
 	end
 end
 
-function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
+function mod:CHAT_MSG_MONSTER_YELL(msg, _, _, _, target)
 	local TrainLimit = self:IsMythic() and 36 or 35
 	if target == L.Train and self.vb.trainCount <= TrainLimit then
 		local adjusted = (GetTime() - fakeYellTime) < 2-- yell followed by fakeyell within 2 sec. this should realyell of scheduled fakeyell. so do not increase count and only do adjust.
@@ -696,48 +653,48 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 			if count == 1 or count == 2 or count == 11 or count == 12 or count == 13 or count == 25 or count == 26 or count == 31 then
 				expectedTime = 5
 				if count == 11 or count == 26 then
-					showHud(self, count)
+					nextMovement(self, count)
 				elseif count == 2 then
-					self:Schedule(14-fakeAdjust, showHud, self, count)
+					self:Schedule(14-fakeAdjust, nextMovement, self, count)
 				end
 			elseif count == 6 or count == 14 or count == 22 or count == 30 or count == 32 or count == 34 then
 				expectedTime = 10
 				if count == 14 then
-					self:Schedule(10-fakeAdjust, showHud, self, count)
+					self:Schedule(10-fakeAdjust, nextMovement, self, count)
 				elseif count == 22 then
-					self:Schedule(8-fakeAdjust, showHud, self, count)
+					self:Schedule(8-fakeAdjust, nextMovement, self, count)
 				elseif count == 30 then
-					showHud(self, count)
+					nextMovement(self, count)
 				elseif count == 32 then
-					self:Schedule(4-fakeAdjust, showHud, self, count)
+					self:Schedule(4-fakeAdjust, nextMovement, self, count)
 				end
 			elseif count == 3 or count == 5 or count == 7 or count == 8 or count == 16 or count == 17 or count == 20 or count == 23 or count == 24 or count == 29 or count == 33 then
 				expectedTime = 15
 				if count == 7 then
-					showHud(self, count)
+					nextMovement(self, count)
 				elseif count == 8 then
-					self:Schedule(12-fakeAdjust, showHud, self, count)
+					self:Schedule(12-fakeAdjust, nextMovement, self, count)
 				elseif count == 17 or count == 23 then
-					self:Schedule(10-fakeAdjust, showHud, self, count)
+					self:Schedule(10-fakeAdjust, nextMovement, self, count)
 				elseif count == 20 then
 					specWarnSplitSoon:Cancel()
 					specWarnSplitSoon:Schedule(5-fakeAdjust)
 					specWarnSplitSoon:ScheduleVoice(5-fakeAdjust, "mobsoon")
-					self:Schedule(7, showHud, self, count)
+					self:Schedule(7, nextMovement, self, count)
 				end
 			elseif count == 4 or count == 15 or count == 18 or count == 19  or count == 21 or count == 27 or count == 28 then
 				expectedTime = 20
 				if count == 15 then
-					self:Schedule(12-fakeAdjust, showHud, self, count)
+					self:Schedule(12-fakeAdjust, nextMovement, self, count)
 				elseif count == 19 then
-					showHud(self, count)
-					self:Schedule(12, showHud, self, 19.25, true)--Group up center for deforester movement, after square.
-					self:Schedule(20, showHud, self, 19.5)
+					nextMovement(self, count)
+					self:Schedule(12, nextMovement, self, 19.25, true)--Group up center for deforester movement, after square.
+					self:Schedule(20, nextMovement, self, 19.5)
 				elseif count == 21 then
-					self:Schedule(17, showHud, self, count)
+					self:Schedule(17, nextMovement, self, count)
 				elseif count == 28 then
-					showHud(self, count)
-					self:Schedule(19, showHud, self, 28.5)
+					nextMovement(self, count)
+					self:Schedule(19, nextMovement, self, 28.5)
 				end
 			elseif count == 10 then
 				expectedTime = 25
@@ -747,7 +704,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg, npc, _, _, target)
 				specWarnSplitSoon:CancelVoice()
 				specWarnSplitSoon:Schedule(25)--10 is a split, pre warn 10 seconds before 10
 				specWarnSplitSoon:ScheduleVoice(25, "mobsoon")
-				self:Schedule(30-fakeAdjust, showHud, self, count)--hud marker 5 seconds before split. later you move the better the bomb placements.
+				self:Schedule(30-fakeAdjust, nextMovement, self, count)--hud marker 5 seconds before split. later you move the better the bomb placements.
 			end
 			if expectedTime then
 				if msg == "Fake" then

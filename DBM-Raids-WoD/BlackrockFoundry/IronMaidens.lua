@@ -15,7 +15,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 158708 158707 158692 158599 155794 158078 156626 158008 156109",
 	"SPELL_CAST_SUCCESS 157854 157886 156109 155794",
 	"SPELL_AURA_APPLIED 158702 164271 156214 158315 158010 159724 156631 156601",
-	"SPELL_AURA_REMOVED 159724 156631 158010",
+	"SPELL_AURA_REMOVED 159724 158010",
 	"SPELL_PERIODIC_DAMAGE 158683",
 	"SPELL_ABSORBED 158683",
 	"UNIT_DIED",
@@ -113,8 +113,6 @@ local timerHeartSeekerCD				= mod:NewCDCountTimer(70, 158010, nil, "Ranged", nil
 mod:AddSetIconOption("SetIconOnRapidFire", 156626, true)
 mod:AddSetIconOption("SetIconOnBloodRitual", 158078, true)
 mod:AddSetIconOption("SetIconOnHeartSeeker", 158010, true)
-mod:AddHudMapOption("HudMapOnRapidFire", 156631)--Yellow markers
-mod:AddHudMapOption("HudMapOnBloodRitual", 158078)--Red markers
 mod:AddBoolOption("filterBladeDash3", false)
 mod:AddBoolOption("filterBloodRitual3", false)
 
@@ -216,9 +214,6 @@ end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
-	if self.Options.HudMapOnRapidFire or self.Options.HudMapOnBloodRitual then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -356,9 +351,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, 2)
 		end
 		if (noFilter or not playerOnBoat) then
-			if self.Options.HudMapOnBloodRitual then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 7, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
-			end
 			if args:IsPlayer() then
 				yellBloodRitual:Yell()
 				if DBM:UnitDebuff("player", bloodcallingDebuff) and self.Options.filterBloodRitual3 then return end
@@ -386,9 +378,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				else
 					warnRapidFire:Show(self.vb.rapidfire, args.destName)
 				end
-				if self.Options.HudMapOnRapidFire then
-					DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 9, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
-				end
 			end
 		end
 	elseif spellId == 156601 then
@@ -407,13 +396,8 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 159724 and self.Options.SetIconOnBloodRitual and not self:IsLFR() then
 		self:SetIcon(args.destName, 0)
-		if self.Options.HudMapOnBloodRitual then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
 	elseif spellId == 158010 and self.Options.SetIconOnHeartSeeker and not self:IsLFR() then
 		self:SetIcon(args.destName, 0)
-	elseif spellId == 156631 and self.Options.HudMapOnRapidFire then
-		DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
 	end
 end
 
@@ -561,9 +545,6 @@ function mod:CHAT_MSG_ADDON(prefix, msg, channel, targetName)
 				specWarnRapidFireNear:Play("runaway")
 			else
 				warnRapidFire:Show(self.vb.rapidfire, targetName)
-			end
-			if self.Options.HudMapOnRapidFire then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(156631, "highlight", targetName, 5, 12, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 			end
 		end
 	end

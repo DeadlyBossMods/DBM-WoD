@@ -12,7 +12,6 @@ mod:RegisterCombat("combat_yell", L.Pull)
 mod:RegisterEventsInCombat(
 	"SPELL_CAST_START 187466",
 	"SPELL_AURA_APPLIED 187668",
-	"SPELL_AURA_REMOVED 187668",
 	"UNIT_SPELLCAST_START"
 )
 
@@ -25,7 +24,6 @@ local timerDoomD		= mod:NewCDTimer(51, 187466, nil, nil, nil, 3)
 local timerBreathCD		= mod:NewCDTimer(22, 187664, nil, nil, nil, 5)
 
 --mod:AddReadyCheckOption(37462, false, 100)--Unknown quest flag
-mod:AddRangeFrameOption(8, 187668)
 
 function mod:OnCombatStart(delay, yellTriggered)
 	if yellTriggered then
@@ -35,9 +33,6 @@ function mod:OnCombatStart(delay, yellTriggered)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -54,20 +49,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		warnMark:CombinedShow(0.5, args.destName)
 		if args:IsPlayer() then
 			specWarnMark:Show()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(8)
-			end
-		end
-	end
-end
-
-function mod:SPELL_AURA_REMOVED(args)
-	local spellId = args.spellId
-	if spellId == 187668 then
-		if args:IsPlayer() then
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Hide()
-			end
 		end
 	end
 end

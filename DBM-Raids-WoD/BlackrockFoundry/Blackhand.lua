@@ -79,9 +79,7 @@ local timerFallingDebris			= mod:NewCastTimer(6, 162585)--Mythic
 local timerFallingDebrisCD			= mod:NewNextCountTimer(40, 162585, nil, nil, nil, 5, nil, DBM_COMMON_L.HEROIC_ICON)--Mythic
 
 mod:AddSetIconOption("SetIconOnMarked", 156096, true)
-mod:AddRangeFrameOption("6/10")
 mod:AddBoolOption("PositionsAllPhases", false)
-mod:AddHudMapOption("HudMapOnMFD", 156096)
 mod:AddBoolOption("InfoFrame")
 
 mod.vb.phase = 1
@@ -94,30 +92,14 @@ mod.vb.siegemaker = 0
 mod.vb.deprisCount = 0
 mod.vb.slagCastCount = 0
 local slagPlayerCount = 0--Doesn't seem to be any value in syncing this, this value is always 0 except for 0.2-2 seconds at most, recovery wouldn't give an accurate count.
-local smashTank = nil
 local UnitName, UnitClass, UnitPowerMax = UnitName, UnitClass, UnitPowerMax
 local markTargets = {}
 local slagTargets = {}
 local mortarsWarned = {}
-local tankFilter
 local yellMFD2 = mod:NewYell(156096, L.customMFDSay, true, false)
 local yellSlag2 = mod:NewYell(157000, L.customSlagSay, true, false)
 local mfdDebuff, slagDebuff1, slagDebuff2 = DBM:GetSpellName(156096), DBM:GetSpellName(157000), DBM:GetSpellName(159179)
 local playerName = UnitName("player")
-do
-	tankFilter = function(uId)
-		if UnitName(uId) == smashTank then
-			return true
-		end
-	end
-end
-
-local function massiveOver(self)
-	smashTank = nil
-	if not DBM:UnitDebuff("player", slagDebuff1) and not DBM:UnitDebuff("player", slagDebuff2) then
-		DBM.RangeCheck:Hide()
-	end
-end
 
 local function warnMarked(self)
 	local countFormat = self.vb.markCount
@@ -274,12 +256,6 @@ end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnMFD then
-		DBM.HudMap:Disable()
-	end
 	if self.Options.InfoFrame then--Only tanks in phase 1
 		DBM.InfoFrame:Hide()
 	end
@@ -309,21 +285,10 @@ function mod:SPELL_CAST_START(args)
 		specWarnSlagEruption:Show(self.vb.SlagEruption)
 		timerSlagEruptionCD:Start(nil, self.vb.SlagEruption+1)
 	elseif spellId == 158054 then
-		smashTank = UnitName("boss1target")
 		self.vb.smashCount = self.vb.smashCount + 1
 		specWarnMassiveShatteringSmash:Show(self.vb.smashCount)
 		timerShatteringSmashCD:Start(24.5, self.vb.smashCount+1)--Use this cd bar in phase 3 as well, because text for "Massive Shattering Smash" too long.
 		specWarnMassiveShatteringSmash:Play("carefly")
-		if self.Options.RangeFrame and smashTank then
-			--Open regular range frame if you are the smash tank, even if you are a bomb, because now you don't have a choice.
-			if smashTank == UnitName("player") then
-				DBM.RangeCheck:Show(6)
-			--Don't open radar for massive smash if you are one of bomb targets
-			elseif not DBM:UnitDebuff("player", slagDebuff1) and not DBM:UnitDebuff("player", slagDebuff2) then
-				DBM.RangeCheck:Show(6, tankFilter)
-			end
-			self:Schedule(4, massiveOver, self)
-		end
 	--"<175.87 23:28:43> [CLEU] SPELL_CAST_START#Vehicle-0-3127-1205-1151-80660-0000732F74#自爆攻城戰車##nil#163008#巨大的爆炸#nil#nil", -- [13865]
 	--"<182.00 23:28:49> [CLEU] UNIT_DIED##nil#Vehicle-0-3127-1205-1151-80660-0000732F74#自爆攻城戰車#-1#false#nil#nil", -- [14611]
 	elseif spellId == 163008 then
@@ -387,9 +352,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if self.Options.SetIconOnMarked then
 			self:SetSortedIcon("roster", 1.5, args.destName, 1, expectedMFDCount)
 		end
-		if self.Options.HudMapOnMFD then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 5, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
-		end
 	elseif spellId == 157000 then--Non Tank Version
 		if self:AntiSpam(5, 4) then
 			slagPlayerCount = 0--Reset to 0, once
@@ -414,9 +376,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			end
 			timerSlagBomb:Start()
 			specWarnAttachSlagBombs:Play("runout")
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(10)
-			end
 		end
 	elseif spellId == 159179 then--Tank version
 		slagTargets[#slagTargets + 1] = args.destName
@@ -429,9 +388,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() and self:AntiSpam(3, 6) then
 			specWarnAttachSlagBombs:Show()
 			yellAttachSlagBombs:Yell()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(10)
-			end
 		else
 			specWarnAttachSlagBombsOther:Show(args.destName)
 		end
@@ -460,18 +416,12 @@ end
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 156096 then
-		if self.Options.HudMapOnMFD then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
 		timerImpalingThrow:Stop()
 		if self.Options.SetIconOnMarked then
 			self:SetIcon(args.destName, 0)
 		end
 	elseif (spellId == 157000 or spellId == 159179) and args:IsPlayer() then
 		timerSlagBomb:Stop()
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Hide()
-		end
 	elseif spellId == 156667 then
 		specWarnSiegemakerPlatingFades:Show()
 		specWarnSiegemakerPlatingFades:Play("attacktank")
@@ -570,9 +520,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(2))
 		warnPhase:Play("ptwo")
 		--Maybe not needed whole phase, only when balcony adds are up? A way to detect and improve?
-		if self.Options.RangeFrame and not self:IsMelee() then
-			DBM.RangeCheck:Show(6)
-		end
 		if self.Options.InfoFrame then--Everyone in phase 2 and 3
 			DBM.InfoFrame:Show(5, "enemypower", 1)
 		end
@@ -602,9 +549,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		timerSlagEruptionCD:Start(31.5, 1)
 		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(3))
 		warnPhase:Play("pthree")
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Hide()
-		end
 	end
 end
 

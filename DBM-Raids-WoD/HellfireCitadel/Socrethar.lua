@@ -15,7 +15,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 184124 190776 183023",
 	"SPELL_AURA_APPLIED 182038 182769 182900 184124 188666 189627 190466 184053 183017 180415",
 	"SPELL_AURA_APPLIED_DOSE 182038",
-	"SPELL_AURA_REMOVED 184124 189627 190466 184053",
+	"SPELL_AURA_REMOVED 184124 190466 184053",
 	"UNIT_DIED",
 --	"SPELL_PERIODIC_DAMAGE",
 --	"SPELL_ABSORBED",
@@ -83,9 +83,6 @@ local timerVoraciousSoulstalkerCD	= mod:NewCDCountTimer(59.5, "ej11778", 151869,
 
 --local berserkTimer				= mod:NewBerserkTimer(360)
 
-mod:AddRangeFrameOption(10, 184124)
-mod:AddHudMapOption("HudMapOnOrb", 180221)
-mod:AddHudMapOption("HudMapOnCharge", 182051)
 mod:AddSetIconOption("SetIconOnCharge", 182051, true)
 mod:AddDropdownOption("InterruptBehavior", {"Count3Resume", "Count3Reset", "Count4Resume", "Count4Reset"}, "Count3Resume", "misc", nil, 183331)
 
@@ -101,27 +98,6 @@ mod.vb.interruptBehavior = "Count3Resume"
 local soulsSeen = {}
 local playerInConstruct = false
 local exertSpellName, debuffName = DBM:GetSpellName(183331), DBM:GetSpellName(184124)
-local debuffFilter
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, debuffName) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame then return end
-	if self.vb.ManariTargets > 0 then
-		if DBM:UnitDebuff("player", debuffName) then
-			DBM.RangeCheck:Show(10)
-		else
-			DBM.RangeCheck:Show(10, debuffFilter)
-		end
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 --if this isn't accurate, or isn't as fast as listing to RAID_BOSS_WHISPER sync i'll switch to a RAID_BOSS_WHISPER transcriptor listener
 function mod:ChargeTarget(targetname, uId)
@@ -141,21 +117,6 @@ function mod:ChargeTarget(targetname, uId)
 		specWarnFelCharge:Play("chargemove")
 	else
 		warnFelCharge:Show(targetname)
-	end
-	if self.Options.HudMapOnCharge then
-		local currentTank = self:GetCurrentTank(90296)
-		if currentTank then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "party", targetname, 0.35, 4, nil, nil, nil, 0.5):Appear():SetLabel(targetname, nil, nil, nil, nil, nil, 0.8, nil, -13, 8, nil)
-			if targetname == UnitName("player") then
-				DBM.HudMap:AddEdge(1, 1, 0, 0.5, 4, currentTank, targetname, nil, nil, nil, nil, 125)
-			else
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "party", UnitName("player"), 0.7, 4, nil, nil, nil, 1):Appear()
-				DBM.HudMap:AddEdge(1, 0, 0, 0.5, 4, currentTank, targetname, nil, nil, nil, nil, 125)
-			end
-		else--Old school
-			DBM:Debug("Tank Detection Failure in HudMapOnCharge", 2)
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(182051, "highlight", targetname, 5, 4, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
-		end
 	end
 	if self.Options.SetIconOnCharge then
 		self:SetIcon(targetname, 1, 4)
@@ -196,12 +157,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnOrb or self.Options.HudMapOnCharge then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -353,7 +308,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			yellGiftoftheManari:Yell()
 			specWarnGiftoftheManari:Play("scatter")
 		end
-		updateRangeFrame(self)
 	elseif spellId == 184053 then--Fel Barrior (Boss becomes immune to damage, Sargerei Dominator spawned and must die)
 		self.vb.barrierUp = true
 		self.vb.dominatorCount = self.vb.dominatorCount + 1
@@ -382,9 +336,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			warnVolatileFelOrb:Show(args.destName)
 		end
-		if self.Options.HudMapOnOrb then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(180221, "highlight", args.destName, 5, 20, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
-		end
 	elseif spellId == 190466 then
 		if args.sourceGUID == UnitGUID("player") then
 			playerInConstruct = true
@@ -399,11 +350,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 184124 then
 		self.vb.ManariTargets = self.vb.ManariTargets - 1
-		updateRangeFrame(self)
-	elseif spellId == 189627 then
-		if self.Options.HudMapOnOrb then
-			DBM.HudMap:FreeEncounterMarkerByTarget(180221, args.destName)
-		end
 	elseif spellId == 190466 and args.sourceGUID == UnitGUID("player") then
 		playerInConstruct = false
 	elseif spellId == 184053 then

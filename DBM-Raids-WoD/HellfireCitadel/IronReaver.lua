@@ -53,9 +53,7 @@ local timerVolatileBombCD			= mod:NewNextCountTimer(15, 182534, nil, nil, nil, 1
 
 local berserkTimer					= mod:NewBerserkTimer(514)
 
-mod:AddRangeFrameOption("8/30")
 mod:AddSetIconOption("SetIconOnArtillery", 182280, true)
-mod:AddHudMapOption("HudMapOnArt", 182108)
 mod:AddInfoFrameOption(181999)
 
 mod.vb.artilleryActive = 0--Number of debuffs count. Room is MASSIVE and combat log range could be an issue. Unsure at this time. DBM didn't seem to miss any artillery debuffs in testing.
@@ -84,15 +82,7 @@ local blitzTimers = {63, 5, 58, 4.7}
 local unstableOrbsTimers = {3, 18, 24, 24, 24}--Nerfed considerbly, useful now.
 local poundingTimers = {32.6, 54, 24}
 
-local debuffFilter
 local debuffName, reactiveName, burningName, quickfuseName, reinforcedName, volatileName = DBM:GetSpellName(182280), DBM:GetSpellName(186676), DBM:GetSpellName(186667), DBM:GetSpellName(186660), DBM:GetSpellName(188294), DBM:GetSpellName(182523)
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, debuffName) then
-			return true
-		end
-	end
-end
 
 local updateInfoFrame
 do
@@ -137,20 +127,6 @@ do
 	end
 end
 
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame or not self:IsInCombat() then return end
-	if (self:IsMelee() or not self.vb.groundPhase) and self.vb.artilleryActive > 0 then--Artillery
-		if DBM:UnitDebuff("player", debuffName) then
-			DBM.RangeCheck:Show(30, nil)
-		else
-			DBM.RangeCheck:Show(30, debuffFilter)
-		end
-	elseif self:IsRanged() and self.vb.groundPhase then--Unstable Orb
-		DBM.RangeCheck:Show(8)
-	else
-		DBM.RangeCheck:Hide()
-	end
-end
 
 function mod:OnCombatStart(delay)
 	self.vb.artilleryActive = 0--Only one that should reset on pull
@@ -159,7 +135,6 @@ function mod:OnCombatStart(delay)
 	self.vb.reactiveCount = 0
 	self.vb.burningCount = 0
 	self.vb.reinforcedCount = 0
-	updateRangeFrame(self)
 	--berserkTimer:Start(-delay)
 	--Boss uses "Ground Phase" trigger after pull. Do not start timers here
 	--No reason to reset variables here either, they also reset on ground phase trigger 1 second after pull
@@ -169,12 +144,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnArt then
-		DBM.HudMap:Disable()
-	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
@@ -209,7 +178,6 @@ function mod:SPELL_CAST_START(args)
 		end
 	elseif spellId == 182066 or spellId == 186449 then--182066 confirmed on heroic. Mythic uses 186449 (Confirmed)
 		specWarnFallingSlam:Show()
-		updateRangeFrame(self)
 		specWarnFallingSlam:Play("phasechange")
 		specWarnFallingSlam:ScheduleVoice(1.5, "watchstep")
 	elseif spellId == 181999 then
@@ -315,10 +283,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				self:SetSortedIcon("roster", 0.5, args.destName, 2, 3)--3 targets at once
 			end
 		end
-		if self.Options.HudMapOnArt then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 13, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
-		end
-		updateRangeFrame(self)
 	elseif spellId == 182020 then
 		self.vb.poundingCount = self.vb.poundingCount + 1
 		specWarnPounding:Show(self.vb.poundingCount)
@@ -347,10 +311,6 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnArtillery then
 			self:SetIcon(args.destName, 0)
 		end
-		if self.Options.HudMapOnArt then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
-		updateRangeFrame(self)
 	end
 end
 

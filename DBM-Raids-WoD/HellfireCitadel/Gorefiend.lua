@@ -14,7 +14,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 179977 182170 181085",
 	"SPELL_AURA_APPLIED 179864 179977 179909 179908 180148 181295 185982 189434 185189",
 	"SPELL_AURA_APPLIED_DOSE 185189",
-	"SPELL_AURA_REMOVED 179909 179908 181295 181973 185982 179977 189434",
+	"SPELL_AURA_REMOVED 179909 181295 181973 185982 179977 189434",
 	"SPELL_PERIODIC_DAMAGE 179995",
 	"SPELL_ABSORBED 179995",
 	"UNIT_SPELLCAST_SUCCEEDED boss1"
@@ -61,9 +61,6 @@ local timerCrushingDarkness			= mod:NewCastTimer(6, 180017, nil, false)
 
 mod:AddSetIconOption("SetIconOnFate", 179909)
 mod:AddSetIconOption("SetIconOnDoom", 179977, false, 6)
-mod:AddHudMapOption("HudMapOnSharedFate", 179909)--Smart hud, distinquishes rooted from non rooted by larger dot/font and lines/arrows
-mod:AddBoolOption("ShowOnlyPlayer", true)
-mod:AddRangeFrameOption(5, 182049)
 mod:AddInfoFrameOption(181295)
 
 mod.vb.rootedFate = nil
@@ -73,7 +70,6 @@ local playerDown = false
 local playersCount = 0
 local sharedFateTimers = {19, 28, 25, 22}
 local sharedFateTargets = {}
-local playerHasFate = false
 local playerName = UnitName("player")
 local digestDebuff, gorefiendCorruption = DBM:GetSpellName(181295), DBM:GetSpellName(179867)
 --[[
@@ -99,23 +95,11 @@ Mythic
 
 local function sharedFateDelay(self)
 	if self.vb.rootedFate then
-		local marker1
-		if self.Options.HudMapOnSharedFate and not playerDown and (playerHasFate or not self.Options.ShowOnlyPlayer) then
-			marker1 = DBM.HudMap:RegisterRangeMarkerOnPartyMember(179909, "party", self.vb.rootedFate, 0.6, 10, nil, nil, nil, 0.5):Appear():SetLabel(self.vb.rootedFate, nil, nil, nil, nil, nil, 0.8, nil, -17, 11, nil)
-		end
 		for i = 1, #sharedFateTargets do
 			local name = sharedFateTargets[i]
 			if name == playerName then
 				specWarnSharedFate:Show(self.vb.rootedFate)
 				specWarnSharedFate:Play("linegather")
-			end
-			if marker1 and name and DBM:GetRaidUnitId(name) then
-				local marker2 = DBM.HudMap:RegisterRangeMarkerOnPartyMember(179908, "party", name, 0.4, 10, nil, nil, nil, 0.5):Appear():SetLabel(name, nil, nil, nil, nil, nil, 0.8, nil, -16, 9, nil)
-				if name == playerName or self.vb.rootedFate == playerName then--Green line since player is in link
-					marker1:EdgeTo(marker2, nil, 10, 0, 1, 0, 0.5)
-				else--Yellow Line since player is not in link
-					marker1:EdgeTo(marker2, nil, 10, 1, 1, 0, 0.5)
-				end
 			end
 		end
 	end
@@ -126,11 +110,7 @@ function mod:OnCombatStart(delay)
 	self.vb.shadowOfDeathCount = 0
 	self.vb.sharedFateCount = 0
 	playerDown = false
-	playerHasFate = false
 	playersCount = DBM:GetGroupSize()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(5)
-	end
 	if self:IsMythic() then
 		timerShadowofDeathCDDps:Start(2-delay, "2x"..DBM_COMMON_L.DAMAGE_ICON)
 		timerShadowofDeathCDTank:Start(9-delay, "1x"..DBM_COMMON_L.TANK_ICON)
@@ -164,12 +144,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnSharedFate then
-		DBM.HudMap:Disable()
-	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
@@ -232,7 +206,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif spellId == 179909 then--Root version
 		if args:IsPlayer() then
-			playerHasFate = true
 			yellSharedFate:Yell()
 		end
 		if not playerDown then
@@ -243,9 +216,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			self:SetIcon(args.destName, 1)
 		end
 	elseif spellId == 179908 then--Non root version (must run to rooted player)
-		if args:IsPlayer() then
-			playerHasFate = true
-		end
 		if not playerDown then
 			warnSharedFate:CombinedShow(0.5, self.vb.sharedFateCount, args.destName)
 		end
@@ -271,9 +241,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				timerDigest:Start()
 			end
 			playerDown = true
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Hide()
-			end
 		end
 	elseif spellId == 185982 then--Cast when a Enraged Spirit in stomach reaches 70%
 		self:SendSync("GoreboundSoon")
@@ -297,31 +264,14 @@ mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 179909 then--Root version
-		if args:IsPlayer() then
-			playerHasFate = false
-		end
 		self.vb.rootedFate = nil
-		if self.Options.HudMapOnSharedFate then
-			DBM.HudMap:FreeEncounterMarkerByTarget(179909, args.destName)
-			--fDBM.HudMap:ClearAllEdges()
-		end
 		if self.Options.SetIconOnFate then
 			self:SetIcon(args.destName, 0)
-		end
-	elseif spellId == 179908 then--Non root version (must run to rooted player)
-		if args:IsPlayer() then
-			playerHasFate = false
-		end
-		if self.Options.HudMapOnSharedFate then
-			DBM.HudMap:FreeEncounterMarkerByTarget(179908, args.destName)
 		end
 	elseif spellId == 181295 then
 		if args:IsPlayer() then
 			timerDigest:Stop()
 			playerDown = false
-			if self.Options.RangeFrame and self:IsInCombat() then
-				DBM.RangeCheck:Show(5)
-			end
 		end
 	elseif spellId == 181973 and self:IsInCombat() then--Phase restart
 		self:SendSync("FeastEnded")
@@ -361,9 +311,6 @@ function mod:OnSync(msg)
 	elseif msg == "FeastOfSouls" then
 		timerTouchofDoomCD:Stop()
 		specWarnFeastofSouls:Show()
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Hide()
-		end
 		--Switch to debuff tracking on mythic feast.
 		if self.Options.InfoFrame and self:IsMythic() then
 			DBM.InfoFrame:SetHeader(gorefiendCorruption)
@@ -452,8 +399,5 @@ function mod:OnSync(msg)
 			timerSharedFateCD:Start(19, 1)
 		end
 		timerFeastofSouls:Start()
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(5)
-		end
 	end
 end

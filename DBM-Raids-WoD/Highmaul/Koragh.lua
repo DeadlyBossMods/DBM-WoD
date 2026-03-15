@@ -64,7 +64,6 @@ mod:AddTimerLine(ENCOUNTER_JOURNAL_SECTION_FLAG12)
 local timerExpelMagicFelCD			= mod:NewCDTimer(15.5, 172895, nil, "-Tank", 2, 3, nil, DBM_COMMON_L.HEROIC_ICON)--Mythic
 local timerExpelMagicFel			= mod:NewBuffFadesTimer(12, 172895, nil, nil, nil, 5, nil, nil, nil, 3, 4)--Mythic
 
-mod:AddRangeFrameOption("5")
 --mod:AddSetIconOption("SetIconOnMC", 163472, false)
 mod:AddSetIconOption("SetIconOnFel", 172895, false)
 
@@ -74,9 +73,6 @@ mod.vb.fireActive = false
 local arcaneDebuff = DBM:GetSpellName(162186)
 
 local function closeRange(self)
-	if self.Options.RangeFrame and not DBM:UnitDebuff("player", arcaneDebuff) then
-		DBM.RangeCheck:Hide()
-	end
 	self.vb.fireActive = false
 end
 
@@ -125,9 +121,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:ArcaneTarget()
@@ -149,10 +142,7 @@ function mod:SPELL_CAST_START(args)
 	if spellId == 162185 then
 		self.vb.fireActive = true
 		specWarnExpelMagicFire:Schedule(5)--Give you about 4 seconds to spread out
-		--Even if you AMS or resist debuff, need to avoid others that didn't, so rangecheck now here
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(5)
-		end
+		--Even if you AMS or resist debuff, need to avoid others that didn't
 		timerExpelMagicFire:Start()
 		if self.vb.shieldCharging then
 			timerExpelMagicFireCD:Start(87)
@@ -228,9 +218,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 		if args:IsPlayer() then--Still do yell and range frame here, in case DK
 			yellExpelMagicArcane:Yell()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(5)
-			end
 		else
 			if self:AntiSpam(3.5, args.destName) and self:IsTank() then--if antispam matches cast start warning, it won't warn again, if name is different, it'll trigger new warning
 				specWarnExpelMagicArcane:Show(args.destName)
@@ -269,14 +256,7 @@ end
 
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
-	if spellId == 162186 and args:IsPlayer() and self.Options.RangeFrame and not self.vb.fireActive then
-		DBM.RangeCheck:Hide()
-	--[[elseif spellId == 163472 then
-		if self.Options.SetIconOnMC then
-			self:SetIcon(args.destName, 0)
-		end
-		--]]
-	elseif spellId == 172895 then
+	if spellId == 172895 then
 		if self.Options.SetIconOnFel then
 			self:SetIcon(args.destName, 0)
 		end

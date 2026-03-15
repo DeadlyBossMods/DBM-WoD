@@ -51,7 +51,6 @@ local berserkTimer					= mod:NewBerserkTimer(600)
 mod:AddTimerLine(ENCOUNTER_JOURNAL_SECTION_FLAG12)
 local timerSpecialCD				= mod:NewCDSpecialTimer(20)--Mythic Specials. Shared cd, which special he uses is random. 20-25 second variation, unless delayed by spores. then 20-25+10
 
-mod:AddRangeFrameOption(8, 160254, false)
 mod:AddDropdownOption("InterruptCounter", {"Two", "Three", "Four"}, "Two", "misc", nil, 160013)
 
 mod.vb.sporesAlive = 0
@@ -84,9 +83,6 @@ end
 
 function mod:OnCombatEnd()
 	self:UnregisterShortTermEvents()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -131,9 +127,6 @@ function mod:SPELL_CAST_SUCCESS(args)
 		self.vb.sporesAlive = self.vb.sporesAlive + 1
 		specWarnSporeShooter:Show()
 		timerSporeShooterCD:Start()
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(8)
-		end
 		specWarnSporeShooter:Play("attacksporeshooter")
 	elseif spellId == 163241 then
 		timerRotCD:Start()
@@ -170,9 +163,6 @@ function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 79183 then--Spore Shooter
 		self.vb.sporesAlive = self.vb.sporesAlive - 1
-		if self.Options.RangeFrame and self.vb.sporesAlive == 0 then
-			DBM.RangeCheck:Hide()
-		end
 	elseif cid == 79092 then--Fungal Flesh Eater
 		self.vb.decayCounter = 0
 		timerDecayCD:Cancel(args.destGUID)

@@ -16,7 +16,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_AURA_APPLIED 157763 158553 156225 164004 164005 164006 158605 164176 164178 164191 157801 178468 165102 165595 176533",
 	"SPELL_AURA_APPLIED_DOSE 158553 178468 165595 159515",
 	"SPELL_AURA_REFRESH 157763",
-	"SPELL_AURA_REMOVED 158605 164176 164178 164191 157763 156225 164004 164005 164006 165102 165595",
+	"SPELL_AURA_REMOVED 158605 164176 164178 164191 156225 164004 164005 164006 165102 165595",
 	"UNIT_DIED",
 	"UNIT_SPELLCAST_SUCCEEDED boss1 boss2"
 )
@@ -121,12 +121,9 @@ local timerEnvelopingNightCD					= mod:NewNextCountTimer(63, 165876, nil, nil, n
 local timerDarkStarCD							= mod:NewCDTimer(61, 178607, nil, nil, nil, 3, nil, nil, nil, 3, 4)--61-65 Variations noticed
 local timerNightTwistedCD						= mod:NewTimer(30, "timerNightTwistedCD", 172138, nil, nil, 1)
 
-mod:AddRangeFrameOption("35/13/5")
 mod:AddSetIconOption("SetIconOnBrandedDebuff", 156225, false)
 mod:AddSetIconOption("SetIconOnInfiniteDarkness", 165102, false)
 mod:AddInfoFrameOption(176537)
-mod:AddHudMapOption("HudMapOnMarkOfChaos", 158605)
-mod:AddHudMapOption("HudMapOnBranded", 156225, false)
 mod:AddDropdownOption("GazeYellType", {"Countdown", "Stacks"}, "Countdown", "misc", nil, 165595)
 
 mod.vb.markActive = false
@@ -156,80 +153,8 @@ local fixateDebuff, gazeDebuff = DBM:GetSpellName(157763), DBM:GetSpellName(1655
 local chaosDebuff1, chaosDebuff2, chaosDebuff3, chaosDebuff4 = DBM:GetSpellName(158605), DBM:GetSpellName(164176), DBM:GetSpellName(164178), DBM:GetSpellName(164191)
 local brandedDebuff1, brandedDebuff2, brandedDebuff3, brandedDebuff4 = DBM:GetSpellName(156225), DBM:GetSpellName(164004), DBM:GetSpellName(164005), DBM:GetSpellName(164006)
 
-local debuffFilterMark, debuffFilterBranded, debuffFilterFixate, debuffFilterGaze
-do
-	debuffFilterMark = function(uId)
-		if DBM:UnitDebuff(uId, chaosDebuff1, chaosDebuff2, chaosDebuff3, chaosDebuff4) then
-			return true
-		end
-	end
-	debuffFilterBranded = function(uId)
-		if DBM:UnitDebuff(uId, brandedDebuff1, brandedDebuff2, brandedDebuff3, brandedDebuff4) then
-			return true
-		end
-	end
-	debuffFilterFixate = function(uId)
-		if DBM:UnitDebuff(uId, fixateDebuff) then
-			return true
-		end
-	end
-	debuffFilterGaze = function(uId)
-		if DBM:UnitDebuff(uId, gazeDebuff) then
-			return true
-		end
-	end
-end
-
-local function updateRangeFrame(self, markPreCast)
-	if not self.Options.RangeFrame then return end
-	if self:IsMythic() and self.vb.phase == 4 then
-		if DBM:UnitDebuff("player", gazeDebuff) then--Player has gaze
-			DBM.RangeCheck:Show(8, nil)
-		else
-			DBM.RangeCheck:Show(8, debuffFilterGaze)
-		end
-		return--Other crap doesn't happen in phase 4 mythic so stop here.
-	end
-	if not self:IsTank() and self.vb.brandedActive > 0 and not self:IsLFR() then--Active branded out there, not a tank. Branded is always prioritized over mark for non tanks since 90% of time tanks handle this on their own, while rest of raid must ALWAYS handle branded
-		local distance = self.vb.jumpDistance
-		if self.vb.playerHasBranded then--Player has Branded debuff
-			if self.vb.markActive and self:CheckNearby(36, self.vb.lastMarkedTank) then
-				DBM.RangeCheck:Show(36, debuffFilterMark)
-			else
-				DBM.RangeCheck:Show(distance, nil)--Show everyone
-			end
-		else--No branded debuff on player, so show a filtered range finder
-			if self.vb.markActive and self.vb.lastMarkedTank and self:CheckNearby(36, self.vb.lastMarkedTank) then--There is an active tank with debuff and they are too close
-				DBM.RangeCheck:Show(36, debuffFilterMark)--Show marked instead of branded if the marked tank is NOT far enough out
-			elseif self.vb.RepNovaActive then--If branded is not on you, and replicating nova is active, show nova instead of branded, it's more important.
-				DBM.RangeCheck:Show(5, nil)
-			else--Show filtered branded range
-				DBM.RangeCheck:Show(distance, debuffFilterBranded)
-			end
-		end
-	else--no branded, or player is a tank
-		if markPreCast or self.vb.markActive then--Mark of Chaos is active, or is being cast
-			if self.vb.playerHasMark then--Player has mark of chaos debuff, or is current highest threat during mark of chaos cast
-				DBM.RangeCheck:Show(36, nil)
-			else--Not boss target during cast, not debuffed, use filtered range frame to show only players affected by mark of chaos.
-				DBM.RangeCheck:Show(36, debuffFilterMark)
-			end
-		elseif self.vb.RepNovaActive then--Replicating Nova Active
-			DBM.RangeCheck:Show(5, nil)
-		elseif self.vb.isTransition then
-			if DBM:UnitDebuff("player", fixateDebuff) then
-				DBM.RangeCheck:Show(5, nil)
-			else
-				DBM.RangeCheck:Show(5, debuffFilterFixate)
-			end
-		else--We got this far, no mark of chaos, no branded, fixate, no nothing, finally hide the range frame!
-			DBM.RangeCheck:Hide()
-		end
-	end
-end
 
 local function trippleMarkCheck(self, target, first)
-	updateRangeFrame(self)
 	if self:CheckNearby(36, target) then--Second and third check will use smaller range
 		specWarnMarkOfChaosFortificationNear:Show(target)
 		specWarnMarkOfChaosFortificationNear:Play("justrun")
@@ -241,7 +166,6 @@ end
 
 local function delayedRangeUpdate(self)
 	self.vb.RepNovaActive = nil
-	updateRangeFrame(self)
 end
 
 local function stopP3Timers()
@@ -296,16 +220,10 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
 	self:UnregisterShortTermEvents()
-	if self.Options.HudMapOnMarkOfChaos or self.Options.HudMapOnBranded then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -360,16 +278,7 @@ function mod:SPELL_CAST_START(args)
 		if self:IsMythic() and self.vb.phase == 1 then--Also replication empowered
 			self.vb.RepNovaActive = true
 			self:Schedule(9, delayedRangeUpdate, self)
-			updateRangeFrame(self)
 			--Three extra checks to make sure we update 35 to 5 if tank was too close briefly if they came at same time
-			self:Schedule(0.5, updateRangeFrame, self)
-			self:Schedule(1, updateRangeFrame, self)
-			self:Schedule(1.5, updateRangeFrame, self)
-			self:Schedule(2, updateRangeFrame, self)
-			self:Schedule(2.5, updateRangeFrame, self)
-			self:Schedule(3, updateRangeFrame, self)
-			self:Schedule(3.5, updateRangeFrame, self)
-			self:Schedule(4, updateRangeFrame, self)
 			specWarnForceNovaRep:Play("range5")
 			specWarnForceNovaRep:Show()
 		else
@@ -401,16 +310,7 @@ function mod:SPELL_CAST_START(args)
 		else
 			self:Schedule(9, delayedRangeUpdate, self)
 		end
-		updateRangeFrame(self)
 		--Three extra checks to make sure we update 35 to 5 if tank was too close briefly if they came at same time
-		self:Schedule(0.5, updateRangeFrame, self)
-		self:Schedule(1, updateRangeFrame, self)
-		self:Schedule(1.5, updateRangeFrame, self)
-		self:Schedule(2, updateRangeFrame, self)
-		self:Schedule(2.5, updateRangeFrame, self)
-		self:Schedule(3, updateRangeFrame, self)
-		self:Schedule(3.5, updateRangeFrame, self)
-		self:Schedule(4, updateRangeFrame, self)
 		specWarnForceNovaRep:Show()
 		local novaTime = self.vb.forceCount == 1 and 45 or 50.5
 		timerForceNovaCD:Start(novaTime, self.vb.forceCount+1)
@@ -497,8 +397,6 @@ function mod:SPELL_CAST_START(args)
 		else
 			self.vb.playerHasMark = false
 		end
-		updateRangeFrame(self, true)
-		self:Schedule(4, updateRangeFrame, self)--Cast + 1, since sometimes tank resists, so we'll want to hide frame after 4 seconds if no debuff has gone out in 2.
 	elseif spellId == 165243 then
 		self.vb.madnessAdd = self.vb.madnessAdd + 1
 		warnGlimpseOfMadness:Show(self.vb.madnessAdd)
@@ -545,7 +443,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				specWarnFixate:Play("runout")
 				specWarnFixate:ScheduleVoice(1.5,"targetyou")
 			end
-			updateRangeFrame(self)
 		end
 	elseif args:IsSpellID(156225, 164004, 164005, 164006) and not self:IsLFR() then
 		self.vb.brandedActive = self.vb.brandedActive + 1
@@ -567,8 +464,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			self.vb.playerHasBranded = true
 			yellBranded:Yell(currentStack, self.vb.jumpDistance)
-			self:Schedule(1, updateRangeFrame, self)
-			self:Schedule(2, updateRangeFrame, self)
 		end
 		--General warnings after 3 stacks
 		if currentStack > 2 then
@@ -618,10 +513,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				else
 					self:SetIcon(args.destName, 1)
 				end
-			end
-			updateRangeFrame(self)--Update it here cause we don't need it before stacks get to relevant levels.
-			if self.Options.HudMapOnBranded then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3.5, 5, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
 			end
 		end
 	elseif spellId == 158553 then
@@ -685,10 +576,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				self:Schedule(3, trippleMarkCheck, self, args.destName, true)
 			end
 		end
-		updateRangeFrame(self)
-		if self.Options.HudMapOnMarkOfChaos then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 5, 7, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
-		end
 	elseif spellId == 157801 and self:CheckDispelFilter("magic") then
 		specWarnSlow:CombinedShow(1, args.destName)
 		if self:AntiSpam(3, 4) then
@@ -716,7 +603,6 @@ function mod:SPELL_AURA_APPLIED(args)
 				yellGaze:Yell(amount, playerName)
 			end
 		end
-		updateRangeFrame(self)
 	elseif spellId == 176533 and args:IsPlayer() and self:AntiSpam(2, 1) then
 		specWarnGrowingDarkness:Show()
 		specWarnGrowingDarkness:Play("runout")
@@ -735,7 +621,6 @@ function mod:SPELL_AURA_REFRESH(args)
 				specWarnFixate:Play("runout")
 				specWarnFixate:ScheduleVoice(1.5,"targetyou")
 			end
-			updateRangeFrame(self)
 		end
 	end
 end
@@ -749,15 +634,9 @@ function mod:SPELL_AURA_REMOVED(args)
 		if args:IsPlayer() then
 			self.vb.playerHasMark = false
 		end
-		updateRangeFrame(self)
 		if spellId == 164178 then
 			self:Unschedule(trippleMarkCheck)
 		end
-		if self.Options.HudMapOnMarkOfChaos then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
-	elseif spellId == 157763 and args:IsPlayer() and self.Options.RangeFrame then
-		updateRangeFrame(self)
 	elseif args:IsSpellID(156225, 164004, 164005, 164006) and not self:IsLFR() then
 		self.vb.brandedActive = self.vb.brandedActive - 1
 		if args:IsPlayer() then
@@ -766,17 +645,12 @@ function mod:SPELL_AURA_REMOVED(args)
 		if self.Options.SetIconOnBrandedDebuff then
 			self:SetIcon(args.destName, 0)
 		end
-		updateRangeFrame(self)
-		if self.Options.HudMapOnBranded then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
 	elseif spellId == 165102 and self.Options.SetIconOnInfiniteDarkness then
 		self:SetIcon(args.destName, 0)
 	elseif spellId == 165595 then
 		if args:IsPlayer() then
 			timerGaze:Stop()
 		end
-		updateRangeFrame(self)
 	end
 end
 
@@ -809,7 +683,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		specWarnForceNova:Cancel()
 		timerTransition:Start()
 		warnPhase:Play("ptran")
-		updateRangeFrame(self)
 		if spellId == 164810 then
 			timerCrushArmorCD:Start(23)
 			timerKickToFaceCD:Start(42)
@@ -854,7 +727,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 				warnPhase:Play("pfour")
 			end
 		end
-		updateRangeFrame(self)
 	elseif spellId == 164336 then--Teleport to Displacement (first phase change that has no transition)
 		specWarnForceNova:CancelVoice()
 		local tr1 = timerArcaneWrathCD:GetRemaining()
@@ -893,7 +765,6 @@ function mod:UNIT_SPELLCAST_SUCCEEDED(uId, _, spellId)
 		self.vb.phase = 4
 		warnPhase:Show(DBM_CORE_L.AUTO_ANNOUNCE_TEXTS.stage:format(4))
 		warnPhase:Play("pfour")
-		updateRangeFrame(self)
 		timerInfiniteDarknessCD:Start(9)--First timer 8-12 second variable, almost always 10. I'll make 9 for now so it's semi accurate in both situations
 		timerGlimpseOfMadnessCD:Start(20, 1)
 		timerDarkStarCD:Start(29)

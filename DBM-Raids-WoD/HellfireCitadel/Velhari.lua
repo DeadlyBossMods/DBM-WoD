@@ -14,7 +14,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_CAST_SUCCESS 179986 179991 180600 180526",
 	"SPELL_AURA_APPLIED 182459 185241 180166 180164 185237 185238 180526 180025 180000",
 	"SPELL_AURA_APPLIED_DOSE 180000",
-	"SPELL_AURA_REMOVED 182459 185241 180526 180300",
+	"SPELL_AURA_REMOVED 182459 185241 180526",
 	"SPELL_PERIODIC_DAMAGE 180604",
 	"SPELL_ABSORBED 180604",
 	"CHAT_MSG_RAID_BOSS_EMOTE",
@@ -86,9 +86,6 @@ local timerGaveloftheTyrantCD				= mod:NewNextCountTimer(10, 180608, 148800, nil
 
 --local berserkTimer						= mod:NewBerserkTimer(360)
 
-mod:AddRangeFrameOption("5/4")
-mod:AddHudMapOption("HudMapOnStrike", 180260)
-mod:AddHudMapOption("HudMapEdict2", 182459, false)
 
 mod.vb.touchofHarmCount = 0
 mod.vb.edictCount = 0
@@ -103,21 +100,6 @@ local AncientHarbinger = DBM:EJ_GetSectionInfo(11163)
 local AncientSovereign = DBM:EJ_GetSectionInfo(11170)
 local TyrantVelhari = EJ_GetEncounterInfo(1394)
 
-local debuffFilter, debuffFilter2
-local debuffName = DBM:GetSpellName(180526)
-do
-	debuffFilter = function(uId)
-		if DBM:UnitDebuff(uId, debuffName) then
-			return true
-		end
-	end
-	debuffFilter2 = function(uId)
-		if not DBM:UnitDebuff(uId, debuffName) then
-			return true
-		end
-	end
-end
-
 function mod:AnnTarget(targetname, uId)
 	if not targetname then
 		warnAnnihilationStrike:Show(self.vb.annihilationCount, DBM_COMMON_L.UNKNOWN)
@@ -130,9 +112,6 @@ function mod:AnnTarget(targetname, uId)
 		specWarnAnnihilatingStrikeNear:Show(targetname)
 	else
 		warnAnnihilationStrike:Show(self.vb.annihilationCount, targetname)
-	end
-	if self.Options.HudMapOnStrike then
-		DBM.HudMap:RegisterRangeMarkerOnPartyMember(180260, "highlight", targetname, 3, 4, 1, 0, 0, 0.5):Pulse(0.5, 0.5)
 	end
 end
 
@@ -152,12 +131,6 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnStrike or self.Options.HudMapEdict2 then
-		DBM.HudMap:Disable()
-	end
 end
 
 function mod:SPELL_CAST_START(args)
@@ -189,9 +162,6 @@ function mod:SPELL_CAST_START(args)
 		specWarnInfernalTempest:Play("watchstep")
 		self.vb.annihilationCount = 0
 		timerAnnihilatingStrikeCD:Start(nil, 1)
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(4)
-		end
 	elseif spellId == 180533 then
 		warnTaintedShadows:Show()
 		timerTaintedShadowsCD:Start()
@@ -209,18 +179,12 @@ function mod:SPELL_CAST_SUCCESS(args)
 		timerTaintedShadowsCD:Start()
 		timerFontofCorruptionCD:Start(22)
 		warnAuraofContempt:Play("ptwo")
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(5, debuffFilter)
-		end
 	elseif spellId == 179991 then--Aura of Malice (phase 3)
 		self.vb.phase = 3
 		warnAuraofMalice:Show()
 		timerFontofCorruptionCD:Stop()
 		timerBulwarkoftheTyrantCD:Start(nil, 1)
 		warnAuraofMalice:Play("pthree")
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Hide()
-		end
 	elseif spellId == 180600 then
 		self.vb.bulwarkCount = self.vb.bulwarkCount + 1
 		if (self:IsTank() or self:CheckNearby(5, args.destName)) and self:AntiSpam(2, 1) then
@@ -256,9 +220,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnEdictofCondemnationOther:Schedule(5, args.destName)
 			specWarnEdictofCondemnationOther:ScheduleVoice(5, "gather")
 		end
-		if self.Options.HudMapEdict2 then
-			DBM.HudMap:RegisterRangeMarkerOnPartyMember(spellId, "highlight", args.destName, 3, 9, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
-		end
 	elseif args:IsSpellID(180166, 185237) then--Casts
 		self.vb.touchofHarmCount = self.vb.touchofHarmCount + 1
 		timerTouchofHarmCD:Start(nil, self.vb.touchofHarmCount+1)
@@ -278,9 +239,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnFontofCorruption:Show()
 			yellFontofCorruption:Yell()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(5, debuffFilter2)
-			end
 		end
 	elseif spellId == 180025 then
 		specWarnHarbingersMendingDispel:Show(args.destName)
@@ -325,18 +283,10 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 182459 or spellId == 185241 then
 		--For icon option, or something.
-		if self.Options.HudMapEdict2 then
-			DBM.HudMap:FreeEncounterMarkerByTarget(spellId, args.destName)
-		end
 	elseif spellId == 180526 then
 		if args:IsPlayer() then
 			specWarnFontofCorruptionOver:Show()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(5, debuffFilter)
-			end
 		end
-	elseif spellId == 180300 and self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
 	end
 end
 

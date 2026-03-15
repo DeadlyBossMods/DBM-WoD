@@ -24,7 +24,6 @@ local specWarnArcaneVol				= mod:NewSpecialWarningMoveAway(166200)
 local yellArcaneVol					= mod:NewYell(166200)
 local specWarnWildFlames			= mod:NewSpecialWarningMove(173827)
 
-mod:AddRangeFrameOption(8, 166200)
 
 local debuff = DBM:GetSpellName(166200)
 local DebuffFilter
@@ -60,12 +59,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			if not self:IsLFR() and self:AntiSpam(3, 1) then
 				yellArcaneVol:Yell()
 			end
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(8, nil, nil, nil, nil, 6.5)
-			end
-		end
-		if self.Options.RangeFrame and not DBM:UnitDebuff("player", debuff) then
-			DBM.RangeCheck:Show(8, DebuffFilter, nil, nil, nil, 6.5)
 		end
 	elseif spellId == 173827 and args:IsPlayer() then
 		specWarnWildFlames:Show()

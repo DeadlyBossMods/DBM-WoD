@@ -85,10 +85,8 @@ local timerSecurityGuard		= mod:NewNextCountTimer(40, "ej9648", nil, "Tank", nil
 
 local berserkTimer				= mod:NewBerserkTimer(780)
 
-mod:AddRangeFrameOption(8)
 mod:AddBoolOption("InfoFrame")
 mod:AddSetIconOption("SetIconOnFixate", 155196, false)
-mod:AddHudMapOption("HudMapOnBomb", 155192, false)
 mod:AddDropdownOption("VFYellType2", {"Countdown", "Apply"}, "Apply", "misc", nil, 176121)--Countdown is a spammy nightmare on mythic (almost always 10 targets get debuff at same time), let guilds opt into this if they want it.
 
 mod.vb.machinesDead = 0
@@ -207,30 +205,6 @@ local function SecurityGuard(self)
 	end
 end
 
---Much better and smarter range checker.
-local function updateRangeFrame(self)
-	if not self.Options.RangeFrame then return end
-	if DBM:UnitDebuff("player", volatileFireDebuff) then--Volatile fire first
-		DBM.RangeCheck:Show(8)--Player has volatile fire, show everyone in 8 yards
-	else
-		playerVolatileCount = 0--Just in case it gets off count somehow, it shouldn't, but setting to 0 when UnitDebuff is false for volatileFireDebuff
-		if DBM:UnitDebuff("player", bombDebuff) then--Bomb 2nd priority
-			DBM.RangeCheck:Show(8)--Player has bomb, show everyone in 8 yards
-		elseif DBM:UnitDebuff("player", fixateDebuff) then--Fixate 3rd priority
-			DBM.RangeCheck:Show(5)--Player has fixate, show everyone in 5 yards.
-		else--No personal debuff, show range frame with other debuffs near us
-			if self.vb.phase == 1 then--Only bombs in phase 1
-				DBM.RangeCheck:Show(8, BombFilter)--Show any players within 8 yards if they have bomb debuff
-			else--Phase 2 or 3
-				if self.vb.volatileActive > 0 then--At least one active volatile fire in the raid
-					DBM.RangeCheck:Show(8, VolatileFilter)--Show any player within 8 yards if they have volatile fire debuff
-				else--No volatile fire, fixate on others range checker
-					DBM.RangeCheck:Show(5, FixateFilter)--Show any player within 5 yards if they are fixated.
-				end
-			end
-		end
-	end
-end
 
 local function FireCaller(self)
 	self.vb.fireCaller = self.vb.fireCaller + 1
@@ -332,16 +306,9 @@ function mod:OnCombatStart(delay)
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Show(3, "function", updateInfoFrame1)
 	end
-	updateRangeFrame(self)
 end
 
 function mod:OnCombatEnd()
-	if self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	end
-	if self.Options.HudMapOnBomb then
-		DBM.HudMap:Disable()
-	end
 	if self.Options.InfoFrame then
 		DBM.InfoFrame:Hide()
 	end
@@ -381,12 +348,8 @@ function mod:SPELL_AURA_APPLIED(args)
 		local debuffTime = expires - GetTime()
 		if self:CheckTankDistance(args.sourceGUID, 40) and self.vb.phase == 1 then--Filter Works very poorly, probably because mob not a BOSS id. usually see ALL warnings and all HUDs :\
 			warnBomb:CombinedShow(1, args.destName)
-			if self.Options.HudMapOnBomb then
-				DBM.HudMap:RegisterRangeMarkerOnPartyMember(155192, "highlight", args.destName, 5, debuffTime+0.5, 1, 1, 0, 0.5):Pulse(0.5, 0.5)
-			end
 		end
 		if args:IsPlayer() then
-			updateRangeFrame(self)
 			timerBomb:Start(debuffTime)
 			if self:AntiSpam(2, 6) then
 				specWarnBomb:Show(L.heatRegulator)
@@ -426,7 +389,6 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnFixate:Show()
 			specWarnFixate:Play("targetyou")
 			--Open Range Frame for http://www.wowhead.com/spell=177744 (not in encounter journal but it's very important especially on mythic)
-			updateRangeFrame(self)
 		end
 		--Update icon number even if option not enabled, so recoveryable in case person with option DCs
 		if self.vb.lastSlagIcon == 6 then--1-6 should be more than enough before reset. Do not want to use skull or x since probably set on kill targets
@@ -480,7 +442,6 @@ function mod:SPELL_AURA_APPLIED(args)
 		if expires then
 			local debuffTime = expires - GetTime()
 			if args:IsPlayer() then
-				updateRangeFrame(self)
 				playerVolatileCount = playerVolatileCount + 1
 				if playerVolatileCount == 2 then
 					specWarnTwoVolatileFire:Show()
@@ -536,26 +497,18 @@ mod.SPELL_AURA_REFRESH = mod.SPELL_AURA_APPLIED
 function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if args:IsSpellID(155192, 174716, 159558) then
-		if self.Options.HudMapOnBomb then
-			DBM.HudMap:FreeEncounterMarkerByTarget(155192, args.destName)
-		end
 		if args:IsPlayer() then
 			timerBomb:Stop()
-			updateRangeFrame(self)
 		end
 	elseif spellId == 176121 then
 		self.vb.volatileActive = self.vb.volatileActive - 1
 		if args:IsPlayer() then
 			playerVolatileCount = playerVolatileCount - 1--Each debuff fires SPELL_AURA_REMOVED. There is no dose on this.
 			--https://www.warcraftlogs.com/reports/YjKftazDw3nbAqmC#view=events&pins=2%24Off%24%23244F4B%24expression%24ability.id+%3D+176121
-			updateRangeFrame(self)
 		end
 	elseif spellId == 155196 and not DBM:UnitDebuff(args.destName, fixateDebuff) then
 		if self.Options.SetIconOnFixate then
 			self:SetIcon(args.destName, 0)
-		end
-		if args:IsPlayer() then
-			updateRangeFrame(self)
 		end
 	elseif spellId == 158345 then
 		timerShieldsDown:Cancel(args.destGUID)
@@ -594,7 +547,6 @@ function mod:UNIT_DIED(args)
 			warnPhase3:Show()
 			specWarnHeartoftheMountain:Show()
 			warnPhase3:Play("pthree")
-			updateRangeFrame(self)
 			if self.Options.InfoFrame then
 				DBM.InfoFrame:Hide()
 			end
@@ -615,7 +567,6 @@ function mod:UNIT_DIED(args)
 			self:Unschedule(SecurityGuard)
 			warnPhase2:Play("ptwo")
 			--Start adds timers. Seem same in all modes.
-			updateRangeFrame(self)
 			if not self:IsLFR() then-- LFR do not have Slag Elemental.
 				timerSlagElemental:Start(13, 1)
 				self:Schedule(72, SecurityGuard, self)

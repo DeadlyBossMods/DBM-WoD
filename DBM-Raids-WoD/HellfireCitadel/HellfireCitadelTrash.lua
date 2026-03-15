@@ -40,7 +40,6 @@ local specWarnFocusedFire			= mod:NewSpecialWarningYou(187110)
 local yellFocusedFire				= mod:NewYell(187110)
 local specWarnMarkofKaz				= mod:NewSpecialWarningYou(189512)
 
-mod:AddRangeFrameOption(15)
 
 local Bloodthirster = DBM:EJ_GetSectionInfo(11266)
 
@@ -90,25 +89,16 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnPhantasmalCorruption:Show()
 			yellPhantasmalCorruption:Yell()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(15)
-			end
 		end
 	elseif spellId == 179219 then
 		warnPhantasmalFelBomb:CombinedShow(0.3, args.destName)
 		if args:IsPlayer() then
 			specWarnPhantasmalFelBomb:Show()
 			yellPhantasmalFelBomb:Yell()
-			if self.Options.RangeFrame then
-				DBM.RangeCheck:Show(15)
-			end
 		end
 	elseif spellId == 187110 and args:IsPlayer() then
 		specWarnFocusedFire:Show()
 		yellFocusedFire:Yell()
-		if self.Options.RangeFrame then
-			DBM.RangeCheck:Show(5, nil, nil, 2, true)--2 players or 3? 3 minimum right now i suppose since mythic is about 550k
-		end
 	end
 end
 --mod.SPELL_AURA_APPLIED_DOSE = mod.SPELL_AURA_APPLIED
@@ -117,12 +107,6 @@ function mod:SPELL_AURA_REMOVED(args)
 	local spellId = args.spellId
 	if spellId == 186961 and args:IsPlayer() then
 		yellDarkFate:Cancel()
-	elseif spellId == 187990 and args:IsPlayer() and self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	elseif spellId == 179219 and args:IsPlayer() and self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
-	elseif spellId == 187110 and args:IsPlayer() and self.Options.RangeFrame then
-		DBM.RangeCheck:Hide()
 	end
 end
 
