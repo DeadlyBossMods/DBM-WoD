@@ -27,24 +27,24 @@ local warnRegulators			= mod:NewAnnounce("warnRegulators", 2, 156918)
 local warnBlastFrequency		= mod:NewAnnounce("warnBlastFrequency", 1, 155209, "Healer")
 local warnBomb					= mod:NewTargetAnnounce(155192, 4, nil, false, 2)
 local warnDropBombs				= mod:NewSpellAnnounce(174726, 1, nil, "-Tank", 2)
-local warnEngineer				= mod:NewCountAnnounce("ej9649", 2, 155179, nil, nil, nil, 12)
+local warnEngineer				= mod:NewCountAnnounce(-9649, 2, 155179, nil, nil, nil, 12)
 local warnRupture				= mod:NewTargetAnnounce(156932, 3)
 local warnInfuriated			= mod:NewTargetAnnounce(155170, 3, nil, "Tank")
 --Phase 2
 local warnPhase2				= mod:NewPhaseAnnounce(2, 2, nil, nil, nil, nil, nil, 2)
-local warnElementalists			= mod:NewAddsLeftAnnounce("ej9655", 2, 91751)
+local warnElementalists			= mod:NewAddsLeftAnnounce(-9655, 2, 91751)
 local warnFixate				= mod:NewTargetAnnounce(155196, 4)
 local warnVolatileFire			= mod:NewTargetAnnounce(176121, 4, nil, false, 2)--Spam. disable by default.
-local warnFireCaller			= mod:NewCountAnnounce("ej9659", 3, 156937, "Tank", nil, nil, 12)
-local warnSecurityGuard			= mod:NewCountAnnounce("ej9648", 2, 160379, "Tank", nil, nil, 12)
-local warnSlagElemental			= mod:NewCountAnnounce("ej9657", 2, 155179, nil, nil, nil, 12)
+local warnFireCaller			= mod:NewCountAnnounce(-9659, 3, 156937, "Tank", nil, nil, 12)
+local warnSecurityGuard			= mod:NewCountAnnounce(-9648, 2, 160379, "Tank", nil, nil, 12)
+local warnSlagElemental			= mod:NewCountAnnounce(-9657, 2, 155179, nil, nil, nil, 12)
 --Phase 3
 local warnPhase3				= mod:NewPhaseAnnounce(3, 2, nil, nil, nil, nil, nil, 2)
 local warnMelt					= mod:NewTargetAnnounce(155225, 4)--Every 10 sec.
 local warnHeat					= mod:NewStackAnnounce(155242, 2, nil, "Tank")
 
 local specWarnBomb				= mod:NewSpecialWarningMoveTo(155192, nil, DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.you:format(155192), nil, 3, 2)
-local specWarnBellowsOperator	= mod:NewSpecialWarningSwitch("ej9650", "-Healer", nil, 2, nil, 2)
+local specWarnBellowsOperator	= mod:NewSpecialWarningSwitch(-9650, "-Healer", nil, 2, nil, 2)
 local specWarnDeafeningRoar		= mod:NewSpecialWarningSpell(177756, "Tank")--Can't be dodged(was only dodgable on beta), was wrong warning for a long time. Also does a lot less damage than it did in beta too so not 3 anymore either.
 local specWarnRepair			= mod:NewSpecialWarningInterrupt(155179, "-Healer", nil, nil, nil, 2)
 local specWarnRuptureOn			= mod:NewSpecialWarningYou(156932, nil, nil, 2, 3, 2)
@@ -60,11 +60,11 @@ local specWarnPyroclasm			= mod:NewSpecialWarningInterrupt(156937, false, nil, n
 local specVolatileFire			= mod:NewSpecialWarningMoveAway(176121, nil, nil, nil, 1, 2)
 local specWarnTwoVolatileFire	= mod:NewSpecialWarning("specWarnTwoVolatileFire", nil, nil, nil, 3)--A person with double volatile fire is extremely dangerous, they will kill everyone
 local yellVolatileFire			= mod:NewYell(176121)
-local specWarnShieldsDown		= mod:NewSpecialWarningSwitch("ej9655", "Dps", nil, nil, 1, 2)
+local specWarnShieldsDown		= mod:NewSpecialWarningSwitch(-9655, "Dps", nil, nil, 1, 2)
 local specWarnEarthShield		= mod:NewSpecialWarningDispel(155173, "MagicDispeller", nil, nil, 1, 2)
 local specWarnSlagPool			= mod:NewSpecialWarningMove(155743, nil, nil, nil, 1, 8)
 --Phase 3
-local specWarnHeartoftheMountain= mod:NewSpecialWarningSwitch("ej10808", "Tank")
+local specWarnHeartoftheMountain= mod:NewSpecialWarningSwitch(-10808, "Tank")
 local specWarnHeat				= mod:NewSpecialWarningStack(155242, nil, 2, nil, nil, nil, 6)
 local specWarnHeatOther			= mod:NewSpecialWarningTaunt(155242, nil, nil, nil, nil, 2)
 --All
@@ -74,15 +74,15 @@ mod:AddTimerLine(SCENARIO_STAGE:format(1))
 local timerBomb					= mod:NewBuffFadesTimer(15, 155192)
 local timerBlastCD				= mod:NewCDTimer(25, 155209, nil, nil, nil, 2)--25 seconds base. shorter when loading is being channeled by operators.
 local timerRuptureCD			= mod:NewCDTimer(20, 156934, nil, "-Tank", 2, 3)
-local timerEngineer				= mod:NewNextCountTimer(41, "ej9649", nil, nil, nil, 1, 155179, nil, nil, 1, 5)
-local timerBellowsOperator		= mod:NewCDCountTimer(59, "ej9650", nil, nil, nil, 1, 155181)--60-65second variation for sure
+local timerEngineer				= mod:NewNextCountTimer(41, -9649, nil, nil, nil, 1, 155179, nil, nil, 1, 5)
+local timerBellowsOperator		= mod:NewCDCountTimer(59, -9650, nil, nil, nil, 1, 155181)--60-65second variation for sure
 mod:AddTimerLine(SCENARIO_STAGE:format(2))
 local timerVolatileFireCD		= mod:NewCDTimer(20, 176121, nil, false, nil, 3)--Very useful, but off by default since it can be spammy if > 2 adds up at once.
 local timerVolatileFire			= mod:NewBuffFadesTimer(8, 176121, nil, nil, nil, 5, nil, nil, nil, 1, 4)
 local timerShieldsDown			= mod:NewBuffActiveTimer(30, 158345, nil, "Dps", nil, 6, nil, DBM_COMMON_L.DAMAGE_ICON)
-local timerSlagElemental		= mod:NewNextCountTimer(55, "ej9657", nil, "-Tank", nil, 1, 155196)--Definitely 55 seconds, although current detection method may make it appear 1-2 seconds if slag has to run across room before casting first fixate
-local timerFireCaller			= mod:NewNextCountTimer(45, "ej9659", nil, "Tank", nil, 1, 156937, nil, nil, 3, 4)
-local timerSecurityGuard		= mod:NewNextCountTimer(40, "ej9648", nil, "Tank", nil, 1, 160379, DBM_COMMON_L.TANK_ICON, nil, 2, 4)
+local timerSlagElemental		= mod:NewNextCountTimer(55, -9657, nil, "-Tank", nil, 1, 155196)--Definitely 55 seconds, although current detection method may make it appear 1-2 seconds if slag has to run across room before casting first fixate
+local timerFireCaller			= mod:NewNextCountTimer(45, -9659, nil, "Tank", nil, 1, 156937, nil, nil, 3, 4)
+local timerSecurityGuard		= mod:NewNextCountTimer(40, -9648, nil, "Tank", nil, 1, 160379, DBM_COMMON_L.TANK_ICON, nil, 2, 4)
 
 local berserkTimer				= mod:NewBerserkTimer(780)
 

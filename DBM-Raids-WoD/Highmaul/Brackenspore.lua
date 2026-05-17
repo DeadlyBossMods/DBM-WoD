@@ -35,7 +35,7 @@ local specWarnExplodingFungus		= mod:NewSpecialWarningDodge(163794, nil, nil, ni
 local specWarnWaves					= mod:NewSpecialWarningDodge(160425, nil, nil, nil, 2, 2)
 --Adds
 local specWarnSporeShooter			= mod:NewSpecialWarningSwitch(163594, "RangedDps", nil, 2, nil, 12)
-local specWarnFungalFlesheater		= mod:NewSpecialWarningSwitchCount("ej9995", "-Healer", nil, nil, nil, 12)
+local specWarnFungalFlesheater		= mod:NewSpecialWarningSwitchCount(-9995, "-Healer", nil, nil, nil, 12)
 local specWarnMindFungus			= mod:NewSpecialWarningSwitch(163141, "Dps", nil, nil, nil, 12)
 
 local timerInfestingSporesCD		= mod:NewCDCountTimer(57, 159996, nil, nil, nil, 2, nil, nil, nil, 1, 4)--57-63 variation
@@ -43,7 +43,7 @@ local timerRotCD					= mod:NewCDTimer(10, 163241, nil, false, nil, 5, nil, DBM_C
 local timerNecroticBreathCD			= mod:NewCDTimer(32, 159219, nil, "Tank|Healer", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 --Adds (all adds are actually NEXT timers however they get dleayed by infesting spores and necrotic breath sometimes so i'm leaving as CD for now)
 local timerSporeShooterCD			= mod:NewCDTimer(57, 163594, nil, "RangedDps", 2, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
-local timerFungalFleshEaterCD		= mod:NewCDCountTimer(120, "ej9995", nil, "-Healer", nil, 1, 163142, nil, nil, 2, 4)
+local timerFungalFleshEaterCD		= mod:NewCDCountTimer(120, -9995, nil, "-Healer", nil, 1, 163142, nil, nil, 2, 4)
 local timerDecayCD					= mod:NewCDTimer(9.5, 160013, nil, "Melee", nil, 4)
 local timerMindFungusCD				= mod:NewCDTimer(30, 163141, nil, "MeleeDps", nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON)
 local timerLivingMushroomCD			= mod:NewCDCountTimer(55.5, 160022, nil, "Healer", nil, 5)

@@ -54,7 +54,7 @@ local specWarnPhasing				= mod:NewSpecialWarningTaunt(189047, nil, nil, nil, 1, 
 local specWarnFelStrike				= mod:NewSpecialWarningSpell(186271, "Tank")
 local specWarnFelSurge				= mod:NewSpecialWarningYou(186407, nil, nil, nil, 1, 2)
 local yellFelSurge					= mod:NewYell(186407)
-local specWarnImps					= mod:NewSpecialWarningSwitchCount("ej11694", "Dps")
+local specWarnImps					= mod:NewSpecialWarningSwitchCount(-11694, "Dps")
 ----Adds
 local specWarnFelBlazeFlurry		= mod:NewSpecialWarningDefensive(186453, "Tank", nil, nil, 3, 2)
 local specWarnFelChains				= mod:NewSpecialWarningYou(186490)
@@ -65,7 +65,7 @@ local yellFelChains					= mod:NewYell(186490)
 local specWarnVoidStrike			= mod:NewSpecialWarningSpell(186292, "Tank")
 local specWarnVoidSurge				= mod:NewSpecialWarningYou(186333, nil, nil, nil, 1, 12)
 local yellVoidSurge					= mod:NewYell(186333)
-local specWarnVoids					= mod:NewSpecialWarningCount("ej11714", "Ranged")
+local specWarnVoids					= mod:NewSpecialWarningCount(-11714, "Ranged")
 ----Adds
 local specWarnWitheringGaze			= mod:NewSpecialWarningDefensive(186783, "Tank", nil, nil, 1, 2)
 local specWarnBlackHole				= mod:NewSpecialWarningCount(186546, nil, nil, nil, 2)
@@ -119,7 +119,7 @@ local AddsSeen = {}
 local function ImpRepeater(self)
 	self.vb.impCount = self.vb.impCount + 1
 	self.vb.impActive = self.vb.impActive + 3
-	if self.Options.SpecWarnej11694switchcount then
+	if self.Options["SpecWarn-11694switchcount"] then
 		specWarnImps:Show(self.vb.impCount)
 	else
 		warnImps:Show(self.vb.impCount)
@@ -137,7 +137,7 @@ end
 
 local function VoidsRepeater(self)
 	self.vb.voidCount = self.vb.voidCount + 1
-	if self.Options.SpecWarnej11714count then
+	if self.Options["SpecWarn-11714count"] then
 		specWarnVoids:Show(self.vb.voidCount)
 	else
 		warnVoids:Show(self.vb.voidCount)

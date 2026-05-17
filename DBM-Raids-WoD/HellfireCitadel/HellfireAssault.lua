@@ -25,8 +25,8 @@ mod:RegisterEventsInCombat(
 local warnHowlingAxe				= mod:NewTargetAnnounce(184369, 3)
 local warnFelfireMunitions			= mod:NewTargetAnnounce(180079, 1)
 --Hellfire Reinforcements
-local warnFelCaster					= mod:NewCountAnnounce("ej11411", 3, 181155)
-local warnBerserker					= mod:NewCountAnnounce("ej11425", 3, 184243)
+local warnFelCaster					= mod:NewCountAnnounce(-11411, 3, 181155)
+local warnBerserker					= mod:NewCountAnnounce(-11425, 3, 184243)
 ----Gorebound Berserker (tank add probably)
 local warnSlam						= mod:NewStackAnnounce(184243, 3, nil, false, 2)--Useful, but optional, only useful if dps is too low
 ----Grand Corruptor U'rogg
@@ -36,16 +36,16 @@ local warnCannon					= mod:NewTargetAnnounce(190748, 2)
 
 --Felfire-Imbued Siege Vehicles
 ----Felfire Crusher
-local warnFelfireCrusher			= mod:NewCountAnnounce("ej11439", 2, 160240, nil, nil, nil, nil, 12)
+local warnFelfireCrusher			= mod:NewCountAnnounce(-11439, 2, 160240, nil, nil, nil, nil, 12)
 ----Felfire Flamebelcher
-local warnFelfireFlamebelcher		= mod:NewCountAnnounce("ej11437", 2, 160240, nil, nil, nil, nil, 12)
+local warnFelfireFlamebelcher		= mod:NewCountAnnounce(-11437, 2, 160240, nil, nil, nil, nil, 12)
 ----Felfire Artillery
-local warnFelfireArtillery			= mod:NewCountAnnounce("ej11435", 3, 160240, nil, nil, nil, nil, 12)
+local warnFelfireArtillery			= mod:NewCountAnnounce(-11435, 3, 160240, nil, nil, nil, nil, 12)
 ----Felfire Demolisher (Heroic, Mythic)
-local warnFelfireDemolisher			= mod:NewCountAnnounce("ej11429", 4, 160240, nil, nil, nil, nil, 12)--Heroic & Mythic only
+local warnFelfireDemolisher			= mod:NewCountAnnounce(-11429, 4, 160240, nil, nil, nil, nil, 12)--Heroic & Mythic only
 local warnNova						= mod:NewSpellAnnounce(180945, 3)
 ----Felfire Transporter (Mythic)
-local warnFelfireTransporter		= mod:NewCountAnnounce("ej11712", 4, 160240, nil, nil, nil, nil, 12)--Mythic Only
+local warnFelfireTransporter		= mod:NewCountAnnounce(-11712, 4, 160240, nil, nil, nil, nil, 12)--Mythic Only
 ----Things
 
 --Siegemaster Mar'tak
@@ -53,7 +53,7 @@ local specWarnHowlingAxe			= mod:NewSpecialWarningMoveAway(184369, nil, nil, nil
 local yellHowlingAxe				= mod:NewYell(184369)
 local specWarnShockwave				= mod:NewSpecialWarningDodge(184394, nil, nil, nil, 2, 2)
 --Hellfire Reinforcements
-local specWarnReinforcements		= mod:NewSpecialWarningSwitch("ej11406", false, nil, 2)--Generic warning for tanks to pick up new adds if they want to enable it
+local specWarnReinforcements		= mod:NewSpecialWarningSwitch(-11406, false, nil, 2)--Generic warning for tanks to pick up new adds if they want to enable it
 ----Gorebound Berserker (tank add)
 
 --Some specail warnings for taunts or stacks or something here, probably.
@@ -69,14 +69,14 @@ local yellCannon					= mod:NewYell(190748)
 local specWarnCannonNear			= mod:NewSpecialWarningClose(190748, nil, nil, nil, 1, 2)
 
 --Felfire-Imbued Siege Vehicles
-local specWarnDemolisher			= mod:NewSpecialWarningSwitch("ej11429", "Dps", nil, nil, 1, 12)--Heroic & Mythic only. Does massive aoe damage, has to be killed asap
+local specWarnDemolisher			= mod:NewSpecialWarningSwitch(-11429, "Dps", nil, nil, 1, 12)--Heroic & Mythic only. Does massive aoe damage, has to be killed asap
 
 --Siegemaster Mar'tak
 local timerHowlingAxeCD				= mod:NewCDTimer(8.47, 184369, nil, nil, nil, 3)
 local timerShockwaveCD				= mod:NewCDTimer(8.5, 184394, nil, nil, nil, 3)
 --Hellfire Reinforcements
-local timerFelCastersCD				= mod:NewCDCountTimer(40, "ej11411", nil, nil, nil, 1, 181155)
-local timerBerserkersCD				= mod:NewCDCountTimer(40, "ej11425", nil, nil, nil, 1, 184243)
+local timerFelCastersCD				= mod:NewCDCountTimer(40, -11411, nil, nil, nil, 1, 181155)
+local timerBerserkersCD				= mod:NewCDCountTimer(40, -11425, nil, nil, nil, 1, 184243)
 ----Gorebound Berserker (tank add probably)
 --local timerSlamCD					= mod:NewCDTimer(107, 184243, nil, nil, nil, 5)
 ----Gorebound Felcaster
@@ -88,7 +88,7 @@ local timerSiegeVehicleCD			= mod:NewTimer(60, "timerSiegeVehicleCD", 160240, ni
 
 --local berserkTimer				= mod:NewBerserkTimer(360)
 
---mod:AddSetIconOption("SetIconOnAdds", "ej11411", false, true)--If last wave isn't dead before new wave, this icon option will screw up. A more complex solution may be needed. Or just accept that this will only work for guilds with high dps
+--mod:AddSetIconOption("SetIconOnAdds", -11411, false, true)--If last wave isn't dead before new wave, this icon option will screw up. A more complex solution may be needed. Or just accept that this will only work for guilds with high dps
 
 mod.vb.vehicleCount = 0
 mod.vb.felcasterCount = 0
@@ -188,7 +188,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			warnFelfireArtillery:Show(Count)
 			warnFelfireArtillery:Play("artillery")
 		elseif cid == 91103 then--Felfire Demolisher
-			if self.Options.SpecWarnej11429switch then
+			if self.Options["SpecWarn-11429switch"] then
 				specWarnDemolisher:Show()
 			else
 				warnFelfireDemolisher:Show(Count)

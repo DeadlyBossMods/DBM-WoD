@@ -39,7 +39,7 @@ local warnShackledTorment			= mod:NewTargetCountAnnounce(184964, 3)
 local warnUnleashedTorment			= mod:NewAddsLeftAnnounce(185008, 2)--NewAddsLeftAnnounce perfect for this!
 local warnWroughtChaos				= mod:NewTargetCountAnnounce(184265, 4)--Combined both targets into one warning under primary spell name
 local warnDreadFixate				= mod:NewTargetAnnounce(186574, 2, nil, false)--In case it matters on mythic, it was spammy on heroic and unimportant
-local warnOverfiend					= mod:NewCountAnnounce("ej11603", 3, 186662)
+local warnOverfiend					= mod:NewCountAnnounce(-11603, 3, 186662)
 --Phase 3
 local warnPhase3					= mod:NewPhaseAnnounce(3, 2, nil, nil, nil, nil, nil, 2)
 ----The Nether
@@ -54,7 +54,7 @@ local specWarnDoomfire				= mod:NewSpecialWarningSwitch(189897, "Dps", nil, nil,
 local specWarnDoomfireFixate		= mod:NewSpecialWarningYou(182879, nil, nil, nil, 4)
 local yellDoomfireFixate			= mod:NewYell(182826)--Use short name for yell
 local specWarnAllureofFlames		= mod:NewSpecialWarningDodge(183254, nil, nil, nil, 2, 2)
-local specWarnDeathCaller			= mod:NewSpecialWarningSwitchCount("ej11582", "Dps", nil, nil, 1, 12)--Tanks don't need switch, they have death brand special warning 2 seconds earlier
+local specWarnDeathCaller			= mod:NewSpecialWarningSwitchCount(-11582, "Dps", nil, nil, 1, 12)--Tanks don't need switch, they have death brand special warning 2 seconds earlier
 local specWarnFelBurst				= mod:NewSpecialWarningYou(183817)
 local yellFelBurst					= mod:NewPosYell(183817)
 local specWarnFelBurstNear			= mod:NewSpecialWarningMoveTo(183817, nil, nil, nil, 1, 2)--Anyone near by should run in to help soak, should be mostly ranged but if it's close to melee, melee soaking too doesn't hurt
@@ -111,7 +111,7 @@ mod:AddTimerLine(SCENARIO_STAGE:format(2))
 local timerShackledTormentCD		= mod:NewCDCountTimer(31.5, 184931, nil, nil, nil, 3, nil, nil, nil, not mod:IsTank() and 3 or nil, 3)
 local timerWroughtChaosCD			= mod:NewCDTimer(51.7, 184265, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
 --Phase 2.5
-local timerFelborneOverfiendCD		= mod:NewNextCountTimer(44.3, "ej11603", nil, nil, nil, 1, 186662)
+local timerFelborneOverfiendCD		= mod:NewNextCountTimer(44.3, -11603, nil, nil, nil, 1, 186662)
 --Phase 3: The Twisting Nether
 mod:AddTimerLine(SCENARIO_STAGE:format(3))
 local timerDemonicFeedbackCD		= mod:NewCDCountTimer(35, 187180, nil, nil, nil, 2, nil, nil, nil, 2, 3)
@@ -133,7 +133,7 @@ local timerSeethingCorruptionCD		= mod:NewNextCountTimer(107, 190506, 66911, nil
 mod:AddSetIconOption("SetIconOnFelBurst", 183634, true, 0)
 mod:AddSetIconOption("SetIconOnShackledTorment2", 184964, false, 0)
 mod:AddSetIconOption("SetIconOnMarkOfLegion2", 187050, true, 0)
-mod:AddSetIconOption("SetIconOnInfernals2", "ej11618", false, 5)
+mod:AddSetIconOption("SetIconOnInfernals2", -11618, false, 5)
 mod:AddBoolOption("ExtendWroughtHud3", true)
 mod:AddBoolOption("NamesWroughtHud", true)
 mod:AddBoolOption("FilterOtherPhase", true)

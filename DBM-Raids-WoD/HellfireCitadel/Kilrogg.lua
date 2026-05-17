@@ -29,7 +29,7 @@ local warnShreddedArmor				= mod:NewStackAnnounce(180200, 4, nil, "Tank|Healer")
 local warnHeartseeker				= mod:NewTargetAnnounce(180372, 4)
 local warnVisionofDeath				= mod:NewTargetAnnounce(181488, 2)--The targets that got picked
 --Adds
-local warnBloodthirster				= mod:NewSpellAnnounce("ej11266", 3, 131150, nil, nil, nil, nil, 12)
+local warnBloodthirster				= mod:NewSpellAnnounce(-11266, 3, 131150, nil, nil, nil, nil, 12)
 
 --Boss
 local specWarnShred					= mod:NewSpecialWarningDefensive(180199, nil, nil, nil, 3, 2)--Block, or get debuff
@@ -41,8 +41,8 @@ local specWarnVisionofDeath			= mod:NewSpecialWarningCount(182428)--Seems everyo
 local specWarnSavageStrikes			= mod:NewSpecialWarningSpell(180163, nil, nil, nil, 1, 2)
 local specWarnBloodGlob				= mod:NewSpecialWarningSwitch(180459, "Dps", nil, nil, 1, 12)
 local specWarnFelBloodGlob			= mod:NewSpecialWarningSwitch(180413, "Dps", nil, nil, 3, 12)
-local specWarnBloodthirster			= mod:NewSpecialWarningSwitch("ej11266", "Dps", nil, 2, 1, 12)--Very frequent, let specwarn be an option
-local specWarnHulkingTerror			= mod:NewSpecialWarningSwitch("ej11269", "Tank", nil, 2, 1, 12)
+local specWarnBloodthirster			= mod:NewSpecialWarningSwitch(-11266, "Dps", nil, 2, 1, 12)--Very frequent, let specwarn be an option
+local specWarnHulkingTerror			= mod:NewSpecialWarningSwitch(-11269, "Tank", nil, 2, 1, 12)
 local specWarnRendingHowl			= mod:NewSpecialWarningInterruptCount(183917, "HasInterrupt", nil, 2, 1, 5)
 
 --Boss
@@ -55,7 +55,7 @@ local timerHeartseekerCD			= mod:NewCDTimer(25, 180372, nil, nil, nil, 3)
 local timerVisionofDeathCD			= mod:NewCDCountTimer(75, 181488, nil, nil, nil, 5, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1, 4)
 local timerDeathThroesCD			= mod:NewCDCountTimer(40, 180224, nil, nil, nil, 2)
 --Adds
-local timerBloodthirsterCD			= mod:NewCDCountTimer(70.3, "ej11266", nil, nil, nil, 1, 131150, DBM_COMMON_L.DAMAGE_ICON)--55969 is an iffy short name for bloodthirster since "bloodthirst" is all I could find that was close
+local timerBloodthirsterCD			= mod:NewCDCountTimer(70.3, -11266, nil, nil, nil, 1, 131150, DBM_COMMON_L.DAMAGE_ICON)--55969 is an iffy short name for bloodthirster since "bloodthirst" is all I could find that was close
 local timerRendingHowlCD			= mod:NewNextTimer(6, 183917, nil, "HasInterrupt", 2, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
 
 local berserkTimer					= mod:NewBerserkTimer(600)
@@ -203,7 +203,7 @@ function mod:INSTANCE_ENCOUNTER_ENGAGE_UNIT()
 			AddsSeen[unitGUID] = true
 			local cid = self:GetCIDFromGUID(unitGUID)
 			if (cid == 92038 or cid == 90521 or cid == 93369) and self:AntiSpam(3, 1) and not self:IsTank() then--Salivating Bloodthirster. Antispam should filter the two that jump down together
-				if self.Options.SpecWarnej11266switch then
+				if self.Options["SpecWarn-11266switch"] then
 					specWarnBloodthirster:Show()
 					specWarnBloodthirster:Play("attackbloodthirster")
 				else

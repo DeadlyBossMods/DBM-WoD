@@ -27,9 +27,9 @@ mod:RegisterEventsInCombat(
 --TODO, figure out what's wrong with DBM-Core stripping most of EJ spellname in specWarnEarthwarper (it's saying "Night - Switch" instead of "Night-Twisted Earthshaper - Switch")
 --Tectus
 local warnCrystallineBarrage		= mod:NewTargetAnnounce(162346, 3)
-local warnBerserker					= mod:NewSpellAnnounce("ej10062", 3, 163312)
+local warnBerserker					= mod:NewSpellAnnounce(-10062, 3, 163312)
 
-local specWarnEarthwarper			= mod:NewSpecialWarningSwitch("ej10061", "-Healer", nil, 2, nil, 2)
+local specWarnEarthwarper			= mod:NewSpecialWarningSwitch(-10061, "-Healer", nil, 2, nil, 2)
 local specWarnTectonicUpheaval		= mod:NewSpecialWarningSpell(162475, nil, nil, nil, 2, 2)
 local specWarnEarthenPillar			= mod:NewSpecialWarningDodge(162518, nil, nil, nil, 3, 2)
 local specWarnCrystallineBarrageYou	= mod:NewSpecialWarningYou(162346, nil, nil, nil, nil, 2)
@@ -40,8 +40,8 @@ local specWarnRavingAssault			= mod:NewSpecialWarningDodge(163312, "Melee", nil,
 local specWarnEarthenFlechettes		= mod:NewSpecialWarningDodge(162968, "Melee", nil, nil, nil, 2)
 local specWarnGiftOfEarth			= mod:NewSpecialWarningCount(162894, "Melee", nil, nil, nil, 12)
 
-local timerEarthwarperCD			= mod:NewNextTimer(40, "ej10061", nil, nil, nil, 1, 162894)--Both of these get delayed by upheavel
-local timerBerserkerCD				= mod:NewNextTimer(40, "ej10062", nil, "Tank", nil, 1, 163312)--Both of these get delayed by upheavel
+local timerEarthwarperCD			= mod:NewNextTimer(40, -10061, nil, nil, nil, 1, 162894)--Both of these get delayed by upheavel
+local timerBerserkerCD				= mod:NewNextTimer(40, -10062, nil, "Tank", nil, 1, 163312)--Both of these get delayed by upheavel
 local timerGiftOfEarthCD			= mod:NewCDTimer(10.5, 162894, nil, "Melee", nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)--10.5 but obviously delayed if stuns were used.
 local timerEarthenFlechettesCD		= mod:NewCDTimer(14, 162968, nil, "Melee", nil, 5)--14 but obviously delayed if stuns were used. Also tends to be recast immediately if stun interrupted
 local timerCrystalBarrageCD			= mod:NewNextSourceTimer(30, 162346, nil, false, nil, 3)--Very accurate but spammy mess with 4+ adds up.
@@ -49,8 +49,8 @@ local timerCrystalBarrage			= mod:NewBuffFadesTimer(15, 162346)
 
 local berserkTimer					= mod:NewBerserkTimer(600)
 
-mod:AddSetIconOption("SetIconOnEarthwarper", "ej10061", true, 5)
-mod:AddSetIconOption("SetIconOnMote", "ej10064", false, 5)--Working with both shard and mote. ej10083 description is bad / This more or less assumes the 4 at a time strat. if you unleash 8 it will fail. Although any guild unleashing 8 is probably doing it wrong (minus LFR)
+mod:AddSetIconOption("SetIconOnEarthwarper", -10061, true, 5)
+mod:AddSetIconOption("SetIconOnMote", -10064, false, 5)--Working with both shard and mote. ej10083 description is bad / This more or less assumes the 4 at a time strat. if you unleash 8 it will fail. Although any guild unleashing 8 is probably doing it wrong (minus LFR)
 mod:AddSetIconOption("SetIconOnCrystal", 162370, false)--icons 1 and 2, no conflict with icon on earthwarper
 
 local UnitGUID, UnitExists = UnitGUID, UnitExists
