@@ -396,7 +396,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 156667 then
 		self.vb.markCount2 = 0
 		self.vb.siegemaker = self.vb.siegemaker + 1
-		if not self.Options["SpecWarn-9571spell"] then
+		if not self.Options["SpecWarn-9571count"] then
 			warnSiegemaker:Show(self.vb.siegemaker)
 		else
 			specWarnSiegemaker:Show(self.vb.siegemaker)
