@@ -28,7 +28,7 @@ local warnPhase						= mod:NewPhaseChangeAnnounce(2, nil, nil, nil, nil, nil, 2)
 local warnMarkedforDeath			= mod:NewTargetCountAnnounce(156096, 4)--If not in combat log, find a RAID_BOSS_WHISPER event.
 local warnMassiveDemolition			= mod:NewCountAnnounce(156479, 3, nil, "Ranged", 2)--As a regular warning, not too spammy and perfectly reasonable for ranged to be on by default.
 --Stage Two: Storage Warehouse
-local warnSiegemaker				= mod:NewCountAnnounce("ej9571", 3, 156667)
+local warnSiegemaker				= mod:NewCountAnnounce(-9571, 3, 156667)
 local warnFixate					= mod:NewTargetAnnounce(156653, 4)
 --Stage Three: Iron Crucible
 local warnAttachSlagBombs			= mod:NewTargetCountAnnounce(157000, 4)
@@ -44,7 +44,7 @@ local specWarnThrowSlagBombs		= mod:NewSpecialWarningCount(156030, nil, nil, nil
 local specWarnShatteringSmash		= mod:NewSpecialWarningCount(155992, "Melee", nil, nil, nil, 2)
 local specWarnMoltenSlag			= mod:NewSpecialWarningMove(156401)
 --Stage Two: Storage Warehouse
-local specWarnSiegemaker			= mod:NewSpecialWarningCount("ej9571", false)--Kiter switch. off by default.
+local specWarnSiegemaker			= mod:NewSpecialWarningCount(-9571, false)--Kiter switch. off by default.
 local specWarnSiegemakerPlatingFades= mod:NewSpecialWarningFades(156667, "Ranged", nil, 2, 1, 12)--Plating removed, NOW dps switch
 local specWarnFixate				= mod:NewSpecialWarningRun(156653, nil, nil, nil, 4)
 local yellFixate					= mod:NewYell(156653)
@@ -69,7 +69,7 @@ local timerShatteringSmashCD		= mod:NewCDCountTimer(44.5, 155992, nil, nil, nil,
 local timerImpalingThrow			= mod:NewCastTimer(5, 156111, nil, nil, nil, nil, nil, DBM_COMMON_L.DEADLY_ICON)--How long marked target has to aim throw at Debris Pile or Siegemaker
 --Stage Two: Storage Warehouse
 mod:AddTimerLine(SCENARIO_STAGE:format(2))
-local timerSiegemakerCD				= mod:NewNextCountTimer(50, "ej9571", nil, nil, nil, 1, 156667)
+local timerSiegemakerCD				= mod:NewNextCountTimer(50, -9571, nil, nil, nil, 1, 156667)
 local timerMassiveExplosion			= mod:NewCastTimer(5, 163008, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
 --Stage Three: Iron Crucible
 mod:AddTimerLine(SCENARIO_STAGE:format(3))
@@ -396,7 +396,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 156667 then
 		self.vb.markCount2 = 0
 		self.vb.siegemaker = self.vb.siegemaker + 1
-		if not self.Options.SpecWarnej9571spell then
+		if not self.Options["SpecWarn-9571spell"] then
 			warnSiegemaker:Show(self.vb.siegemaker)
 		else
 			specWarnSiegemaker:Show(self.vb.siegemaker)

@@ -17,11 +17,11 @@ mod:RegisterEventsInCombat(
 --TODO, find target scanning for skullcracker. Also, find out how it behaves when it's more than 1 target (just recast?)
 --TODO, collect more data to figure out how roar starts/resumes on jump down. One pull/kill is not a sufficient sampling.
 local warnSkullcracker					= mod:NewSpellAnnounce(153470, 3, nil, false)--This seems pretty worthless.
-local warnJumpSlam						= mod:NewTargetCountAnnounce("ej9854", 3)--Find pretty icon
+local warnJumpSlam						= mod:NewTargetCountAnnounce(-9854, 3)--Find pretty icon
 
-local specWarnJumpSlam					= mod:NewSpecialWarningYou("ej9854", nil, nil, nil, 1, 2)
-local specWarnJumpSlamNear				= mod:NewSpecialWarningClose("ej9854", nil, nil, nil, 1, 2)
-local yellJumpSlam						= mod:NewYell("ej9854")
+local specWarnJumpSlam					= mod:NewSpecialWarningYou(-9854, nil, nil, nil, 1, 2)
+local specWarnJumpSlamNear				= mod:NewSpecialWarningClose(-9854, nil, nil, nil, 1, 2)
+local yellJumpSlam						= mod:NewYell(-9854)
 local specWarnDisruptingRoar			= mod:NewSpecialWarningCast(160838, "SpellCaster", nil, 2, nil, 2)
 --Move specWarnCripplingSupplex to a health check, warn when near 85, 55, or 25%
 local specWarnCripplingSupplex			= mod:NewSpecialWarningPreWarn(156938, "Tank|Healer", 3, nil, 3, 3)--pop a cooldown.
@@ -34,7 +34,7 @@ local timerDisruptingRoar				= mod:NewCastTimer(2.5, 160838, nil, "SpellCaster")
 local timerDisruptingRoarCD				= mod:NewCDTimer(45, 160838, nil, "SpellCaster")
 local timerSkullcrackerCD				= mod:NewCDTimer(22, 153470, nil, "Healer", nil, 5, nil, DBM_COMMON_L.HEALER_ICON)
 local timerCripplingSupplex				= mod:NewCastTimer(9.5, 156938, nil, "Tank|Healer", nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, 2, 4)
-local timerJumpSlamCD					= mod:NewNextTimer(34, "ej9854", nil, nil, nil, 3)
+local timerJumpSlamCD					= mod:NewNextTimer(34, -9854, nil, nil, nil, 3)
 mod:AddTimerLine(ENCOUNTER_JOURNAL_SECTION_FLAG12)
 local timerSmartStamperCD				= mod:NewNextTimer(12, 162124, nil, nil, nil, 6, nil, DBM_COMMON_L.HEROIC_ICON, nil, 1, 4)--Activation
 

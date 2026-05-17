@@ -36,7 +36,7 @@ local Garan = DBM:EJ_GetSectionInfo(10025)
 --(ability.id = 158078 or ability.id = 156626 or ability.id = 155794 or ability.id = 158008 or ability.id = 156109) and type = "begincast" or ability.id = 164271 and type = "cast" or ability.name = "Sabotage"
 --Ship
 local warnPhase2						= mod:NewPhaseAnnounce(2, 2, nil, nil, nil, nil, nil, 2)
-local warnShip							= mod:NewTargetAnnounce("ej10019", 3, 76204, nil, nil, nil, nil, 2)
+local warnShip							= mod:NewTargetAnnounce(-10019, 3, 76204, nil, nil, nil, nil, 2)
 local warnBombardmentAlpha				= mod:NewCountAnnounce(157854, 3)--From ship, but affects NON ship.
 ----Blackrock Deckhand
 local warnProtectiveEarth				= mod:NewSpellAnnounce(158707, 3, nil, false, 2)--Could not verify
@@ -58,7 +58,7 @@ local warnSanguineStrikes				= mod:NewTargetAnnounce(156601, 3, nil, "Healer")
 --Ship
 local specWarnBombardmentOmega			= mod:NewSpecialWarningCount(157886, nil, nil, nil, 3)--From ship, but affects NON ship.
 local specWarnReturnBase				= mod:NewSpecialWarning("specWarnReturnBase")
-local specWarnBoatEnded					= mod:NewSpecialWarningEnd("ej10019")
+local specWarnBoatEnded					= mod:NewSpecialWarningEnd(-10019)
 ----Blackrock Deckhand
 local specWarnEarthenbarrier			= mod:NewSpecialWarningInterrupt(158708, "-Healer", nil, 2, nil, 2)
 ----Shattered Hand Deckhand
@@ -92,7 +92,7 @@ local yellHeartseeker					= mod:NewYell(158010, nil, false)
 
 --Ship
 mod:AddTimerLine(Ship)
-local timerShipCD						= mod:NewNextCountTimer(198, "ej10019", nil, nil, nil, 6, 76204, nil, nil, 1, 5)
+local timerShipCD						= mod:NewNextCountTimer(198, -10019, nil, nil, nil, 6, 76204, nil, nil, 1, 5)
 local timerBombardmentAlphaCD			= mod:NewNextTimer(18, 157854, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON)
 local timerWarmingUp					= mod:NewCastTimer(90, 158849, nil, nil, nil, 6, nil, nil, nil, 1, 5)
 --Ground

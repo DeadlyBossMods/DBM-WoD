@@ -50,16 +50,16 @@ local specWarnFelChargeYou			= mod:NewSpecialWarningYou(182051, nil, nil, nil, 1
 local yellCharge					= mod:NewYell(182051)
 local specWarnFelCharge				= mod:NewSpecialWarningTarget(182051, "Melee", nil, nil, 2, 2)--Boss will often go through melee most of time, so they still need generic warning.
 local specWarnApocalypticFelburst	= mod:NewSpecialWarningCount(188693, nil, nil, nil, 2, 2)--Mythic
-local specWarnSoulstalker			= mod:NewSpecialWarningCount("ej11778", nil, nil, nil, 2, 2)
+local specWarnSoulstalker			= mod:NewSpecialWarningCount(-11778, nil, nil, nil, 2, 2)
 --Socrethar
 local specWarnExertDominance		= mod:NewSpecialWarningInterruptCount(183331, "HasInterrupt", nil, 2, 1, 2)
 local specWarnApocalypse			= mod:NewSpecialWarningSpell(183329, nil, nil, nil, 2, 2)
 --Adds
 local specWarnShadowWordAgony		= mod:NewSpecialWarningInterrupt(184239, false, nil, nil, 1, 2)
 local specWarnShadowBoltVolley		= mod:NewSpecialWarningInterrupt(182392, "HasInterrupt", nil, 2, 1, 2)
-local specWarnSouls					= mod:NewSpecialWarningCount("ej11462", nil, nil, nil, 1)
+local specWarnSouls					= mod:NewSpecialWarningCount(-11462, nil, nil, nil, 1)
 local specWarnGhastlyFixation		= mod:NewSpecialWarningYou(182769, nil, nil, nil, 1, 2)--You don't run out or kite. you position yourself so ghosts go through fire dropped by construct
-local specWarnSargereiDominator		= mod:NewSpecialWarningSwitchCount("ej11456", "-Healer", nil, nil, 3)
+local specWarnSargereiDominator		= mod:NewSpecialWarningSwitchCount(-11456, "-Healer", nil, nil, 3)
 local specWarnGiftoftheManari		= mod:NewSpecialWarningYou(184124, nil, nil, nil, 1, 2)
 local yellGiftoftheManari			= mod:NewYell(184124)
 local specWarnEternalHunger			= mod:NewSpecialWarningRun(188666, nil, nil, nil, 4, 2)--Mythic
@@ -76,11 +76,11 @@ local timerTransition				= mod:NewStageTimer(6.5)
 local timerExertDominanceCD			= mod:NewCDCountTimer(4.5, 183331, nil, "-Healer", nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
 local timerApocalypseCD				= mod:NewCDTimer(46, 183329, nil, nil, nil, 2)
 --Adds
-local timerSargereiDominatorCD		= mod:NewNextCountTimer(60, "ej11456", nil, nil, nil, 1, 184053)
-local timerHauntingSoulCD			= mod:NewCDCountTimer(29, "ej11462", nil, nil, nil, 1, 182769, nil, nil, 1, 5)
+local timerSargereiDominatorCD		= mod:NewNextCountTimer(60, -11456, nil, nil, nil, 1, 184053)
+local timerHauntingSoulCD			= mod:NewCDCountTimer(29, -11462, nil, nil, nil, 1, 182769, nil, nil, 1, 5)
 local timerGiftofManariCD			= mod:NewCDTimer(11, 184124, nil, nil, nil, 3)
 --Mythic
-local timerVoraciousSoulstalkerCD	= mod:NewCDCountTimer(59.5, "ej11778", 151869, nil, nil, 1, 190776, DBM_COMMON_L.HEROIC_ICON)
+local timerVoraciousSoulstalkerCD	= mod:NewCDCountTimer(59.5, -11778, 151869, nil, nil, 1, 190776, DBM_COMMON_L.HEROIC_ICON)
 
 --local berserkTimer				= mod:NewBerserkTimer(360)
 

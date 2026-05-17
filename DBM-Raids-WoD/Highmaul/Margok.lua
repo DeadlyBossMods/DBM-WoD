@@ -74,7 +74,7 @@ local yellBranded								= mod:NewYell(156225, L.BrandedYell)
 
 local specWarnBrandedDisplacementNear			= mod:NewSpecialWarningClose(164004)--Displacement version of branded makes player unable to move from raid, raid moves from player
 
-local specWarnAberration						= mod:NewSpecialWarningSwitchCount("ej9945", "-Healer", nil, nil, nil, 2)--can use short name for all of them
+local specWarnAberration						= mod:NewSpecialWarningSwitchCount(-9945, "-Healer", nil, nil, nil, 2)--can use short name for all of them
 
 local specWarnAcceleratedAssault				= mod:NewSpecialWarningCount(159515, nil, DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.stack:format(5, 159515), nil, nil, 2)
 local specWarnAcceleratedAssaultOther			= mod:NewSpecialWarningTaunt(159515, nil, nil, nil, nil, 2)
@@ -107,7 +107,7 @@ local timerMarkOfChaos							= mod:NewTargetTimer(8, 158605, nil, "Tank")
 local timerMarkOfChaosCD						= mod:NewCDTimer(50.5, 158605, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, 2, 5)
 local timerForceNovaCD							= mod:NewCDCountTimer(45, 157349, nil, nil, nil, 2, nil, nil, nil, 3, 4)--45-52
 local timerForceNovaFortification				= mod:NewNextTimer(9, 157349, nil, nil, nil, 2)--For repeating nova
-local timerSummonArcaneAberrationCD				= mod:NewCDCountTimer(45, "ej9945", nil, "-Healer", nil, 1, 156471, DBM_COMMON_L.DAMAGE_ICON)--45-52 Variation Noted
+local timerSummonArcaneAberrationCD				= mod:NewCDCountTimer(45, -9945, nil, "-Healer", nil, 1, 156471, DBM_COMMON_L.DAMAGE_ICON)--45-52 Variation Noted
 --Intermission: Lineage of Power
 mod:AddTimerLine(DBM_COMMON_L.INTERMISSION)
 local timerTransition							= mod:NewStageTimer(74, nil, nil, nil, nil, nil, nil, nil, nil, 1, 5)

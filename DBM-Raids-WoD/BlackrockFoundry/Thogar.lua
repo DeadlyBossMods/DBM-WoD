@@ -42,7 +42,7 @@ local specWarnIronbellow			= mod:NewSpecialWarningSpell(163753, nil, nil, nil, 2
 local specWarnDelayedSiegeBomb		= mod:NewSpecialWarningYou(159481, nil, nil, nil, nil, 2)
 local specWarnDelayedSiegeBombMove	= mod:NewSpecialWarningMove(159481)
 local yellDelayedSiegeBomb			= mod:NewCountYell(159481)
-local specWarnManOArms				= mod:NewSpecialWarningSwitch("ej9549", "-Healer")
+local specWarnManOArms				= mod:NewSpecialWarningSwitch(-9549, "-Healer")
 local specWarnBurning				= mod:NewSpecialWarningStack(164380, nil, 2)--Mythic
 
 --Operator Thogar
@@ -57,7 +57,7 @@ local timerDelayedSiegeBomb			= mod:NewNextCountTimer(6, 159481)
 local berserkTimer					= mod:NewBerserkTimer(492)
 
 mod:AddInfoFrameOption(176312)
-mod:AddSetIconOption("SetIconOnAdds", "ej9549", false, 5)
+mod:AddSetIconOption("SetIconOnAdds", -9549, false, 5)
 mod:AddDropdownOption("TrainVoiceAnnounce", {"LanesOnly", "MovementsOnly", "LanesandMovements"}, "LanesOnly", "misc", nil, 176312)
 mod:AddDropdownOption("InfoFrameSpeed", {"Immediately", "Delayed"}, "Delayed", "misc", nil, 176312)
 
