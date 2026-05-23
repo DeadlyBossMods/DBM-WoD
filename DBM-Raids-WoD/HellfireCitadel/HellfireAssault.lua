@@ -49,24 +49,24 @@ local warnFelfireTransporter		= mod:NewCountAnnounce(-11712, 4, 160240, nil, nil
 ----Things
 
 --Siegemaster Mar'tak
-local specWarnHowlingAxe			= mod:NewSpecialWarningMoveAway(184369, nil, nil, nil, 1, 2)
+local specWarnHowlingAxe			= mod:NewSpecialWarningMoveAway(184369, nil, nil, nil, 1, 2, nil, nil, "runout")
 local yellHowlingAxe				= mod:NewYell(184369)
-local specWarnShockwave				= mod:NewSpecialWarningDodge(184394, nil, nil, nil, 2, 2)
+local specWarnShockwave				= mod:NewSpecialWarningDodge(184394, nil, nil, nil, 2, 2, nil, nil, "shockwave")
 --Hellfire Reinforcements
 local specWarnReinforcements		= mod:NewSpecialWarningSwitch(-11406, false, nil, 2)--Generic warning for tanks to pick up new adds if they want to enable it
 ----Gorebound Berserker (tank add)
 
 --Some specail warnings for taunts or stacks or something here, probably.
 ----Gorebound Felcaster
-local specWarnIncinerate			= mod:NewSpecialWarningInterrupt(181155, false, nil, nil, 1, 2)--Seems less important of two spells
-local specWarnMetamorphosis			= mod:NewSpecialWarningSwitch(181968, "Dps", nil, nil, 1, 2)--Switch and get dead if they transform, they do TONS of damage transformed
-local specWarnFelfireVolley			= mod:NewSpecialWarningInterrupt(183452, "HasInterrupt", nil, 2, 1, 2)
+local specWarnIncinerate			= mod:NewSpecialWarningInterrupt(181155, false, nil, nil, 1, 2, nil, nil, "kickcast")--Seems less important of two spells
+local specWarnMetamorphosis			= mod:NewSpecialWarningSwitch(181968, "Dps", nil, nil, 1, 2, nil, nil, "killmob")--Switch and get dead if they transform, they do TONS of damage transformed
+local specWarnFelfireVolley			= mod:NewSpecialWarningInterrupt(183452, "HasInterrupt", nil, 2, 1, 2, nil, nil, "kickcast")
 ----Contracted Engineer
-local specWarnRepair				= mod:NewSpecialWarningInterrupt(185816, "-Healer", nil, nil, 1, 2)
+local specWarnRepair				= mod:NewSpecialWarningInterrupt(185816, "-Healer", nil, nil, 1, 2, nil, nil, "kickcast")
 ----Grute
-local specWarnCannon				= mod:NewSpecialWarningDodge(190748, nil, nil, nil, 1, 2)
+local specWarnCannon				= mod:NewSpecialWarningDodge(190748, nil, nil, nil, 1, 2, nil, nil, "targetyou")
 local yellCannon					= mod:NewYell(190748)
-local specWarnCannonNear			= mod:NewSpecialWarningClose(190748, nil, nil, nil, 1, 2)
+local specWarnCannonNear			= mod:NewSpecialWarningClose(190748, nil, nil, nil, 1, 2, nil, nil, "watchstep")
 
 --Felfire-Imbued Siege Vehicles
 local specWarnDemolisher			= mod:NewSpecialWarningSwitch(-11429, "Dps", nil, nil, 1, 12)--Heroic & Mythic only. Does massive aoe damage, has to be killed asap

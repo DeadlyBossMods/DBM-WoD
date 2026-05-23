@@ -16,7 +16,7 @@ mod:RegisterEventsInCombat(
 local warnWhirlingAxe		= mod:NewSpellAnnounce(180882, 3)
 local warnChainGrasp		= mod:NewTargetAnnounce(180880, 3)
 
-local specWarnChainGrasp	= mod:NewSpecialWarningYou(180880, nil, nil, nil, 1, 12)--Persists for 30 seconds or until you get 30 yards from boss, whichever first.
+local specWarnChainGrasp	= mod:NewSpecialWarningYou(180880, nil, nil, nil, 1, 12, nil, nil, "breakchain")--Persists for 30 seconds or until you get 30 yards from boss, whichever first.
 
 function mod:SPELL_CAST_START(args)
 	local spellId = args.spellId

@@ -24,16 +24,16 @@ local warnOpenWounds				= mod:NewStackAnnounce(159178, 2, nil, "Tank|Healer")
 local warnPillar					= mod:NewSpellAnnounce(-9394, 3, 159202, nil, nil, nil, nil, 2)
 local warnOnTheHunt					= mod:NewTargetAnnounce(162497, 4)
 
-local specWarnChainHurl				= mod:NewSpecialWarningSpell(159947, nil, nil, nil, nil, 12)
-local specWarnBerserkerRushOther	= mod:NewSpecialWarningTarget(158986, nil, nil, nil, 2, 2)
-local specWarnBerserkerRush			= mod:NewSpecialWarningMoveTo(158986, nil, DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.run:format(158986), nil, 3, 12)--Creative use of warning. Run option text but a moveto warning to get players in LFR to actually run to the flame jet instead of being clueless.
+local specWarnChainHurl				= mod:NewSpecialWarningSpell(159947, nil, nil, nil, nil, 12, nil, nil, "tossonyou")
+local specWarnBerserkerRushOther	= mod:NewSpecialWarningTarget(158986, nil, nil, nil, 2, 2, nil, nil, "chargemove")
+local specWarnBerserkerRush			= mod:NewSpecialWarningMoveTo(158986, nil, DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.run:format(158986), nil, 3, 12, nil, nil, "findflamejet")--Creative use of warning. Run option text but a moveto warning to get players in LFR to actually run to the flame jet instead of being clueless.
 local yellBerserkerRush				= mod:NewYell(158986)
-local specWarnImpale				= mod:NewSpecialWarningYou(159113)
+local specWarnImpale				= mod:NewSpecialWarningYou(159113, nil, nil, nil, nil, nil, nil, nil, "tankheal")
 local specWarnOpenWounds			= mod:NewSpecialWarningStack(159178, nil, 2)
 local specWarnOpenWoundsOther		= mod:NewSpecialWarningTaunt(159178)--If it is swap every impale, will move this to impale cast and remove stack stuff all together.
-local specWarnMaulingBrew			= mod:NewSpecialWarningMove(159413, nil, nil, nil, 1, 2)
-local specWarnFlameJet				= mod:NewSpecialWarningMove(159311, nil, nil, nil, 1, 2)
-local specWarnOnTheHunt				= mod:NewSpecialWarningMoveTo(162497, nil, DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.run:format(162497), nil, nil, 12)--Does not need yell, tigers don't cleave other targets like berserker rush does.
+local specWarnMaulingBrew			= mod:NewSpecialWarningMove(159413, nil, nil, nil, 1, 2, nil, nil, "watchfeet")
+local specWarnFlameJet				= mod:NewSpecialWarningMove(159311, nil, nil, nil, 1, 2, nil, nil, "watchfeet")
+local specWarnOnTheHunt				= mod:NewSpecialWarningMoveTo(162497, nil, DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.run:format(162497), nil, nil, 12, nil, nil, "findflamejet")--Does not need yell, tigers don't cleave other targets like berserker rush does.
 
 local timerPillarCD					= mod:NewNextTimer(20, -9394, nil, nil, nil, nil, 159202)
 local timerChainHurlCD				= mod:NewNextTimer(106, 159947, nil, nil, nil, 6, nil, nil, nil, 1, 5)--177776

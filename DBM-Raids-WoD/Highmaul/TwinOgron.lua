@@ -26,17 +26,17 @@ local warnArcaneVolatility			= mod:NewTargetAnnounce(163372, 4)--Mythic
 local warnPulverize					= mod:NewCountAnnounce(158385, 3)--158385 is primary activation with SPELL_CAST_SUCCESS, cast at start, followed by 3 channeled IDs using SPELL_CAST_START
 
 --Phemos
-local specWarnEnfeeblingRoar		= mod:NewSpecialWarningCount(158057, nil, nil, nil, nil, 12)
-local specWarnWhirlWind				= mod:NewSpecialWarningCount(157943, nil, nil, nil, 2, 2)
-local specWarnQuake					= mod:NewSpecialWarningCount(158200, nil, nil, nil, 2, 12)
-local specWarnBlaze					= mod:NewSpecialWarningMove(158241, nil, nil, nil, nil, 2)
-local specWarnArcaneVolatility		= mod:NewSpecialWarningMoveAway(163372, nil, nil, nil, nil, 2)--Mythic
+local specWarnEnfeeblingRoar		= mod:NewSpecialWarningCount(158057, nil, nil, nil, nil, 12, nil, nil, "enfeeblingroar")
+local specWarnWhirlWind				= mod:NewSpecialWarningCount(157943, nil, nil, nil, 2, 2, nil, nil, "whirlwind")
+local specWarnQuake					= mod:NewSpecialWarningCount(158200, nil, nil, nil, 2, 12, nil, nil, "quake")
+local specWarnBlaze					= mod:NewSpecialWarningMove(158241, nil, nil, nil, nil, 2, nil, nil, "runaway")
+local specWarnArcaneVolatility		= mod:NewSpecialWarningMoveAway(163372, nil, nil, nil, nil, 2, nil, nil, "runout")--Mythic
 local yellArcaneVolatility			= mod:NewYell(163372)--Mythic
 --Pol
-local specWarnShieldCharge			= mod:NewSpecialWarningSpell(158134, nil, nil, nil, 2, 2)
-local specWarnInterruptingShout		= mod:NewSpecialWarningCast(158093, "SpellCaster", nil, 2, 2, 2)
-local specWarnPulverize				= mod:NewSpecialWarningSpell(158385, nil, nil, nil, 2, 2)
-local specWarnArcaneCharge			= mod:NewSpecialWarningSpell(163336, nil, nil, nil, 2, 2)
+local specWarnShieldCharge			= mod:NewSpecialWarningSpell(158134, nil, nil, nil, 2, 2, nil, nil, "chargemove")
+local specWarnInterruptingShout		= mod:NewSpecialWarningCast(158093, "SpellCaster", nil, 2, 2, 2, nil, nil, "stopcast")
+local specWarnPulverize				= mod:NewSpecialWarningSpell(158385, nil, nil, nil, 2, 2, nil, nil, "scatter")
+local specWarnArcaneCharge			= mod:NewSpecialWarningSpell(163336, nil, nil, nil, 2, 2, nil, nil, "chargemove")
 
 --Phemos (100-106 second full rotation, 33-34 in between)
 mod:AddTimerLine((DBM:EJ_GetSectionInfo(9590)))

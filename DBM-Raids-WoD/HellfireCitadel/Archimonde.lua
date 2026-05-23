@@ -50,51 +50,51 @@ local warnMarkOfLegion				= mod:NewTargetCountAnnounce(187050, 4)
 local warnDarkConduit				= mod:NewCountAnnounce(190394, 2, nil, "Ranged", nil, nil, nil, 2)
 
 --Phase 1: The Defiler
-local specWarnDoomfire				= mod:NewSpecialWarningSwitch(189897, "Dps", nil, nil, 1, 12)
+local specWarnDoomfire				= mod:NewSpecialWarningSwitch(189897, "Dps", nil, nil, 1, 12, nil, nil, "attackdoomfire")
 local specWarnDoomfireFixate		= mod:NewSpecialWarningYou(182879, nil, nil, nil, 4)
 local yellDoomfireFixate			= mod:NewYell(182826)--Use short name for yell
-local specWarnAllureofFlames		= mod:NewSpecialWarningDodge(183254, nil, nil, nil, 2, 2)
-local specWarnDeathCaller			= mod:NewSpecialWarningSwitchCount(-11582, "Dps", nil, nil, 1, 12)--Tanks don't need switch, they have death brand special warning 2 seconds earlier
+local specWarnAllureofFlames		= mod:NewSpecialWarningDodge(183254, nil, nil, nil, 2, 2, nil, nil, "watchstep")
+local specWarnDeathCaller			= mod:NewSpecialWarningSwitchCount(-11582, "Dps", nil, nil, 1, 12, nil, nil, "attackdeathcaller")--Tanks don't need switch, they have death brand special warning 2 seconds earlier
 local specWarnFelBurst				= mod:NewSpecialWarningYou(183817)
 local yellFelBurst					= mod:NewPosYell(183817)
 local specWarnFelBurstNear			= mod:NewSpecialWarningMoveTo(183817, nil, nil, nil, 1, 2)--Anyone near by should run in to help soak, should be mostly ranged but if it's close to melee, melee soaking too doesn't hurt
-local specWarnDesecrate				= mod:NewSpecialWarningDodge(185590, "Melee", nil, nil, 1, 2)
-local specWarnDeathBrand			= mod:NewSpecialWarningCount(183828, "Tank", nil, 2, 1, 2)
+local specWarnDesecrate				= mod:NewSpecialWarningDodge(185590, "Melee", nil, nil, 1, 2, nil, nil, "watchstep")
+local specWarnDeathBrand			= mod:NewSpecialWarningCount(183828, "Tank", nil, 2, 1, 2, nil, nil, "tauntboss")
 --Phase 2: Hand of the Legion
-local specWarnBreakShackle			= mod:NewSpecialWarning("specWarnBreakShackle", nil, nil, nil, 1, 12)
+local specWarnBreakShackle			= mod:NewSpecialWarning("specWarnBreakShackle", nil, nil, nil, 1, 12, nil, nil, nil, nil, "breaktormentsecond")
 local yellShackledTorment			= mod:NewPosYell(184964)
-local specWarnWroughtChaos			= mod:NewSpecialWarningYou(186123, nil, nil, nil, 3, 12)
+local specWarnWroughtChaos			= mod:NewSpecialWarningYou(186123, nil, nil, nil, 3, 12, nil, nil, "wroughtchaosyou")
 local yellWroughtChaos				= mod:NewYell(186123)
-local specWarnFocusedChaos			= mod:NewSpecialWarningYou(185014, nil, nil, nil, 3, 12)
+local specWarnFocusedChaos			= mod:NewSpecialWarningYou(185014, nil, nil, nil, 3, 12, nil, nil, "focusedchaosyou")
 local yellFocusedChaos				= mod:NewFadesYell(185014)
 local specWarnDreadFixate			= mod:NewSpecialWarningYou(186574, false)--In case it matters on mythic, it was spammy on heroic and unimportant
-local specWarnFlamesOfArgus			= mod:NewSpecialWarningInterrupt(186663, "HasInterrupt", nil, 2, 1, 2)
+local specWarnFlamesOfArgus			= mod:NewSpecialWarningInterrupt(186663, "HasInterrupt", nil, 2, 1, 2, nil, nil, "kickcast")
 --Phase 3: The Twisting Nether
-local specWarnDemonicFeedbackSoon	= mod:NewSpecialWarningSoon(187180, nil, nil, nil, 1, 2)
-local specWarnDemonicFeedback		= mod:NewSpecialWarningCount(187180, nil, nil, nil, 3, 2)
-local specWarnNetherBanish			= mod:NewSpecialWarningYou(186961, nil, nil, nil, 1, 5)
+local specWarnDemonicFeedbackSoon	= mod:NewSpecialWarningSoon(187180, nil, nil, nil, 1, 2, nil, nil, "scattersoon")
+local specWarnDemonicFeedback		= mod:NewSpecialWarningCount(187180, nil, nil, nil, 3, 2, nil, nil, "scatter")
+local specWarnNetherBanish			= mod:NewSpecialWarningYou(186961, nil, nil, nil, 1, 5, nil, nil, "telesoon")
 local specWarnNetherBanishOther		= mod:NewSpecialWarningTargetCount(186961, nil, nil, nil, 1, 5)
 local yellNetherBanish				= mod:NewFadesYell(186961)
 ----The Nether
-local specWarnTouchofShadows		= mod:NewSpecialWarningInterruptCount(190050, nil, nil, nil, 1, 5)
-local specWarnVoidStarFixate		= mod:NewSpecialWarningYou(189895, nil, nil, nil, 1, 5)
+local specWarnTouchofShadows		= mod:NewSpecialWarningInterruptCount(190050, nil, nil, nil, 1, 5, nil, nil, "kick2r")
+local specWarnVoidStarFixate		= mod:NewSpecialWarningYou(189895, nil, nil, nil, 1, 5, nil, nil, "orbrun")
 local yellVoidStarFixate			= mod:NewYell(189895, nil, false)
-local specWarnNetherStorm			= mod:NewSpecialWarningMove(187255, nil, nil, nil, 1, 2)
+local specWarnNetherStorm			= mod:NewSpecialWarningMove(187255, nil, nil, nil, 1, 2, nil, nil, "runaway")
 --Phase 3.5
-local specWarnRainofChaos			= mod:NewSpecialWarningCount(189953, nil, nil, nil, 2, 2)
+local specWarnRainofChaos			= mod:NewSpecialWarningCount(189953, nil, nil, nil, 2, 2, nil, nil, "killmob")
 --Mythic
-local specWarnDarkConduitSoon		= mod:NewSpecialWarningSoon(190394, "Ranged", nil, nil, 1, 2)
-local specWarnSeethingCorruption	= mod:NewSpecialWarningCount(190506, nil, nil, nil, 2, 2)
-local specWarnMarkOfLegion			= mod:NewSpecialWarningYouPos(187050, nil, nil, 2, 3, 5)
-local specWarnMarkOfLegionSoak		= mod:NewSpecialWarningSoakPos(187050, nil, nil, 2, 1, 6)
+local specWarnDarkConduitSoon		= mod:NewSpecialWarningSoon(190394, "Ranged", nil, nil, 1, 2, nil, nil, "scatter")
+local specWarnSeethingCorruption	= mod:NewSpecialWarningCount(190506, nil, nil, nil, 2, 2, nil, nil, "watchstep")
+local specWarnMarkOfLegion			= mod:NewSpecialWarningYouPos(187050, nil, nil, 2, 3, 5, nil, nil, "mm")
+local specWarnMarkOfLegionSoak		= mod:NewSpecialWarningSoakPos(187050, nil, nil, 2, 1, 6, nil, nil, "frontright")
 local yellDoomFireFades				= mod:NewFadesYell(183586, nil, false)
 local yellMarkOfLegion				= mod:NewFadesYell(187050, 28836)
 local yellMarkOfLegionPoS			= mod:NewPosYell(187050, 28836)
-local specWarnSourceofChaosYou		= mod:NewSpecialWarningYou(190703, nil, nil, nil, 2, 2)
+local specWarnSourceofChaosYou		= mod:NewSpecialWarningYou(190703, nil, nil, nil, 2, 2, nil, nil, "targetyou")
 local yellSourceofChaos				= mod:NewYell(190703)
-local specWarnSourceofChaos			= mod:NewSpecialWarningSwitchCount(190703, "Dps", nil, nil, 2, 2)--Maybe exclude ranged or healers. Not sure if just dps is enough to soak it, at very least dps have to kill it
-local specWarnInfernals				= mod:NewSpecialWarningSwitchCount(187111, "-Healer", nil, nil, 2, 2)--Tanks should probably help pick these up and spread them
-local specWarnTwistedDarkness		= mod:NewSpecialWarningSwitchCount(190821, "RangedDps", nil, nil, 2, 2)
+local specWarnSourceofChaos			= mod:NewSpecialWarningSwitchCount(190703, "Dps", nil, nil, 2, 2, nil, nil, "killmob")--Maybe exclude ranged or healers. Not sure if just dps is enough to soak it, at very least dps have to kill it
+local specWarnInfernals				= mod:NewSpecialWarningSwitchCount(187111, "-Healer", nil, nil, 2, 2, nil, nil, "killmob")--Tanks should probably help pick these up and spread them
+local specWarnTwistedDarkness		= mod:NewSpecialWarningSwitchCount(190821, "RangedDps", nil, nil, 2, 2, nil, nil, "killmob")
 
 --Phase 1: The Defiler
 mod:AddTimerLine(SCENARIO_STAGE:format(1))

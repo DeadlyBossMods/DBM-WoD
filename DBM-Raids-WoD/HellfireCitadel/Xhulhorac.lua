@@ -45,29 +45,29 @@ local warnOverwhelmingChaos			= mod:NewCountAnnounce(187204, 4)
 
 --Fight Wide
 local specWarnFelTouched			= mod:NewSpecialWarningYou(186134, false)
-local specWarnFelsinged				= mod:NewSpecialWarningMove(186073, nil, nil, nil, 1, 2)--Fire GTFO
+local specWarnFelsinged				= mod:NewSpecialWarningMove(186073, nil, nil, nil, 1, 2, nil, nil, "runaway")--Fire GTFO
 local specWarnVoidTouched			= mod:NewSpecialWarningYou(186135, false)
-local specWarnWastingVoid			= mod:NewSpecialWarningMove(186063, nil, nil, nil, 1, 2)--Void GTFO
-local specWarnPhasing				= mod:NewSpecialWarningTaunt(189047, nil, nil, nil, 1, 2)--May need smarter code.
+local specWarnWastingVoid			= mod:NewSpecialWarningMove(186063, nil, nil, nil, 1, 2, nil, nil, "runaway")--Void GTFO
+local specWarnPhasing				= mod:NewSpecialWarningTaunt(189047, nil, nil, nil, 1, 2, nil, nil, "changemt")--May need smarter code.
 --Fire Phase
 ----Boss
 local specWarnFelStrike				= mod:NewSpecialWarningSpell(186271, "Tank")
-local specWarnFelSurge				= mod:NewSpecialWarningYou(186407, nil, nil, nil, 1, 2)
+local specWarnFelSurge				= mod:NewSpecialWarningYou(186407, nil, nil, nil, 1, 2, nil, nil, "runout")
 local yellFelSurge					= mod:NewYell(186407)
 local specWarnImps					= mod:NewSpecialWarningSwitchCount(-11694, "Dps")
 ----Adds
-local specWarnFelBlazeFlurry		= mod:NewSpecialWarningDefensive(186453, "Tank", nil, nil, 3, 2)
+local specWarnFelBlazeFlurry		= mod:NewSpecialWarningDefensive(186453, "Tank", nil, nil, 3, 2, nil, nil, "defensive")
 local specWarnFelChains				= mod:NewSpecialWarningYou(186490)
 local specWarnEmpoweredFelChains	= mod:NewSpecialWarningYou(189775)
 local yellFelChains					= mod:NewYell(186490)
 --Void Phase
 ----Boss
 local specWarnVoidStrike			= mod:NewSpecialWarningSpell(186292, "Tank")
-local specWarnVoidSurge				= mod:NewSpecialWarningYou(186333, nil, nil, nil, 1, 12)
+local specWarnVoidSurge				= mod:NewSpecialWarningYou(186333, nil, nil, nil, 1, 12, nil, nil, "runintofire")
 local yellVoidSurge					= mod:NewYell(186333)
 local specWarnVoids					= mod:NewSpecialWarningCount(-11714, "Ranged")
 ----Adds
-local specWarnWitheringGaze			= mod:NewSpecialWarningDefensive(186783, "Tank", nil, nil, 1, 2)
+local specWarnWitheringGaze			= mod:NewSpecialWarningDefensive(186783, "Tank", nil, nil, 1, 2, nil, nil, "defensive")
 local specWarnBlackHole				= mod:NewSpecialWarningCount(186546, nil, nil, nil, 2)
 local specWarnEmpBlackHole			= mod:NewSpecialWarningCount(189779, nil, nil, nil, 2)--Mythic
 

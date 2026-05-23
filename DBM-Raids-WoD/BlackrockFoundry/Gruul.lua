@@ -27,12 +27,12 @@ local warnCrumblingRoar				= mod:NewSpellAnnounce(155730, 3, nil, false)--Cave i
 local warnInfernoSlice				= mod:NewCountAnnounce(155080, 4)
 local warnPetrifyingSlam			= mod:NewTargetAnnounce(155326, 4)--non mythic only. in mythic, applied to all, so target list only spam
 
-local specWarnInfernoSlice			= mod:NewSpecialWarningTarget(155080, "Tank|Healer", DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.count:format(155080), nil, nil, 2)
-local specWarnRampage				= mod:NewSpecialWarningSpell(155539, nil, nil, nil, 2, 2)
-local specWarnRampageEnded			= mod:NewSpecialWarningEnd(155539, nil, nil, nil, 2, 2)
-local specWarnOverheadSmash			= mod:NewSpecialWarningCount(155301, nil, nil, nil, 2, 2)
-local specWarnCaveIn				= mod:NewSpecialWarningMove(173192, nil, nil, nil, 1, 2)
-local specWarnPetrifyingSlam		= mod:NewSpecialWarningMoveAway(155326, nil, nil, nil, 3, 2)
+local specWarnInfernoSlice			= mod:NewSpecialWarningTarget(155080, "Tank|Healer", DBM_CORE_L.AUTO_SPEC_WARN_OPTIONS.count:format(155080), nil, nil, 2, nil, nil, "gathershare")
+local specWarnRampage				= mod:NewSpecialWarningSpell(155539, nil, nil, nil, 2, 2, nil, nil, "phasechange")
+local specWarnRampageEnded			= mod:NewSpecialWarningEnd(155539, nil, nil, nil, 2, 2, nil, nil, "phasechange")
+local specWarnOverheadSmash			= mod:NewSpecialWarningCount(155301, nil, nil, nil, 2, 2, nil, nil, "shockwave")
+local specWarnCaveIn				= mod:NewSpecialWarningMove(173192, nil, nil, nil, 1, 2, nil, nil, "runaway")
+local specWarnPetrifyingSlam		= mod:NewSpecialWarningMoveAway(155326, nil, nil, nil, 3, 2, nil, nil, "scatter")
 
 local timerInfernoSliceCD			= mod:NewCDCountTimer(11, 155080, nil, nil, nil, 5, nil, nil, nil, 1, 3)--Variable do to energy bugs (gruul not gain power consistently)
 local timerSpecialCD				= mod:NewCDSpecialTimer(20.5)

@@ -43,29 +43,29 @@ local warnFelConduit					= mod:NewCastAnnounce(181827, 3, nil, nil, "-Healer")
 
 --Boss
 local specWarnEyeofAnzu					= mod:NewSpecialWarningYou(179202)
-local specWarnThrowAnzu					= mod:NewSpecialWarning("specWarnThrowAnzu", nil, nil, nil, 1, 12)
-local specWarnFocusedBlast				= mod:NewSpecialWarningCount(181912, nil, nil, nil, 2, 2)
-local specWarnPhantasmalWinds			= mod:NewSpecialWarningYou(181957, nil, nil, nil, 3, 2)
-local specWarnFelChakram				= mod:NewSpecialWarningMoveAway(182178, nil, nil, nil, 1, 2)
+local specWarnThrowAnzu					= mod:NewSpecialWarning("specWarnThrowAnzu", nil, nil, nil, 1, 12, nil, nil, nil, nil, "throweyehealer")
+local specWarnFocusedBlast				= mod:NewSpecialWarningCount(181912, nil, nil, nil, 2, 2, nil, nil, "gathershare")
+local specWarnPhantasmalWinds			= mod:NewSpecialWarningYou(181957, nil, nil, nil, 3, 2, nil, nil, "keepmove")
+local specWarnFelChakram				= mod:NewSpecialWarningMoveAway(182178, nil, nil, nil, 1, 2, nil, nil, "runout")
 local yellFelChakram					= mod:NewYell(182178)
-local specWarnFelChakramTank			= mod:NewSpecialWarningTaunt(182178, nil, nil, nil, 1, 2)
+local specWarnFelChakramTank			= mod:NewSpecialWarningTaunt(182178, nil, nil, nil, 1, 2, nil, nil, "tauntboss")
 local yellPhantasmalWinds				= mod:NewYell(181957)--So person with eye can see where the targets are faster
 local specWarnPhantasmalWounds			= mod:NewSpecialWarningYou(182325, false)
 local yellPhantasmalWounds				= mod:NewYell(182325, nil, false)--Can't see much reason to have THIS one on by default, but offered as an option.
-local specWarnFelLaser					= mod:NewSpecialWarningMoveAway(182582, nil, nil, nil, 1, 2)
-local specWarnFelLaserGTFO				= mod:NewSpecialWarningMove(182600, nil, nil, nil, 1, 2)
+local specWarnFelLaser					= mod:NewSpecialWarningMoveAway(182582, nil, nil, nil, 1, 2, nil, nil, "runout")
+local specWarnFelLaserGTFO				= mod:NewSpecialWarningMove(182600, nil, nil, nil, 1, 2, nil, nil, "runaway")
 local yellFelLaser						= mod:NewYell(182582)
 local specWarnShadowRiposte				= mod:NewSpecialWarningSpell(185345, nil, nil, nil, 3)--Has eye of anzu, they need to know this badly.
 --Adds
-local specWarnPhantasmalCorruption		= mod:NewSpecialWarningYou(181824, nil, nil, nil, 1, 2)--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
+local specWarnPhantasmalCorruption		= mod:NewSpecialWarningYou(181824, nil, nil, nil, 1, 2, nil, nil, "targetyou")--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
 local yellPhantasmalCorruption			= mod:NewYell(181824)--For eye of anzu holder. Explosion shouldn't happen.
 local specWarnPhantasmalFelBomb			= mod:NewSpecialWarningYou(179219, nil, nil, nil, 1, 2)--Not move away on purpose, correct way to handle is get eye of anzu to real fel bomb
 local yellPhantasmalFelBomb				= mod:NewYell(179219, nil, false)--Fake bombs off by default, they will never explode and eye of anzu holder will get distracted
-local specWarnFelBomb					= mod:NewSpecialWarningYou(181753, nil, nil, nil, 1, 2)--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
+local specWarnFelBomb					= mod:NewSpecialWarningYou(181753, nil, nil, nil, 1, 2, nil, nil, "targetyou")--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
 local yellFelBomb						= mod:NewYell(181753)--Yell for real fel bomb on by default only
-local specWarnFelBombDispel				= mod:NewSpecialWarningDispel(181753, nil, nil, nil, 1, 2)--Doesn't need option default, it's filtered by anzu check
-local specWarnDarkBindings				= mod:NewSpecialWarningYou(185510, nil, nil, nil, 1, 2)--Mythic
-local specWarnFelConduit				= mod:NewSpecialWarningInterrupt(181827, nil, nil, nil, 1, 2)--On for everyone, filtered by eye of anzu, if this person can't interrupt, then they better pass it to someone who can
+local specWarnFelBombDispel				= mod:NewSpecialWarningDispel(181753, nil, nil, nil, 1, 2, nil, nil, "dispelnow")--Doesn't need option default, it's filtered by anzu check
+local specWarnDarkBindings				= mod:NewSpecialWarningYou(185510, nil, nil, nil, 1, 2, nil, nil, "scatter")--Mythic
+local specWarnFelConduit				= mod:NewSpecialWarningInterrupt(181827, nil, nil, nil, 1, 2, nil, nil, "kickcast")--On for everyone, filtered by eye of anzu, if this person can't interrupt, then they better pass it to someone who can
 
 local timerFelLaserCD					= mod:NewCDTimer(16, 182582, nil, nil, nil, 3)--16-22. Never pauses, used all phases
 local timerChakramCD					= mod:NewCDTimer(33, 182178, nil, nil, nil, 3)

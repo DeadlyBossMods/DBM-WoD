@@ -19,11 +19,11 @@ mod:RegisterEventsInCombat(
 local warnUnleashedEnergy		= mod:NewTargetAnnounce(180908, 4)
 local warnWildPolymorph			= mod:NewTargetAnnounce(180815, 2)
 
-local specWarnUnleashedEnergy	= mod:NewSpecialWarningMoveAway(180908, nil, nil, nil, 1, 2)
+local specWarnUnleashedEnergy	= mod:NewSpecialWarningMoveAway(180908, nil, nil, nil, 1, 2, nil, nil, "runout")
 local yellUnleashedEnergy		= mod:NewYell(180908)
-local specWarnArcaneOrb			= mod:NewSpecialWarningSpell(180819, nil, nil, nil, 2, 5)
-local specWarnArcaneSurge		= mod:NewSpecialWarningInterrupt(180816, false, nil, nil, 1, 2)
-local specWarnArcaneSurgeDispel	= mod:NewSpecialWarningDispel(180816, "MagicDispeller", nil, nil, 1, 2)
+local specWarnArcaneOrb			= mod:NewSpecialWarningSpell(180819, nil, nil, nil, 2, 5, nil, nil, "watchorb")
+local specWarnArcaneSurge		= mod:NewSpecialWarningInterrupt(180816, false, nil, nil, 1, 2, nil, nil, "kickcast")
+local specWarnArcaneSurgeDispel	= mod:NewSpecialWarningDispel(180816, "MagicDispeller", nil, nil, 1, 2, nil, nil, "dispelboss")
 
 
 mod.vb.debuffCount = 0

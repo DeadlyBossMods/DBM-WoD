@@ -27,14 +27,14 @@ local warnRetchedBlackrock			= mod:NewTargetAnnounce(156179, 3, nil, "Ranged", 2
 local warnCollectOre				= mod:NewCountAnnounce(165184, 2)
 local warnRollingFury				= mod:NewCountAnnounce(155898, 3, nil, false)
 
-local specWarnBlackrockBarrage		= mod:NewSpecialWarningInterruptCount(156877, false, nil, nil, nil, 3)--Off by default since only interruptors want this on for their duty
-local specWarnAcidTorrent			= mod:NewSpecialWarningCount(156240, "Tank", nil, nil, 3, 2)--No voice filter, because voice is for tank swap that comes AFTER breath, this warning is to alert tank they need to move into position to soak breath, NOT taunt
+local specWarnBlackrockBarrage		= mod:NewSpecialWarningInterruptCount(156877, false, nil, nil, nil, 3, nil, nil, "kick2r")--Off by default since only interruptors want this on for their duty
+local specWarnAcidTorrent			= mod:NewSpecialWarningCount(156240, "Tank", nil, nil, 3, 2, nil, nil, "defensive")--No voice filter, because voice is for tank swap that comes AFTER breath, this warning is to alert tank they need to move into position to soak breath, NOT taunt
 local yellRetchedBlackrock			= mod:NewYell(156179)
 local specWarnRetchedBlackrockNear	= mod:NewSpecialWarningClose(156179)
-local specWarnRetchedBlackrock		= mod:NewSpecialWarningMove(156203, nil, nil, nil, nil, 2)
+local specWarnRetchedBlackrock		= mod:NewSpecialWarningMove(156203, nil, nil, nil, nil, 2, nil, nil, "runaway")
 local specWarnExplosiveShard		= mod:NewSpecialWarningDodge(156390, "MeleeDps", nil, 3)--No target scanning available. targets ONLY melee (except tanks)
-local specWarnHungerDrive			= mod:NewSpecialWarningSpell(-9964, nil, nil, nil, 2, 2)
-local specWarnHungerDriveEnded		= mod:NewSpecialWarningFades(-9964, nil, nil, nil, 1, 2)
+local specWarnHungerDrive			= mod:NewSpecialWarningSpell(-9964, nil, nil, nil, 2, 2, nil, nil, "phasechange")
+local specWarnHungerDriveEnded		= mod:NewSpecialWarningFades(-9964, nil, nil, nil, 1, 2, nil, nil, "phasechange")
 
 local timerBlackrockSpinesCD		= mod:NewCDTimer(18.5, 156834, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)--20-23 (cd for barrages themselves too inconsistent and useless. but CD for when he recharges his spines, quite consistent)
 local timerAcidTorrentCD			= mod:NewCDCountTimer(13, 156240, nil, "Tank|Healer", 2, 5, nil, DBM_COMMON_L.TANK_ICON, nil, 2, 4)

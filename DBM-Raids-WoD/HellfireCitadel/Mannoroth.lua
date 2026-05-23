@@ -47,28 +47,28 @@ local warnFelseeker					= mod:NewCountAnnounce(181735, 3)
 
 --Adds
 ----Doom Lords
-local specWarnCurseofLegion			= mod:NewSpecialWarningYou(181275, nil, nil, nil, 1, 2)
+local specWarnCurseofLegion			= mod:NewSpecialWarningYou(181275, nil, nil, nil, 1, 2, nil, nil, "targetyou")
 local yellCurseofLegion				= mod:NewFadesYell(181275)--Don't need to know when it's applied, only when it's fading does it do aoe/add spawn
-local specWarnMarkOfDoom			= mod:NewSpecialWarningYou(181099, nil, nil, nil, 1, 2)
+local specWarnMarkOfDoom			= mod:NewSpecialWarningYou(181099, nil, nil, nil, 1, 2, nil, nil, "runout")
 local yellMarkOfDoom				= mod:NewPosYell(181099, 31348)-- This need to know at apply, only player needs to know when it's fading
-local specWarnShadowBoltVolley		= mod:NewSpecialWarningInterrupt(181126, "HasInterrupt", nil, 2, 1, 2)
+local specWarnShadowBoltVolley		= mod:NewSpecialWarningInterrupt(181126, "HasInterrupt", nil, 2, 1, 2, nil, nil, "kickcast")
 local specWarnDoomSpikeOther		= mod:NewSpecialWarningTaunt(181119, false, nil, 2, 1, 2)--Optional, most guilds 3 tank and don't swap for this so off by default
 ----Fel Imps
-local specWarnFelBlast				= mod:NewSpecialWarningInterrupt(181132, false, nil, 2, 1, 2)--Can be spammy, but someone may want it
+local specWarnFelBlast				= mod:NewSpecialWarningInterrupt(181132, false, nil, 2, 1, 2, nil, nil, "kickcast")--Can be spammy, but someone may want it
 ----Dread Infernals
-local specWarnFelHellfire			= mod:NewSpecialWarningDodge(181191, nil, nil, 3, 1, 2)
+local specWarnFelHellfire			= mod:NewSpecialWarningDodge(181191, nil, nil, 3, 1, 2, nil, nil, "runaway")
 ----Gul'dan
-local specWarnWrathofGuldan			= mod:NewSpecialWarningYou(186362, nil, nil, nil, 1, 5)
+local specWarnWrathofGuldan			= mod:NewSpecialWarningYou(186362, nil, nil, nil, 1, 5, nil, nil, "mm")
 local yellWrathofGuldan				= mod:NewPosYell(186362, 169826)
-local specWarnFelPillar				= mod:NewSpecialWarningDodge(190070, nil, nil, 3, 1, 2)
+local specWarnFelPillar				= mod:NewSpecialWarningDodge(190070, nil, nil, 3, 1, 2, nil, nil, "runaway")
 --Mannoroth
-local specWarnGlaiveCombo			= mod:NewSpecialWarningDefensive(181354, "Tank", nil, nil, 3, 2)--Active mitigation or die mechanic
+local specWarnGlaiveCombo			= mod:NewSpecialWarningDefensive(181354, "Tank", nil, nil, 3, 2, nil, nil, "defensive")--Active mitigation or die mechanic
 local specWarnMassiveBlastOther		= mod:NewSpecialWarningTaunt(181359, nil, nil, nil, 1, 2)
-local specWarnFelHellStorm			= mod:NewSpecialWarningSpell(181557, nil, nil, nil, 2, 2)
-local specWarnGaze					= mod:NewSpecialWarningYou(181597, nil, nil, nil, 1, 2)
+local specWarnFelHellStorm			= mod:NewSpecialWarningSpell(181557, nil, nil, nil, 2, 2, nil, nil, "watchstep")
+local specWarnGaze					= mod:NewSpecialWarningYou(181597, nil, nil, nil, 1, 2, nil, nil, "targetyou")
 local yellGaze						= mod:NewPosYell(181597, 134029)
-local specWarnFelSeeker				= mod:NewSpecialWarningDodge(181735, nil, nil, nil, 2, 2)
-local specWarnShadowForce			= mod:NewSpecialWarningSpell(181799, nil, nil, nil, 3, 2)
+local specWarnFelSeeker				= mod:NewSpecialWarningDodge(181735, nil, nil, nil, 2, 2, nil, nil, "watchstep")
+local specWarnShadowForce			= mod:NewSpecialWarningSpell(181799, nil, nil, nil, 3, 2, nil, nil, "keepmove")
 
 --Adds
 mod:AddTimerLine(OTHER)

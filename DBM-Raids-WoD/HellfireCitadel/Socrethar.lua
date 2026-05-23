@@ -43,26 +43,26 @@ local warnEternalHunger				= mod:NewTargetAnnounce(188666, 3)--Mythic
 
 --Soulbound Construct
 local specWarnReverberatingBlow		= mod:NewSpecialWarningCount(180008, "Tank", nil, nil, 1)
-local specWarnFelPrison				= mod:NewSpecialWarningDodge(181288, nil, nil, nil, 2, 2)
-local specWarnVolatileFelOrb		= mod:NewSpecialWarningRun(180221, nil, nil, nil, 4, 2)
+local specWarnFelPrison				= mod:NewSpecialWarningDodge(181288, nil, nil, nil, 2, 2, nil, nil, "watchstep")
+local specWarnVolatileFelOrb		= mod:NewSpecialWarningRun(180221, nil, nil, nil, 4, 2, nil, nil, "runout")
 local yellVolatileFelOrb			= mod:NewYell(180221)
-local specWarnFelChargeYou			= mod:NewSpecialWarningYou(182051, nil, nil, nil, 1, 2)
+local specWarnFelChargeYou			= mod:NewSpecialWarningYou(182051, nil, nil, nil, 1, 2, nil, nil, "runout")
 local yellCharge					= mod:NewYell(182051)
-local specWarnFelCharge				= mod:NewSpecialWarningTarget(182051, "Melee", nil, nil, 2, 2)--Boss will often go through melee most of time, so they still need generic warning.
-local specWarnApocalypticFelburst	= mod:NewSpecialWarningCount(188693, nil, nil, nil, 2, 2)--Mythic
-local specWarnSoulstalker			= mod:NewSpecialWarningCount(-11778, nil, nil, nil, 2, 2)
+local specWarnFelCharge				= mod:NewSpecialWarningTarget(182051, "Melee", nil, nil, 2, 2, nil, nil, "chargemove")--Boss will often go through melee most of time, so they still need generic warning.
+local specWarnApocalypticFelburst	= mod:NewSpecialWarningCount(188693, nil, nil, nil, 2, 2, nil, nil, "watchstep")--Mythic
+local specWarnSoulstalker			= mod:NewSpecialWarningCount(-11778, nil, nil, nil, 2, 2, nil, nil, "watchstep")
 --Socrethar
-local specWarnExertDominance		= mod:NewSpecialWarningInterruptCount(183331, "HasInterrupt", nil, 2, 1, 2)
-local specWarnApocalypse			= mod:NewSpecialWarningSpell(183329, nil, nil, nil, 2, 2)
+local specWarnExertDominance		= mod:NewSpecialWarningInterruptCount(183331, "HasInterrupt", nil, 2, 1, 2, nil, nil, "kick2r")
+local specWarnApocalypse			= mod:NewSpecialWarningSpell(183329, nil, nil, nil, 2, 2, nil, nil, "aesoon")
 --Adds
-local specWarnShadowWordAgony		= mod:NewSpecialWarningInterrupt(184239, false, nil, nil, 1, 2)
-local specWarnShadowBoltVolley		= mod:NewSpecialWarningInterrupt(182392, "HasInterrupt", nil, 2, 1, 2)
+local specWarnShadowWordAgony		= mod:NewSpecialWarningInterrupt(184239, false, nil, nil, 1, 2, nil, nil, "kickcast")
+local specWarnShadowBoltVolley		= mod:NewSpecialWarningInterrupt(182392, "HasInterrupt", nil, 2, 1, 2, nil, nil, "kickcast")
 local specWarnSouls					= mod:NewSpecialWarningCount(-11462, nil, nil, nil, 1)
-local specWarnGhastlyFixation		= mod:NewSpecialWarningYou(182769, nil, nil, nil, 1, 2)--You don't run out or kite. you position yourself so ghosts go through fire dropped by construct
+local specWarnGhastlyFixation		= mod:NewSpecialWarningYou(182769, nil, nil, nil, 1, 2, nil, nil, "targetyou")--You don't run out or kite. you position yourself so ghosts go through fire dropped by construct
 local specWarnSargereiDominator		= mod:NewSpecialWarningSwitchCount(-11456, "-Healer", nil, nil, 3)
-local specWarnGiftoftheManari		= mod:NewSpecialWarningYou(184124, nil, nil, nil, 1, 2)
+local specWarnGiftoftheManari		= mod:NewSpecialWarningYou(184124, nil, nil, nil, 1, 2, nil, nil, "scatter")
 local yellGiftoftheManari			= mod:NewYell(184124)
-local specWarnEternalHunger			= mod:NewSpecialWarningRun(188666, nil, nil, nil, 4, 2)--Mythic
+local specWarnEternalHunger			= mod:NewSpecialWarningRun(188666, nil, nil, nil, 4, 2, nil, nil, "runout")--Mythic
 local yellEternalHunger				= mod:NewYell(188666, nil, false)
 
 --Soulbound Construct

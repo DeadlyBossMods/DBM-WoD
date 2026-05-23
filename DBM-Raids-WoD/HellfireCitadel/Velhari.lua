@@ -39,33 +39,33 @@ local warnAuraofMalice						= mod:NewSpellAnnounce(179991, 3, nil, nil, nil, nil
 local warnBulwarkoftheTyrant				= mod:NewTargetCountAnnounce(180600, 2)
 
 --All
-local specWarnEdictofCondemnation			= mod:NewSpecialWarningYouCount(182459, nil, nil, nil, 1, 2)
+local specWarnEdictofCondemnation			= mod:NewSpecialWarningYouCount(182459, nil, nil, nil, 1, 2, nil, nil, "runin")
 local specWarnEdictofCondemnationOther		= mod:NewSpecialWarningMoveTo(185241, false, nil, 2, 1, 2)--Varying strats, so off by default
 local yellEdictofCondemnation				= mod:NewFadesYell(182459)
 local specWarnTouchofHarm					= mod:NewSpecialWarningTarget(180166, false)
 local specWarnSealofDecay					= mod:NewSpecialWarningStack(180000, nil, 2)
-local specWarnSealofDecayOther				= mod:NewSpecialWarningTaunt(180000, nil, nil, nil, 1, 2)
+local specWarnSealofDecayOther				= mod:NewSpecialWarningTaunt(180000, nil, nil, nil, 1, 2, nil, nil, "tauntboss")
 --Stage One: Oppression
 local specWarnAnnihilatingStrike			= mod:NewSpecialWarningYou(180260)
 local specWarnAnnihilatingStrikeNear		= mod:NewSpecialWarningClose(180260)
 local yellAnnihilatingStrike				= mod:NewYell(180260)
-local specWarnInfernalTempest				= mod:NewSpecialWarningCount(180300, nil, nil, nil, 2, 2)
+local specWarnInfernalTempest				= mod:NewSpecialWarningCount(180300, nil, nil, nil, 2, 2, nil, nil, "watchstep")
 ----Ancient Enforcer
-local specWarnAncientEnforcer				= mod:NewSpecialWarningSwitch(-11155, "-Healer", nil, nil, 1, 2)
-local specWarnEnforcersOnslaught			= mod:NewSpecialWarningDodge(180004, "Tank", nil, 2, 1, 5)
+local specWarnAncientEnforcer				= mod:NewSpecialWarningSwitch(-11155, "-Healer", nil, nil, 1, 2, nil, nil, "bigmob")
+local specWarnEnforcersOnslaught			= mod:NewSpecialWarningDodge(180004, "Tank", nil, 2, 1, 5, nil, nil, "watchorb")
 --Stage Two: Contempt
 local specWarnFontofCorruption				= mod:NewSpecialWarningYou(180526, nil, nil, 2, 3)
 local specWarnFontofCorruptionOver			= mod:NewSpecialWarningEnd(180526)
 local yellFontofCorruption					= mod:NewYell(180526)
 ----Ancient Harbinger
-local specWarnAncientHarbinger				= mod:NewSpecialWarningSwitch(-11163, "-Healer", nil, nil, 1, 2)
-local specWarnHarbingersMending				= mod:NewSpecialWarningInterruptCount(180025, "HasInterrupt", nil, 2, 1, 2)
-local specWarnHarbingersMendingDispel		= mod:NewSpecialWarningDispel(180025, "MagicDispeller", nil, nil, 1, 2)--if interrupt is missed (likely at some point, cast gets faster each time). Then it MUST be dispelled
+local specWarnAncientHarbinger				= mod:NewSpecialWarningSwitch(-11163, "-Healer", nil, nil, 1, 2, nil, nil, "bigmob")
+local specWarnHarbingersMending				= mod:NewSpecialWarningInterruptCount(180025, "HasInterrupt", nil, 2, 1, 2, nil, nil, "kick2r")
+local specWarnHarbingersMendingDispel		= mod:NewSpecialWarningDispel(180025, "MagicDispeller", nil, nil, 1, 2, nil, nil, "dispelboss")--if interrupt is missed (likely at some point, cast gets faster each time). Then it MUST be dispelled
 --Stage Three: Malice
-local specWarnDespoiledGround				= mod:NewSpecialWarningMove(180604, nil, nil, nil, 1, 1)
-local specWarnGaveloftheTyrant				= mod:NewSpecialWarningCount(180608, nil, nil, nil, 2, 2)
+local specWarnDespoiledGround				= mod:NewSpecialWarningMove(180604, nil, nil, nil, 1, 1, nil, nil, "runaway")
+local specWarnGaveloftheTyrant				= mod:NewSpecialWarningCount(180608, nil, nil, nil, 2, 2, nil, nil, "carefly")
 ----Ancient Sovereign
-local specWarnAncientSovereign				= mod:NewSpecialWarningSwitch(-11170, "-Healer", nil, nil, 1, 2)
+local specWarnAncientSovereign				= mod:NewSpecialWarningSwitch(-11170, "-Healer", nil, nil, 1, 2, nil, nil, "bigmob")
 
 mod:AddTimerLine(ALL)--All
 local timerSealofDecayCD					= mod:NewCDTimer(6, 180000, nil, false, nil, 5, nil, DBM_COMMON_L.TANK_ICON)--I don't think it's really needed, but at least make it an option

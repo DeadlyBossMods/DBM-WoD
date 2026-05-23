@@ -25,11 +25,11 @@ local warnCleaver					= mod:NewSpellAnnounce(156143, 3, nil, false, 2)--Saberlas
 local warnBoundingCleaveEnd			= mod:NewEndAnnounce(156160, 1)
 local warnFrenzy					= mod:NewSpellAnnounce(156598, 4)
 
-local specWarnTenderizer			= mod:NewSpecialWarningStack(156151, nil, 2, nil, nil, 1, 6)
-local specWarnTenderizerOther		= mod:NewSpecialWarningTaunt(156151, nil, nil, nil, nil, 2)
-local specWarnGushingWounds			= mod:NewSpecialWarningStack(156152, nil, 2, nil, nil, nil, 2)
+local specWarnTenderizer			= mod:NewSpecialWarningStack(156151, nil, 2, nil, nil, 1, 6, nil, nil, "stackhigh")
+local specWarnTenderizerOther		= mod:NewSpecialWarningTaunt(156151, nil, nil, nil, nil, 2, nil, nil, "tauntboss")
+local specWarnGushingWounds			= mod:NewSpecialWarningStack(156152, nil, 2, nil, nil, nil, 2, nil, nil, "runout")
 local specWarnBoundingCleave		= mod:NewSpecialWarningCount(156160, nil, nil, nil, 2, 12)
-local specWarnPaleVitriol			= mod:NewSpecialWarningGTFO(163046, nil, nil, nil, 1, 8)--Mythic
+local specWarnPaleVitriol			= mod:NewSpecialWarningGTFO(163046, nil, nil, nil, 1, 8, nil, nil, "watchfeet")--Mythic
 
 local timerCleaveCD					= mod:NewCDTimer(6, 156157, nil, false, nil, 5)
 local timerTenderizerCD				= mod:NewCDTimer(15.2, 156151, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, 2, 4)

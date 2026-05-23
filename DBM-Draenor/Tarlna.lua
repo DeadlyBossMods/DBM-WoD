@@ -22,10 +22,10 @@ mod:RegisterEventsInCombat(
 --TODO, do dps siwtch to Untamed Mand, or just tanks.
 local warnSavageVines				= mod:NewTargetAnnounce(176004, 2)
 
-local specWarnColossalBlow			= mod:NewSpecialWarningDodge(175973, nil, nil, nil, 2, 2)
-local specWarnGenesis				= mod:NewSpecialWarningSpell(175979, nil, nil, nil, nil, 12)--Everyone. "Switch" is closest generic to "run around stomping flowers". Might need custom message
+local specWarnColossalBlow			= mod:NewSpecialWarningDodge(175973, nil, nil, nil, 2, 2, nil, nil, "shockwave")
+local specWarnGenesis				= mod:NewSpecialWarningSpell(175979, nil, nil, nil, nil, 12, nil, nil, "runoverflowers")--Everyone. "Switch" is closest generic to "run around stomping flowers". Might need custom message
 local specWarnSavageVines			= mod:NewSpecialWarningYou(176004)
-local specWarnGrowUntamedMandragora	= mod:NewSpecialWarningSwitch(176013, "-Healer", nil, nil, nil, 2)
+local specWarnGrowUntamedMandragora	= mod:NewSpecialWarningSwitch(176013, "-Healer", nil, nil, nil, 2, nil, nil, "killmob")
 local specWarnNoxiousSpit			= mod:NewSpecialWarningMove(176037)
 
 --local timerColossalBlowCD			= mod:NewNextTimer(60, 175973, nil, nil, nil, 3)

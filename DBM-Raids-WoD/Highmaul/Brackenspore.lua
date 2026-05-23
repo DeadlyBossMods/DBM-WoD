@@ -25,18 +25,18 @@ local warnRot						= mod:NewStackAnnounce(163241, 2, nil, "Tank")
 local warnLivingMushroom			= mod:NewCountAnnounce(160022, 1, nil, nil, nil, nil, nil, 12)--Good shroom! (mana/haste)
 local warnRejuvMushroom				= mod:NewCountAnnounce(160021, 1, nil, nil, nil, nil, nil, 12)--Other good shroom (healing)
 
-local specWarnCreepingMoss			= mod:NewSpecialWarningMove(163590, "Tank", nil, nil, 2, 2)
+local specWarnCreepingMoss			= mod:NewSpecialWarningMove(163590, "Tank", nil, nil, 2, 2, nil, nil, "bossout")
 local specWarnInfestingSpores		= mod:NewSpecialWarningCount(159996, nil, nil, nil, 2, 2)
-local specWarnDecay					= mod:NewSpecialWarningInterruptCount(160013, "-Healer", nil, nil, nil, 2)
+local specWarnDecay					= mod:NewSpecialWarningInterruptCount(160013, "-Healer", nil, nil, nil, 2, nil, nil, "kick2r")
 local specWarnNecroticBreath		= mod:NewSpecialWarningSpell(159219, "Tank", nil, nil, 3)
-local specWarnRot					= mod:NewSpecialWarningStack(163241, nil, 3, nil, nil, 1, 6)
-local specWarnRotOther				= mod:NewSpecialWarningTaunt(163241, nil, nil, nil, 1, 2)
-local specWarnExplodingFungus		= mod:NewSpecialWarningDodge(163794, nil, nil, nil, 2, 2)--Change warning type/sound? need to know more about spawn.
-local specWarnWaves					= mod:NewSpecialWarningDodge(160425, nil, nil, nil, 2, 2)
+local specWarnRot					= mod:NewSpecialWarningStack(163241, nil, 3, nil, nil, 1, 6, nil, nil, "stackhigh")
+local specWarnRotOther				= mod:NewSpecialWarningTaunt(163241, nil, nil, nil, 1, 2, nil, nil, "changemt")
+local specWarnExplodingFungus		= mod:NewSpecialWarningDodge(163794, nil, nil, nil, 2, 2, nil, nil, "watchstep")--Change warning type/sound? need to know more about spawn.
+local specWarnWaves					= mod:NewSpecialWarningDodge(160425, nil, nil, nil, 2, 2, nil, nil, "watchwave")
 --Adds
-local specWarnSporeShooter			= mod:NewSpecialWarningSwitch(163594, "RangedDps", nil, 2, nil, 12)
-local specWarnFungalFlesheater		= mod:NewSpecialWarningSwitchCount(-9995, "-Healer", nil, nil, nil, 12)
-local specWarnMindFungus			= mod:NewSpecialWarningSwitch(163141, "Dps", nil, nil, nil, 12)
+local specWarnSporeShooter			= mod:NewSpecialWarningSwitch(163594, "RangedDps", nil, 2, nil, 12, nil, nil, "attacksporeshooter")
+local specWarnFungalFlesheater		= mod:NewSpecialWarningSwitchCount(-9995, "-Healer", nil, nil, nil, 12, nil, nil, "attackflesheater")
+local specWarnMindFungus			= mod:NewSpecialWarningSwitch(163141, "Dps", nil, nil, nil, 12, nil, nil, "attackmindfungus")
 
 local timerInfestingSporesCD		= mod:NewCDCountTimer(57, 159996, nil, nil, nil, 2, nil, nil, nil, 1, 4)--57-63 variation
 local timerRotCD					= mod:NewCDTimer(10, 163241, nil, false, nil, 5, nil, DBM_COMMON_L.TANK_ICON)--it's a useful timer, but not mandatory and this fight has A LOT of timers so off by default for clutter reduction

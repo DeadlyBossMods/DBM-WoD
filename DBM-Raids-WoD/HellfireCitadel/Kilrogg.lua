@@ -32,18 +32,18 @@ local warnVisionofDeath				= mod:NewTargetAnnounce(181488, 2)--The targets that 
 local warnBloodthirster				= mod:NewSpellAnnounce(-11266, 3, 131150, nil, nil, nil, nil, 12)
 
 --Boss
-local specWarnShred					= mod:NewSpecialWarningDefensive(180199, nil, nil, nil, 3, 2)--Block, or get debuff
-local specWarnHeartSeeker			= mod:NewSpecialWarningRun(180372, nil, nil, nil, 4, 2)--Must run as far from boss as possible
+local specWarnShred					= mod:NewSpecialWarningDefensive(180199, nil, nil, nil, 3, 2, nil, nil, "defensive")--Block, or get debuff
+local specWarnHeartSeeker			= mod:NewSpecialWarningRun(180372, nil, nil, nil, 4, 2, nil, nil, "farfromline")--Must run as far from boss as possible
 local yellHeartSeeker				= mod:NewYell(180372)
-local specWarnDeathThroes			= mod:NewSpecialWarningCount(180224, nil, nil, nil, 2, 2)
+local specWarnDeathThroes			= mod:NewSpecialWarningCount(180224, nil, nil, nil, 2, 2, nil, nil, "aesoon")
 local specWarnVisionofDeath			= mod:NewSpecialWarningCount(182428)--Seems everyone goes down at some point, dps healers and off tank. Each getting different abiltiy when succeed
 --Adds
-local specWarnSavageStrikes			= mod:NewSpecialWarningSpell(180163, nil, nil, nil, 1, 2)
-local specWarnBloodGlob				= mod:NewSpecialWarningSwitch(180459, "Dps", nil, nil, 1, 12)
-local specWarnFelBloodGlob			= mod:NewSpecialWarningSwitch(180413, "Dps", nil, nil, 3, 12)
-local specWarnBloodthirster			= mod:NewSpecialWarningSwitch(-11266, "Dps", nil, 2, 1, 12)--Very frequent, let specwarn be an option
-local specWarnHulkingTerror			= mod:NewSpecialWarningSwitch(-11269, "Tank", nil, 2, 1, 12)
-local specWarnRendingHowl			= mod:NewSpecialWarningInterruptCount(183917, "HasInterrupt", nil, 2, 1, 5)
+local specWarnSavageStrikes			= mod:NewSpecialWarningSpell(180163, nil, nil, nil, 1, 2, nil, nil, "defensive")
+local specWarnBloodGlob				= mod:NewSpecialWarningSwitch(180459, "Dps", nil, nil, 1, 12, nil, nil, "attackblood")
+local specWarnFelBloodGlob			= mod:NewSpecialWarningSwitch(180413, "Dps", nil, nil, 3, 12, nil, nil, "attackfelblood")
+local specWarnBloodthirster			= mod:NewSpecialWarningSwitch(-11266, "Dps", nil, 2, 1, 12, nil, nil, "attackbloodthirster")--Very frequent, let specwarn be an option
+local specWarnHulkingTerror			= mod:NewSpecialWarningSwitch(-11269, "Tank", nil, 2, 1, 12, nil, nil, "attackhulkingterror")
+local specWarnRendingHowl			= mod:NewSpecialWarningInterruptCount(183917, "HasInterrupt", nil, 2, 1, 5, nil, nil, "kick2r")
 
 --Boss
 --Next timers that are delayed by other next timers. how annoying
