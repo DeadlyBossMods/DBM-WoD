@@ -58,7 +58,7 @@ local specWarnFelBlast				= mod:NewSpecialWarningInterrupt(181132, false, nil, 2
 ----Dread Infernals
 local specWarnFelHellfire			= mod:NewSpecialWarningDodge(181191, nil, nil, 3, 1, 2, nil, nil, "runaway")
 ----Gul'dan
-local specWarnWrathofGuldan			= mod:NewSpecialWarningYou(186362, nil, nil, nil, 1, 5, nil, nil, "mm")
+local specWarnWrathofGuldan			= mod:NewSpecialWarningYou(186362, nil, nil, nil, 1, 5, nil, nil, "mm1")
 local yellWrathofGuldan				= mod:NewPosYell(186362, 169826)
 local specWarnFelPillar				= mod:NewSpecialWarningDodge(190070, nil, nil, 3, 1, 2, nil, nil, "runaway")
 --Mannoroth
