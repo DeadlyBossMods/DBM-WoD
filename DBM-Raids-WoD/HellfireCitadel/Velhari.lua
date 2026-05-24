@@ -24,6 +24,12 @@ mod:RegisterEventsInCombat(
 )
 
 --(ability.id = 180260 or ability.id = 180004 or ability.id = 180025 or ability.id = 180608 or ability.id = 180300 or ability.id = 180533) and type = "begincast" or (ability.id = 179986 or ability.id = 179991 or ability.id = 180600 or ability.id = 180526) and type = "cast" or (ability.id = 182459 or ability.id = 185241 or ability.id = 180166 or ability.id = 185237) and type = "applydebuff" or ability.id = 180000 and not type = "removedebuff"
+DBM:RegisterAltSpellName(182459, 57377)--Edict of Condemnation -> Condemnation
+DBM:RegisterAltSpellName(180260, 92214)--Annihilating Strike -> Flame Strike
+DBM:RegisterAltSpellName(180526, 156842)--Font of Corruption -> Corruption
+DBM:RegisterAltSpellName(180025, 36968)--Harbinger's Mending -> Mending
+DBM:RegisterAltSpellName(180600, 160533)--Bulwark of the Tyrant -> Bulwark
+DBM:RegisterAltSpellName(180608, 148800)--Gavel of the Tyrant -> Gavel
 --All
 local warnEdictofCondemnation				= mod:NewTargetCountAnnounce(182459, 3)
 local warnTouchofHarm						= mod:NewTargetAnnounce(180166, 3, nil, "Healer")--Todo, split new cast and jump into two different warnings?
@@ -69,21 +75,21 @@ local specWarnAncientSovereign				= mod:NewSpecialWarningSwitch(-11170, "-Healer
 
 mod:AddTimerLine(ALL)--All
 local timerSealofDecayCD					= mod:NewCDTimer(6, 180000, nil, false, nil, 5, nil, DBM_COMMON_L.TANK_ICON)--I don't think it's really needed, but at least make it an option
-local timerEdictofCondemnationCD			= mod:NewNextCountTimer(60, 182459, 57377, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)--"condemnation" short name
+local timerEdictofCondemnationCD			= mod:NewNextCountTimer(60, 182459, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)--"condemnation" short name
 local timerTouchofHarmCD					= mod:NewNextCountTimer(45, 180166, nil, "Healer", nil, 3, nil, DBM_COMMON_L.HEALER_ICON)
 mod:AddTimerLine(SCENARIO_STAGE:format(1))--Stage One: Oppression
-local timerAnnihilatingStrikeCD				= mod:NewNextCountTimer(10, 180260, 92214, nil, nil, 3, nil, nil, nil, 1, 3)--"Flame Strike" short name
+local timerAnnihilatingStrikeCD				= mod:NewNextCountTimer(10, 180260, nil, nil, nil, 3, nil, nil, nil, 1, 3)--"Flame Strike" short name
 local timerInfernalTempestCD				= mod:NewNextCountTimer(10, 180300, nil, nil, nil, 2, nil, nil, nil, 2, 4)
 ----Ancient Enforcer
 local timerEnforcersOnslaughtCD				= mod:NewCDTimer(18, 180004, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 mod:AddTimerLine(SCENARIO_STAGE:format(2))--Stage Two: Contempt
 local timerTaintedShadowsCD					= mod:NewNextTimer(5, 180533, nil, "Tank", nil, 5)
-local timerFontofCorruptionCD				= mod:NewNextTimer(19.6, 180526, 156842, nil, nil, 3)--156842 "Corruption" for short name?
+local timerFontofCorruptionCD				= mod:NewNextTimer(19.6, 180526, nil, nil, nil, 3)--156842 "Corruption" for short name?
 ----Ancient Harbinger
-local timerHarbingersMendingCD				= mod:NewCDTimer(10.5, 180025, 36968, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
+local timerHarbingersMendingCD				= mod:NewCDTimer(10.5, 180025, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
 mod:AddTimerLine(SCENARIO_STAGE:format(3))--Stage Three: Malice
-local timerBulwarkoftheTyrantCD				= mod:NewNextCountTimer(10, 180600, 160533, nil, nil, 3, nil, nil, nil, 1, 3)
-local timerGaveloftheTyrantCD				= mod:NewNextCountTimer(10, 180608, 148800, nil, nil, 2, nil, nil, nil, 2, 3)--Dat Hammer (alternative, "Hammer" 175798)
+local timerBulwarkoftheTyrantCD				= mod:NewNextCountTimer(10, 180600, nil, nil, nil, 3, nil, nil, nil, 1, 3)
+local timerGaveloftheTyrantCD				= mod:NewNextCountTimer(10, 180608, nil, nil, nil, 2, nil, nil, nil, 2, 3)--Dat Hammer (alternative, "Hammer" 175798)
 
 --local berserkTimer						= mod:NewBerserkTimer(360)
 

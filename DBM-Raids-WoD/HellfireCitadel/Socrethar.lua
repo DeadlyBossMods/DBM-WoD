@@ -28,6 +28,9 @@ mod:RegisterEventsInCombat(
 --TODO, voice for reverberatingblow removed since it's instant cast and currently a bit wonky/buggy. Needs further review later.
 --TODO, first construct timers after a soul phase
 --(ability.id = 183331 or ability.name="Soul Dispersion") and overkill > 0 or ability.id = 190466 or (ability.id = 181288 or ability.id = 182051 or ability.id = 183331 or ability.id = 183329 or ability.id = 188693) and type = "begincast" or (ability.id = 180008 or ability.id = 184124 or ability.id = 190776 or ability.id = 183023) and type = "cast" or (ability.id = 184053 or ability.id = 189627) and (type = "applydebuff" or type = "applybuff")
+DBM:RegisterAltSpellName(180221, 186532)--Volatile Fel Orb -> Orb
+DBM:RegisterAltSpellName(188693, 206388)--Apocalyptic Felburst -> Felburst
+DBM:RegisterAltSpellName(-11778, 151869)--Voracious Soulstalker -> Soulstalker
 --Soulbound Construct
 local warnFelPrison					= mod:NewTargetAnnounce(183017, 3)
 local warnShatteredDefenses			= mod:NewStackAnnounce(182038, 3, nil, "Tank")
@@ -68,9 +71,9 @@ local yellEternalHunger				= mod:NewYell(188666, nil, false)
 --Soulbound Construct
 local timerReverberatingBlowCD		= mod:NewCDCountTimer(17, 180008, nil, "Tank|Healer", 2, 5, nil, DBM_COMMON_L.TANK_ICON, nil, 2, 4)
 local timerFelPrisonCD				= mod:NewCDTimer(29, 182994, nil, nil, nil, 3)--29-33
-local timerVolatileFelOrbCD			= mod:NewCDTimer(23, 180221, 186532, nil, nil, 3)
+local timerVolatileFelOrbCD			= mod:NewCDTimer(23, 180221, nil, nil, nil, 3)
 local timerFelChargeCD				= mod:NewCDTimer(23, 182051, nil, nil, nil, 3, nil, nil, nil, 2, 4)
-local timerApocalypticFelburstCD	= mod:NewCDCountTimer(30, 188693, 206388, nil, nil, 2, nil, DBM_COMMON_L.HEROIC_ICON)
+local timerApocalypticFelburstCD	= mod:NewCDCountTimer(30, 188693, nil, nil, nil, 2, nil, DBM_COMMON_L.HEROIC_ICON)
 --Socrethar
 local timerTransition				= mod:NewStageTimer(6.5)
 local timerExertDominanceCD			= mod:NewCDCountTimer(4.5, 183331, nil, "-Healer", nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
@@ -80,7 +83,7 @@ local timerSargereiDominatorCD		= mod:NewNextCountTimer(60, -11456, nil, nil, ni
 local timerHauntingSoulCD			= mod:NewCDCountTimer(29, -11462, nil, nil, nil, 1, 182769, nil, nil, 1, 5)
 local timerGiftofManariCD			= mod:NewCDTimer(11, 184124, nil, nil, nil, 3)
 --Mythic
-local timerVoraciousSoulstalkerCD	= mod:NewCDCountTimer(59.5, -11778, 151869, nil, nil, 1, 190776, DBM_COMMON_L.HEROIC_ICON)
+local timerVoraciousSoulstalkerCD	= mod:NewCDCountTimer(59.5, -11778, nil, nil, nil, 1, 190776, DBM_COMMON_L.HEROIC_ICON)
 
 --local berserkTimer				= mod:NewBerserkTimer(360)
 

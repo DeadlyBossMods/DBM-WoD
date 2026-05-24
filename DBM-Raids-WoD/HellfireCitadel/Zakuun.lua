@@ -21,6 +21,7 @@ mod:RegisterEventsInCombat(
 --TODO, auto send latent energy targets down for disembodied?
 --TODO, maybe add a "breaking soon" to 189031 or 189032
 --(ability.id = 179406) and type = "begincast" or (ability.id = 181508 or ability.id = 181515 or ability.id = 179709 or ability.id = 179582) and type = "cast" or (ability.id = 179667 or ability.id = 179681)
+DBM:RegisterAltSpellName(179582, 161600)--Rumbling Fissure -> Fissure
 --Encounter-Wide Mechanics
 local warnLatentEnergy					= mod:NewTargetAnnounce(182008, 3, nil, false)--Spammy, optional
 local warnEnrage						= mod:NewSpellAnnounce(179681, 3, nil, nil, nil, nil, nil, 2)
@@ -47,7 +48,7 @@ local specWarnSeedPosition				= mod:NewSpecialWarningYouPos(181508, nil, false, 
 local yellSeedsofDestruction			= mod:NewYell(181508)
 
 --Armed
-local timerRumblingFissureCD			= mod:NewNextTimer(39, 179582, 161600, nil, nil, 5)
+local timerRumblingFissureCD			= mod:NewNextTimer(39, 179582, nil, nil, nil, 5)
 local timerBefouledCD					= mod:NewNextTimer(38, 179711, nil, nil, nil, 3, nil, DBM_COMMON_L.HEALER_ICON)
 local timerSoulCleaveCD					= mod:NewNextTimer(40, 179406, nil, nil, nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerCavitationCD					= mod:NewNextTimer(40, 181461, nil, nil, nil, 2)

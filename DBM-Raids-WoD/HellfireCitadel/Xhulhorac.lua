@@ -23,6 +23,7 @@ mod:RegisterEventsInCombat(
 )
 
 --(target.id = 94185 or target.id =  94239) and type = "death" or (ability.id = 190223 or ability.id = 190224 or ability.id = 186453 or ability.id = 186783 or ability.id = 186546 or ability.id = 189779 or ability.id = 186490 or ability.id = 189775) and type = "begincast" or (ability.id = 186407 or ability.id = 186333) and type = "cast" or ability.id = 187204 and type = "applybuff"
+DBM:RegisterAltSpellName(189779, 186546)--Empowered Black Hole -> Black Hole
 --Fire Phase
 ----Boss
 local warnFelPortal					= mod:NewSpellAnnounce(187003, 2, nil, nil, nil, nil, nil, 2)
@@ -87,7 +88,7 @@ local timerVoidsCD					= mod:NewNextTimer(30, -11714, nil, "Ranged", nil, 1, 697
 ----Big Add
 local timerWitheringGazeCD			= mod:NewCDTimer(22, 186783, nil, "Tank", 2, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerBlackHoleCD				= mod:NewCDCountTimer(29.5, 186546, nil, "-Tank", 2, 5)
-local timerEmpBlackHoleCD			= mod:NewCDCountTimer(29.5, 189779, 186546, "-Tank", 2, 5, nil, DBM_COMMON_L.DEADLY_ICON)
+local timerEmpBlackHoleCD			= mod:NewCDCountTimer(29.5, 189779, nil, "-Tank", 2, 5, nil, DBM_COMMON_L.DEADLY_ICON)
 --End Phase
 local timerOverwhelmingChaosCD		= mod:NewNextCountTimer(10, 187204, nil, nil, 2, 2, nil, DBM_COMMON_L.HEALER_ICON)
 

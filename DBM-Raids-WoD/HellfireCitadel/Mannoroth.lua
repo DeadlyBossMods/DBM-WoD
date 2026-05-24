@@ -28,6 +28,8 @@ mod:RegisterEventsInCombat(
 --(ability.id = 181255 or ability.id = 181180) and type = "summon" or (ability.id = 186362 or ability.id = 181275) and type = "applydebuff"
 --TODO, get timer for 2nd doom lord spawning on non mythic, if some group decides to do portals in a bad order and not kill that portal summoner first
 --TODO, custom voice for shadowforce? It works almost identical to helm of command from lei shen. Did that have a voice usuable here?
+DBM:RegisterAltSpellName(186348, 169826)--Wrath of Gul'dan -> Wrath
+DBM:RegisterAltSpellName(181597, 134029)--Gaze -> Gaze
 --Adds
 ----Doom Lords
 local warnCurseoftheLegion			= mod:NewTargetCountAnnounce(181275, 3)--Spawn
@@ -81,12 +83,12 @@ local timerFelImplosionCD			= mod:NewNextCountTimer(46, 181255, nil, nil, nil, 1
 ----Infernals
 local timerInfernoCD				= mod:NewNextCountTimer(107, 181180, nil, nil, nil, 1)
 ----Gul'dan
-local timerWrathofGuldanCD			= mod:NewNextTimer(107, 186348, 169826, nil, nil, 3, nil, DBM_COMMON_L.HEROIC_ICON)
+local timerWrathofGuldanCD			= mod:NewNextTimer(107, 186348, nil, nil, nil, 3, nil, DBM_COMMON_L.HEROIC_ICON)
 --Mannoroth
 mod:AddTimerLine(L.name)
 local timerGlaiveComboCD			= mod:NewCDTimer(30, 181354, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON, nil, 2, 3)--30 seconds unless delayed by something else
 local timerFelHellfireCD			= mod:NewCDTimer(35, 181557, nil, nil, nil, 2)--35, unless delayed by other things.
-local timerGazeCD					= mod:NewCDTimer(47.1, 181597, 134029, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)--As usual, some variation do to other abilities
+local timerGazeCD					= mod:NewCDTimer(47.1, 181597, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)--As usual, some variation do to other abilities
 local timerFelSeekerCD				= mod:NewCDTimer(49.5, 181735, nil, nil, nil, 2)--Small sample size, confirm it's not shorter if not delayed by things.
 local timerShadowForceCD			= mod:NewCDTimer(52.2, 181799, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1, 4)
 

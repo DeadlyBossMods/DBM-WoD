@@ -26,6 +26,11 @@ mod:RegisterEventsInCombat(
 
 --(ability.id = 183254 or ability.id = 182225 or ability.id = 189897 or ability.id = 183817 or ability.id = 183828 or ability.id = 185590 or ability.id = 184265 or ability.id = 190506 or ability.id = 184931 or ability.id = 187180) and type = "begincast" or (ability.id = 183865) and type = "cast" or (ability.id = 186662 or ability.id = 186961) and (type = "applydebuff" or type = "applybuff")
 --(ability.id = 190394 or ability.id = 190686 or ability.id = 190821 or ability.id = 190506 or ability.id = 187108) and type = "begincast" or (ability.id = 188514) and type = "cast" or ability.id = 187108
+DBM:RegisterAltSpellName(182225, 23426)--Rain of Chaos -> Infernal
+DBM:RegisterAltSpellName(187050, 28836)--Mark of the Legion -> Mark
+DBM:RegisterAltSpellName(187111, 23426)--Infernal Doombringer -> Infernal
+DBM:RegisterAltSpellName(190821, 189894)--Twisted Darkness -> Darkness
+DBM:RegisterAltSpellName(190506, 66911)--Seething Corruption -> Corruption
 --Phase 1: The Defiler
 local warnDoomfireFixate			= mod:NewTargetAnnounce(182879, 3)
 local warnAllureofFlames			= mod:NewCastAnnounce(183254, 2)
@@ -117,16 +122,16 @@ mod:AddTimerLine(SCENARIO_STAGE:format(3))
 local timerDemonicFeedbackCD		= mod:NewCDCountTimer(35, 187180, nil, nil, nil, 2, nil, nil, nil, 2, 3)
 local timerNetherBanishCD			= mod:NewCDCountTimer(61.9, 186961, nil, nil, nil, 5, nil, nil, nil, 1, 3)
 --Phase 3.5:
-local timerRainofChaosCD			= mod:NewCDCountTimer(62, 182225, 23426, nil, nil, 2)
+local timerRainofChaosCD			= mod:NewCDCountTimer(62, 182225, nil, nil, nil, 2)
 ----The Nether
 --Mythic
 mod:AddTimerLine(ENCOUNTER_JOURNAL_SECTION_FLAG12)
 local timerDarkConduitCD			= mod:NewNextCountTimer(107, 190394, nil, "-Melee", 2, 3)
-local timerMarkOfLegionCD			= mod:NewNextCountTimer(107, 187050, 28836, nil, nil, 3)
-local timerInfernalsCD				= mod:NewNextCountTimer(107, 187111, 23426, nil, nil, 1, 1122)
+local timerMarkOfLegionCD			= mod:NewNextCountTimer(107, 187050, nil, nil, nil, 3)
+local timerInfernalsCD				= mod:NewNextCountTimer(107, 187111, nil, nil, nil, 1, 1122)
 local timerSourceofChaosCD			= mod:NewNextCountTimer(107, 190703, nil, nil, 2, 1, nil, DBM_COMMON_L.TANK_ICON, nil, 2, 4)
-local timerTwistedDarknessCD		= mod:NewNextCountTimer(107, 190821, 189894, nil, nil, 1)
-local timerSeethingCorruptionCD		= mod:NewNextCountTimer(107, 190506, 66911, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1, 4)
+local timerTwistedDarknessCD		= mod:NewNextCountTimer(107, 190821, nil, nil, nil, 1)
+local timerSeethingCorruptionCD		= mod:NewNextCountTimer(107, 190506, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1, 4)
 
 --local berserkTimer				= mod:NewBerserkTimer(360)
 

@@ -27,6 +27,7 @@ mod:RegisterEventsInCombat(
 )
 
 --(ability.id = 181912 or ability.id = 181827 or ability.id = 187998 or ability.id = 181873 or ability.id = 185345) and type = "begincast" or (ability.id = 182178 or ability.id = 181956 or ability.id = 181912 or ability.id = 185510) and type = "cast" or (ability.id = 181824 or ability.id = 187990 or ability.id = 181753) and type = "applydebuff"
+DBM:RegisterAltSpellName(181824, 156842)--Phantasmal Corruption -> Corruption
 --Boss
 local warnEyeofAnzu						= mod:NewTargetAnnounce(179202, 1, nil, false)--Important, but spammy, Will do something fancy with infoframe to show target instead of spamming screen with warnings
 local warnPhantasmalWinds				= mod:NewTargetAnnounce(181957, 4)--Announce to all, for things like life grips, body and soul, etc to keep them on platform while anzu person helps clear them.
@@ -76,7 +77,7 @@ local timerShadowRiposteCD				= mod:NewCDTimer(23.5, 185345, nil, nil, nil, 3, n
 --Adds
 local timerFelBombCD					= mod:NewCDTimer(18.5, 181753, nil, nil, nil, 3, nil, DBM_COMMON_L.MAGIC_ICON, nil, 3, 4)
 local timerFelConduitCD					= mod:NewCDTimer(15, 181827, nil, nil, nil, 4, nil, DBM_COMMON_L.INTERRUPT_ICON)
-local timerPhantasmalCorruptionCD		= mod:NewCDTimer(14, 181824, 156842, "Tank", nil, 3, nil, nil, nil, 2, 4)--14-18
+local timerPhantasmalCorruptionCD		= mod:NewCDTimer(14, 181824, nil, "Tank", nil, 3, nil, nil, nil, 2, 4)--14-18
 local timerDarkBindingsCD				= mod:NewCDTimer(34, 185456, nil, nil, nil, 3, nil, DBM_COMMON_L.HEROIC_ICON)
 
 local berserkTimer						= mod:NewBerserkTimer(540)

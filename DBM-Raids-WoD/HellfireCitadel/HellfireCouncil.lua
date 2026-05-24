@@ -32,6 +32,7 @@ local Gurtogg	= DBM:EJ_GetSectionInfo(11490)
 
 --(target.id = 92142 or target.id = 92144 or target.id = 92146) and type = "death" or (ability.id = 184657 or ability.id = 184476 or ability.id = 184355) and type = "begincast" or (ability.id = 184449 or ability.id = 183480 or ability.id = 184357) and type = "cast" or (ability.id = 183701 or ability.id = 184360 or ability.id = 184365) and type = "applydebuff" or ability.id = 184674
 --TODO, add bloodboil. mythic only?
+DBM:RegisterAltSpellName(184449, 28836)--Mark of the Necromancer -> Mark
 --Blademaster Jubei'thos
 local warnMirrorImage				= mod:NewSpellAnnounce(183885, 2)
 --Dia Darkwhisper
@@ -63,7 +64,7 @@ local timerMirrorImageCD			= mod:NewCDTimer(75, 183885, nil, nil, nil, 1)
 local timerWickedStrikeCD			= mod:NewCDTimer(10.5, 186993, nil, nil, nil, 2)
 mod:AddTimerLine(Dia)
 --Dia Darkwhisper
-local timerMarkofNecroCD			= mod:NewCDTimer(60, 184449, 28836, "Healer", nil, 5, nil, DBM_COMMON_L.HEALER_ICON)
+local timerMarkofNecroCD			= mod:NewCDTimer(60, 184449, nil, "Healer", nil, 5, nil, DBM_COMMON_L.HEALER_ICON)
 local timerReapCD					= mod:NewCDTimer(54, 184476, nil, nil, nil, 3, nil, nil, nil, 2, 4)--54-71
 local timerNightmareVisageCD		= mod:NewCDTimer(30, 184657, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerDarknessCD				= mod:NewCDTimer(75, 184681, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, nil, 1, 5)
