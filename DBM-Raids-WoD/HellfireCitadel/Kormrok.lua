@@ -34,7 +34,7 @@ local specWarnExplosiveBurstNear	= mod:NewSpecialWarningClose(181306, nil, nil, 
 local specWarnFoulCrush				= mod:NewSpecialWarningSwitchCount(181307, "Dps|Tank")--Tweak it as needed once can figure out how to detect what tank it's on
 local specWarnFelOutpouring			= mod:NewSpecialWarningDodge(181292, nil, nil, nil, 2, 2, nil, nil, "watchwave")
 local specWarnExplosiveRunes		= mod:NewSpecialWarningSpell(181296, "-Tank")--Leaving as a spell warning, MoveTo gives misleading info that everyone just runs toward them, only a few do who know what to do
-local specWarnGraspingHands			= mod:NewSpecialWarningSwitch(181299)
+local specWarnGraspingHands			= mod:NewSpecialWarningSwitch(181299, nil, nil, nil, nil, nil, nil, nil, "gather")
 --Empowered versions (made separate so users can set different sounds for the more dangerous versions if they choose)
 local specWarnEmpFelOutpouring		= mod:NewSpecialWarningDodge(181293, nil, nil, nil, 2, 2, nil, nil, "watchwave")
 local specWarnEmpExplosiveRunes		= mod:NewSpecialWarningSpell(181297, "-Tank")

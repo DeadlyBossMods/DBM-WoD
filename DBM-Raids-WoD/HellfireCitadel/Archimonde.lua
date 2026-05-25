@@ -62,7 +62,7 @@ local specWarnAllureofFlames		= mod:NewSpecialWarningDodge(183254, nil, nil, nil
 local specWarnDeathCaller			= mod:NewSpecialWarningSwitchCount(-11582, "Dps", nil, nil, 1, 12, nil, nil, "attackdeathcaller")--Tanks don't need switch, they have death brand special warning 2 seconds earlier
 local specWarnFelBurst				= mod:NewSpecialWarningYou(183817)
 local yellFelBurst					= mod:NewPosYell(183817)
-local specWarnFelBurstNear			= mod:NewSpecialWarningMoveTo(183817, nil, nil, nil, 1, 2)--Anyone near by should run in to help soak, should be mostly ranged but if it's close to melee, melee soaking too doesn't hurt
+local specWarnFelBurstNear			= mod:NewSpecialWarningMoveTo(183817, nil, nil, nil, 1, 2, nil, nil, "gathershare")--Anyone near by should run in to help soak, should be mostly ranged but if it's close to melee, melee soaking too doesn't hurt
 local specWarnDesecrate				= mod:NewSpecialWarningDodge(185590, "Melee", nil, nil, 1, 2, nil, nil, "watchstep")
 local specWarnDeathBrand			= mod:NewSpecialWarningCount(183828, "Tank", nil, 2, 1, 2, nil, nil, "tauntboss")
 --Phase 2: Hand of the Legion

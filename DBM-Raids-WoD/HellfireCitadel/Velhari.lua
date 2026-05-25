@@ -46,7 +46,7 @@ local warnBulwarkoftheTyrant				= mod:NewTargetCountAnnounce(180600, 2)
 
 --All
 local specWarnEdictofCondemnation			= mod:NewSpecialWarningYouCount(182459, nil, nil, nil, 1, 2, nil, nil, "runin")
-local specWarnEdictofCondemnationOther		= mod:NewSpecialWarningMoveTo(185241, false, nil, 2, 1, 2)--Varying strats, so off by default
+local specWarnEdictofCondemnationOther		= mod:NewSpecialWarningMoveTo(185241, false, nil, 2, 1, 2, nil, nil, "gather")--Varying strats, so off by default
 local yellEdictofCondemnation				= mod:NewFadesYell(182459)
 local specWarnTouchofHarm					= mod:NewSpecialWarningTarget(180166, false)
 local specWarnSealofDecay					= mod:NewSpecialWarningStack(180000, nil, 2)

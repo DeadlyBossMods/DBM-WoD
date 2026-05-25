@@ -34,7 +34,7 @@ local yellProtoGrenade				= mod:NewYell(165195)
 local specWarnEnkindle				= mod:NewSpecialWarningStack(155921, nil, 2, nil, nil, 1, 6, nil, nil, "stackhigh")--Maybe need 3 for new cd?
 local specWarnEnkindleOther			= mod:NewSpecialWarningTaunt(155921, nil, nil, nil, 1, 2, nil, nil, "tauntboss")
 local specWarnTrain					= mod:NewSpecialWarningDodge(176312, nil, nil, nil, 3, 2, nil, nil, "chargemove")
-local specWarnSplitSoon				= mod:NewSpecialWarning("specWarnSplitSoon", nil, nil, nil, 1, 2)--TODO, maybe include types in the split?
+local specWarnSplitSoon				= mod:NewSpecialWarning("specWarnSplitSoon", nil, nil, nil, 1, 2, nil, nil, nil, nil, "mobsoon")--TODO, maybe include types in the split?
 --Adds
 local specWarnCauterizingBolt		= mod:NewSpecialWarningInterrupt(160140, "-Healer", nil, 2)
 local specWarnCauterizingBoltDispel	= mod:NewSpecialWarningDispel(160140, "MagicDispeller")

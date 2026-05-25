@@ -26,7 +26,7 @@ local warnLivingMushroom			= mod:NewCountAnnounce(160022, 1, nil, nil, nil, nil,
 local warnRejuvMushroom				= mod:NewCountAnnounce(160021, 1, nil, nil, nil, nil, nil, 12)--Other good shroom (healing)
 
 local specWarnCreepingMoss			= mod:NewSpecialWarningMove(163590, "Tank", nil, nil, 2, 2, nil, nil, "bossout")
-local specWarnInfestingSpores		= mod:NewSpecialWarningCount(159996, nil, nil, nil, 2, 2)
+local specWarnInfestingSpores		= mod:NewSpecialWarningCount(159996, nil, nil, nil, 2, 2, nil, nil, "aesoon")
 local specWarnDecay					= mod:NewSpecialWarningInterruptCount(160013, "-Healer", nil, nil, nil, 2, nil, nil, "kick2r")
 local specWarnNecroticBreath		= mod:NewSpecialWarningSpell(159219, "Tank", nil, nil, 3)
 local specWarnRot					= mod:NewSpecialWarningStack(163241, nil, 3, nil, nil, 1, 6, nil, nil, "stackhigh")

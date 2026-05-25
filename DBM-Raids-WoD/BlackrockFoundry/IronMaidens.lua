@@ -81,7 +81,7 @@ local specWarnBladeDashOther			= mod:NewSpecialWarningClose(155794, nil, nil, ni
 local specWarnConvulsiveShadows			= mod:NewSpecialWarningMoveAway(156214, nil, nil, nil, 1, 2, nil, nil, "runaway")--Does this still drop lingering shadows, if not moveaway is not appropriate
 local specWarnConvulsiveShadowsOther	= mod:NewSpecialWarningTargetCount(156214, false)
 local yellConvulsiveShadows				= mod:NewYell(156214, nil, false)
-local specWarnDarkHunt					= mod:NewSpecialWarningYou(158315, nil, nil, nil, 1, 2)
+local specWarnDarkHunt					= mod:NewSpecialWarningYou(158315, nil, nil, nil, 1, 2, nil, nil, "defensive")
 local specWarnDarkHuntOther				= mod:NewSpecialWarningTargetCount(158315, false)--Healer may want this, or raid leader
 ----Marak the Blooded
 local specWarnBloodRitual				= mod:NewSpecialWarningYou(158078, nil, nil, nil, 1, 2, nil, nil, "farfromline")

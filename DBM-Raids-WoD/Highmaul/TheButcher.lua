@@ -28,7 +28,7 @@ local warnFrenzy					= mod:NewSpellAnnounce(156598, 4)
 local specWarnTenderizer			= mod:NewSpecialWarningStack(156151, nil, 2, nil, nil, 1, 6, nil, nil, "stackhigh")
 local specWarnTenderizerOther		= mod:NewSpecialWarningTaunt(156151, nil, nil, nil, nil, 2, nil, nil, "tauntboss")
 local specWarnGushingWounds			= mod:NewSpecialWarningStack(156152, nil, 2, nil, nil, nil, 2, nil, nil, "runout")
-local specWarnBoundingCleave		= mod:NewSpecialWarningCount(156160, nil, nil, nil, 2, 12)
+local specWarnBoundingCleave		= mod:NewSpecialWarningCount(156160, nil, nil, nil, 2, 12, nil, nil, "boundingcleave")
 local specWarnPaleVitriol			= mod:NewSpecialWarningGTFO(163046, nil, nil, nil, 1, 8, nil, nil, "watchfeet")--Mythic
 
 local timerCleaveCD					= mod:NewCDTimer(6, 156157, nil, false, nil, 5)

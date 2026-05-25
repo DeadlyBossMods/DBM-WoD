@@ -53,7 +53,7 @@ local specWarnSuperheatedScrap		= mod:NewSpecialWarningMove(156823)
 local yellSuperheated				= mod:NewYell(156823)
 --Beast abilities (living)
 local specWarnSavageHowl			= mod:NewSpecialWarningTarget(155198, "Tank|Healer")
-local specWarnSavageHowlDispel		= mod:NewSpecialWarningDispel(155198, "RemoveEnrage", nil, 2, nil, 2)
+local specWarnSavageHowlDispel		= mod:NewSpecialWarningDispel(155198, "RemoveEnrage", nil, 2, nil, 2, nil, nil, "trannow")
 local specWarnConflag				= mod:NewSpecialWarningDispel(155399, false)--Just too buggy, cast 3 targets, but can be as high as 5 seconds apart, making warning very spammy. Therefor, MUST stay off by default to reduce DBM spam :\
 local specWarnSearingFangs			= mod:NewSpecialWarningStack(155030, nil, 12)--Stack count assumed, may be 2
 local specWarnSearingFangsOther		= mod:NewSpecialWarningTaunt(155030)--No evidence of this existing ANYWHERE in any logs. removed? Bugged?

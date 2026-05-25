@@ -60,7 +60,7 @@ local specWarnShadowRiposte				= mod:NewSpecialWarningSpell(185345, nil, nil, ni
 --Adds
 local specWarnPhantasmalCorruption		= mod:NewSpecialWarningYou(181824, nil, nil, nil, 1, 2, nil, nil, "targetyou")--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
 local yellPhantasmalCorruption			= mod:NewYell(181824)--For eye of anzu holder. Explosion shouldn't happen.
-local specWarnPhantasmalFelBomb			= mod:NewSpecialWarningYou(179219, nil, nil, nil, 1, 2)--Not move away on purpose, correct way to handle is get eye of anzu to real fel bomb
+local specWarnPhantasmalFelBomb			= mod:NewSpecialWarningYou(179219, nil, nil, nil, 1, 2, nil, nil, "targetyou")--Not move away on purpose, correct way to handle is get eye of anzu to real fel bomb
 local yellPhantasmalFelBomb				= mod:NewYell(179219, nil, false)--Fake bombs off by default, they will never explode and eye of anzu holder will get distracted
 local specWarnFelBomb					= mod:NewSpecialWarningYou(181753, nil, nil, nil, 1, 2, nil, nil, "targetyou")--Not move away on purpose, correct way to handle is get eye of anzu, you do NOT move
 local yellFelBomb						= mod:NewYell(181753)--Yell for real fel bomb on by default only

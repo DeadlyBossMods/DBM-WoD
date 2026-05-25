@@ -29,7 +29,7 @@ local warnArtillery					= mod:NewTargetCountAnnounce(182280, 4)
 local warnUnstableOrb				= mod:NewTargetCountAnnounce(182001, 3, nil, false)--Off by default do to some frequent casts. Boss fires 2 orbs. anyone then hit on landing gets debuff, if ranged properly spread, 2 targets, if numpty, could be 30 targets
 local warnFuelStreak				= mod:NewCountAnnounce(182668, 3)
 
-local specWarnArtillery				= mod:NewSpecialWarningMoveAway(182280, nil, nil, nil, 3, 2)
+local specWarnArtillery				= mod:NewSpecialWarningMoveAway(182280, nil, nil, nil, 3, 2, nil, nil, "runout")
 local yellArtillery					= mod:NewFadesYell(182108)
 local specWarnImmolation			= mod:NewSpecialWarningMove(182074, nil, nil, nil, 1, 2, nil, nil, "runaway")
 local specWarnBarrage				= mod:NewSpecialWarningCount(185282, nil, nil, nil, 2, 12, nil, nil, "barrageonway")--Count probably better than dodge
