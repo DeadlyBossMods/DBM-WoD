@@ -68,7 +68,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnSeverSoulOther:Play("tauntboss")
 		end
 	elseif spellId == 188476 and not args:IsPlayer() and not DBM:UnitDebuff("player", args.spellName) then
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		if self:IsTanking(uId) then
 			specWarnBadBreathOther:Show(args.destName)
 		end

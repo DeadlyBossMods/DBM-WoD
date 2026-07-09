@@ -187,7 +187,7 @@ function mod:SPELL_AURA_APPLIED(args)
 			specWarnShadowofDeath:Play("teleyou")
 		end
 		--Check if it's a tank (todo, maybe just change it to count == 2 to reduce cpu, the tank is pretty much always 2/6
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		if self:IsTanking(uId, "boss1") and not UnitIsUnit("player", uId) then
 			--It is a tank and we're not tanking. Fire taunt warning
 			specWarnShadowofDeathTank:Show(args.destName)

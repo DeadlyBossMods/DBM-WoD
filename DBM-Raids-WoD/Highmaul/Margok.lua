@@ -547,7 +547,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		--Update frame again in case he swaped targets during cast (happens)
 		self.vb.markActive = true
 		self.vb.lastMarkedTank = args.destName
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		if not uId then return end
 		local _, _, _, _, duration, expires = DBM:UnitDebuff(uId, args.spellName)
 		if expires then

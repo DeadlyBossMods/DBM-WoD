@@ -852,7 +852,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		else
 			self:Schedule(0.5, showMarkOfLegion, self, args.spellName)
 		end
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		local _, _, _, _, duration, expires, _, _ = DBM:UnitDebuff(uId, args.spellName)
 		if expires then
 			if args:IsPlayer() then

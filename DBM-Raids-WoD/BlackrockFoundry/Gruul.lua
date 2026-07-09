@@ -212,7 +212,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		timerInfernoSliceCD:Stop()
 		self:UnregisterShortTermEvents()
 	elseif spellId == 155078 then
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		if self:IsTanking(uId, "boss1") then
 			local amount = args.amount or 1
 			if amount % 2 == 0 or amount >= 5 then

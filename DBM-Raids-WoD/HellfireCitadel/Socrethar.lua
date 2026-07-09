@@ -262,7 +262,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if spellId == 182038 then
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		if uId and self:IsTanking(uId, "boss1") then
 			local amount = args.amount or 1
 			warnShatteredDefenses:Cancel()

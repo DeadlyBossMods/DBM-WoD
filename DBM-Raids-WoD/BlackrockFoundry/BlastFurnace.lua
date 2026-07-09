@@ -331,7 +331,7 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	local spellId = args.spellId
 	if args:IsSpellID(155192, 174716, 159558) then
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		local _, _, _, _, duration, expires = DBM:UnitDebuff(uId, args.spellName)
 		local debuffTime = expires - GetTime()
 		if self:CheckTankDistance(args.sourceGUID, 40) and self.vb.phase == 1 then--Filter Works very poorly, probably because mob not a BOSS id. usually see ALL warnings and all HUDs :\
@@ -425,7 +425,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif spellId == 176121 then
 		warnVolatileFire:CombinedShow(1, args.destName)
 		self.vb.volatileActive = self.vb.volatileActive + 1
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		local _, _, _, _, duration, expires = DBM:UnitDebuff(uId, args.spellName)
 		if expires then
 			local debuffTime = expires - GetTime()

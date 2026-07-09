@@ -169,7 +169,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	if spellId == 180079 then
 		warnFelfireMunitions:CombinedShow(2, args.destName)
 	elseif spellId == 184243 then
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		if self:IsTanking(uId) then
 			local amount = args.amount or 1
 			warnSlam:Show(args.destName, amount)

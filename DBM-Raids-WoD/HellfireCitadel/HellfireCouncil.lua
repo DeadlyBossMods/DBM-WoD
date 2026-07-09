@@ -212,7 +212,7 @@ function mod:SPELL_AURA_APPLIED(args)
 --		timerFelstormCD:Start()
 	elseif spellId == 184847 and self:AntiSpam(4, 2) then--Probably stacks very rapidly, so using antispam for now until better method constructed
 		local amount = args.amount or 1
-		local uId = DBM:GetRaidUnitId(args.destName)
+		local uId = DBM:GetRaidUnitId(args.destName, true)
 		if self:IsTanking(uId) then
 			warnAcidicWound:Show(args.destName, amount)
 		end

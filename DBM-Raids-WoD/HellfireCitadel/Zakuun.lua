@@ -296,7 +296,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		if args:IsPlayer() then
 			specWarnDisembodiedYou:Show()
 		else
-			local uId = DBM:GetRaidUnitId(args.destName)
+			local uId = DBM:GetRaidUnitId(args.destName, true)
 			if self:IsTanking(uId, "boss1") then
 				specWarnDisembodied:Show(args.destName)
 			end
