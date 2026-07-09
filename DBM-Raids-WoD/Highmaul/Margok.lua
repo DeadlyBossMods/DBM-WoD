@@ -448,7 +448,7 @@ function mod:SPELL_AURA_APPLIED(args)
 	elseif args:IsSpellID(156225, 164004, 164005, 164006) and not self:IsLFR() then
 		self.vb.brandedActive = self.vb.brandedActive + 1
 		local name = args.destName
-		local uId = DBM:GetRaidUnitId(name)
+		local uId = DBM:GetRaidUnitId(name, true)
 		if not uId then return end
 		local _, _, currentStack = DBM:UnitDebuff(uId, DBM:GetSpellName(spellId))
 		local fortified = (self:IsMythic() and self.vb.phase >= 3) or spellId == 164005--Phase 3 uses replication ID, so need hack for mythic fortified/replication phase.
