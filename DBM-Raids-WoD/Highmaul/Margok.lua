@@ -447,7 +447,7 @@ function mod:SPELL_AURA_APPLIED(args)
 		end
 	elseif args:IsSpellID(156225, 164004, 164005, 164006) and not self:IsLFR() then
 		self.vb.brandedActive = self.vb.brandedActive + 1
-		local name = args.destName
+		local name = args.destName or ""--Impossible to be nil but LuaLS is retarded
 		local uId = DBM:GetRaidUnitId(name, true)
 		if not uId then return end
 		local _, _, currentStack = DBM:UnitDebuff(uId, DBM:GetSpellName(spellId))
