@@ -98,7 +98,7 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization("HighmaulTrash")
 
 L:SetGeneralLocalization({
-	name	= "Трэш мобы Верховного Молота"
+	name	= "Трэш: Верховный Молот"
 })
 
 ---------------
@@ -227,7 +227,7 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization("BlackrockFoundryTrash")
 
 L:SetGeneralLocalization({
-	name	= "Трэш мобы Литейной клана Черной горы"
+	name	= "Трэш: Литейная клана Черной горы"
 })
 
 ---------------
@@ -394,5 +394,5 @@ L:SetMiscLocalization({
 L = DBM:GetModLocalization("HellfireCitadelTrash")
 
 L:SetGeneralLocalization({
-	name	= "Трэш мобы Цитадель Адского Пламени"
+	name	= "Трэш: Цитадель Адского Пламени"
 })
