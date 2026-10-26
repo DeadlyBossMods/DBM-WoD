@@ -164,7 +164,6 @@ L:SetOptionLocalization({
 	InfoFrameSpeed		= "Marco de información de trenes",
 	Immediately			= "Mostrar en cuanto se abran las puertas",
 	Delayed				= "Mostrar en cuanto se vaya el tren anterior",
-	HudMapUseIcons		= "Usar iconos de banda para el indicador en pantalla en lugar de círculos verdes",
 	TrainVoiceAnnounce	= "Alertas de voz para los trenes",
 	LanesOnly			= "Solo anunciar vías",
 	MovementsOnly		= "Solo anunciar movimientos (dificultad mítica)",
@@ -282,7 +281,6 @@ L:SetOptionLocalization({
 	SoDDPS2			= "Mostrar temporizador para la siguiente $spell:179864 que afecte a los DPS",
 	SoDTank2		= "Mostrar temporizador para la siguiente $spell:179864 que afecte a los tanques",
 	SoDHealer2		= "Mostrar temporizador para la siguiente $spell:179864 que afecte a los sanadores",
-	ShowOnlyPlayer	= "Mostrar indicadores en pantalla para $spell:179909 solo si eres uno de los jugadores afectados"
 })
 
 --------------------------------
@@ -365,9 +363,6 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	specWarnBreakShackle	= "Mostrar aviso especial cuando te afecte $spell:184964. Este aviso asigna un orden para minimizar el daño sufrido.",
-	ExtendWroughtHud3		= "Extender las líneas del indicador de $spell:185014 más allá del objetivo (puede reducir la precisión de la línea)",
-	AlternateHudLine		= "Usar textura alternativa para las líneas del indicador en pantalla de $spell:185014",
-	NamesWroughtHud			= "Mostrar nombres de jugadores en el indicador en pantalla de $spell:185014",
 	FilterOtherPhase		= "Ocultar avisos de eventos que no ocurran en tu fase actual",
 	MarkBehavior			= "Patrón de gritos de la banda para Marca de la Legión (requiere líder)",
 	Numbered				= "Estrella, Círculo, Diamante, Triángulo. Para marcadores del mundo.",--Default

@@ -160,7 +160,6 @@ L:SetWarningLocalization({
 	InfoFrameSpeed		= "정보 창에서 언제 다음 기차를 보여줄 것인지 설정",
 	Immediately			= "등장할 기차 문이 열릴 때(5초전)",
 	Delayed				= "기차가 실제로 등장한 후",
-	HudMapUseIcons		= "범위정보에 녹색원 대신 전술 목표 아이콘 사용하기"
 })
 
 L:SetOptionLocalization({
@@ -285,7 +284,6 @@ L:SetOptionLocalization({
 	SoDDPS2			= "다음 $spell:179864 대상 바 보기(공격 전담)",
 	SoDTank2		= "다음 $spell:179864 대상 바 보기(방어 전담)",
 	SoDHealer2		= "다음 $spell:179864 대상 바 보기(치유 전담)",
-	ShowOnlyPlayer	= "$spell:179909 대상일 경우에만 범위정보 표시"
 })
 
 --------------------------
@@ -364,9 +362,6 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	specWarnBreakShackle	= "$spell:184964 대상이 된 경우 특수 경고 보기(빠지는 순서가 자동으로 할당됩니다.)",
-	ExtendWroughtHud3		= "$spell:185014 대상에게 범위정보 연장(선모양이 부정확할 수 있습니다.)",
-	AlternateHudLine		= "$spell:185014 대상에게 다른 범위정보 무늬 사용",
-	NamesWroughtHud			= "$spell:185014 대상 이름을 포함한 범위정보 보기",
 	FilterOtherPhase		= "당신과 다른 위상에 있는 주문 경고 숨기기"
 })
 

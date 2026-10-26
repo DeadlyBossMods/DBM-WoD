@@ -165,7 +165,6 @@ L:SetOptionLocalization({
 	InfoFrameSpeed		= "Infofenster zeigt nächste Zuginformation",
 	Immediately			= "sobald sich die Türen für den aktuellen Zug öffnen",
 	Delayed				= "nachdem der aktuelle Zug herausgekommen ist",
-	HudMapUseIcons		= "Benutze Schlachtzugzeichen für HudMap statt grünen Kreis",
 	TrainVoiceAnnounce	= "Gesprochene Warnungen für Züge",
 	LanesOnly			= "Verkünde nur Gleise mit ankommenden Zügen",
 	MovementsOnly		= "Verkünde nur Bewegungen zu einem anderen Gleis (nur mythisch)",
@@ -283,7 +282,6 @@ L:SetOptionLocalization({
 	SoDDPS2			= "Zeige Zeit bis nächste $spell:179864 die DDs betreffen",
 	SoDTank2		= "Zeige Zeit bis nächste $spell:179864 die Tanks betreffen",
 	SoDHealer2		= "Zeige Zeit bis nächste $spell:179864 die Heiler betreffen",
-	ShowOnlyPlayer	= "Zeige HudMap für $spell:179909 nur, falls du beteiligt bist"
 })
 
 --------------------------
@@ -366,15 +364,12 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	specWarnBreakShackle	= "Spezialwarnung, wenn du von $spell:184964 betroffen bist (diese Warnung weist zur Minimierung des gleichzeitigen Schadens die Brechungsreihenfolge automatisch zu)",
-	ExtendWroughtHud3		= "Erweitere die HudMap-Linien über das Ziel von $spell:185014 hinaus (kann die Liniengenauigkeit verringern)",
-	AlternateHudLine		= "Nutze alternative Linientextur für HudMap-Linien zwischen Zielen von $spell:185014",
-	NamesWroughtHud			= "Zeige Spielernamen in HudMap für Ziele von $spell:185014",
 	FilterOtherPhase		= "Zeige keine Warnungen für Ereignisse, die sich nicht in deiner Phase befinden",
 	MarkBehavior			= "Auswahl der Positionierungsschreie für Mal der Legion (nur als Schlachtzugsleiter)",
 	Numbered				= "Stern, Kreis, Diamant, Dreieck (für Strategien mit Weltmarkierungen)",
 	LocSmallFront			= "Nah L/R (Stern, Kreis), Fern L/R (Diamant, Dreieck), kurze Debuffs Nah",
 	LocSmallBack			= "Nah L/R (Stern, Kreis), Fern L/R (Diamant, Dreieck), kurze Debuffs Fern",
-	NoAssignment			= "Deaktiviere Positionierungsschreie, -zeichen und -HUD bei allen im Schlachtzug",
+	NoAssignment			= "Deaktiviere Positionierungsschreie und -zeichen bei allen im Schlachtzug",
 	overrideMarkOfLegion	= "Blockiere Überschreiben des Mal der Legion Verhaltens durch den Schlachtzugsleiter (nur empfohlen für Experten, die sich sicher sind, dass ihre eigenen Einstellungen den Absichten des Schlachtzugsleiters nicht widersprechen)"
 })
 

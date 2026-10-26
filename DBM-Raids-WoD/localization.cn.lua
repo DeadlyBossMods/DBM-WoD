@@ -159,7 +159,6 @@ L:SetOptionLocalization({
 	InfoFrameSpeed		= "设置何时在信息框体显示下一班列车的信息",
 	Immediately			= "当门打开时",
 	Delayed				= "当列车出现时",
-	HudMapUseIcons		= "在HudMap中，使用团队标记代替绿圈",
 	TrainVoiceAnnounce	= "设置语音报警下一班列车的信息类型",
 	LanesOnly			= "仅包含轨道信息",
 	MovementsOnly		= "仅包含走位信息 (史诗模式)",
@@ -277,7 +276,6 @@ L:SetOptionLocalization({
 	SoDDPS2			= "计时条：下一次针对DPS的$spell:179864",
 	SoDTank2		= "计时条：下一次针对坦克的$spell:179864",
 	SoDHealer2		= "计时条：下一次针对治疗的$spell:179864",
-	ShowOnlyPlayer	= "只在你被$spell:179909点名时显示HUD"
 })
 --------------------------
 -- Shadow-Lord Iskar --
@@ -364,9 +362,6 @@ L:SetWarningLocalization({
 
 L:SetOptionLocalization({
 	specWarnBreakShackle	= "特殊警报：当你受到$spell:184964影响时。DBM会自动分配拉断次序，使得伤害最小化。",
-	ExtendWroughtHud3		= "将HUD连线延长到受到$spell:185014影响的目标上。 (可能会导致连线准确度下降)",
-	AlternateHudLine		= "在HUD中使用代替的线条材质来指示$spell:185014",
-	NamesWroughtHud			= "在HUD中显示受到$spell:185014影响的目标的姓名",
 	FilterOtherPhase		= "过滤掉不在同一阶段的事件",
 	MarkBehavior			= "设定$spell:187051的喊叫方式（需要团长权限）",
 	Numbered				= "星星，大饼，菱形，三角。 适合任何站位方式。",--Default
