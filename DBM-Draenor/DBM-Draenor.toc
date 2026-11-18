@@ -35,15 +35,15 @@
 ## X-Wago-ID: LvNAkBKo
 ## Version: @project-version@
 
-localization.br.lua
+localization.br.lua [AllowLoadTextLocale ptBR]
 localization.en.lua
-localization.kr.lua
-localization.de.lua
-localization.es.lua
-localization.fr.lua
-localization.ru.lua
-localization.tw.lua
-localization.cn.lua
+localization.kr.lua [AllowLoadTextLocale koKR]
+localization.de.lua [AllowLoadTextLocale deDE]
+localization.es.lua [AllowLoadTextLocale esES, esMX]
+localization.fr.lua [AllowLoadTextLocale frFR]
+localization.ru.lua [AllowLoadTextLocale ruRU]
+localization.tw.lua [AllowLoadTextLocale zhTW]
+localization.cn.lua [AllowLoadTextLocale zhCN]
 Drov.lua
 Tarlna.lua
 Rukhmar.lua
